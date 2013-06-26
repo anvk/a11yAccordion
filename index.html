@@ -1,0 +1,55 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>a11y Accordeon</title>
+  <link rel="stylesheet" href="css/a11yAccordeon.css" />
+  <script type="text/javascript" src="js/libs/jquery-1.10.0.min.js"></script>
+  <script type="text/javascript" src="js/a11yAccordeon.js"></script>
+</head>
+<body onload="load()">
+
+  <script type="text/javascript">
+    var load = function () {
+      a11yAccordeon({
+        container: ".a11yAccordeon",
+        hiddenLinkDescription: "this is some row with data"
+      });
+    };
+  </script>
+
+  <ul class="a11yAccordeon">
+    <li class="a11yAccordeonItem">
+      <div class="a11yAccordeonItemHeader">
+        <strong>Header #1</strong>
+      </div>
+      <div class="accordeonA11yHideArea">
+        <ul>
+          <li>Point 1</li>
+          <li>Point 2</li>
+          <li>Point 3</li>
+          <li>Point 4</li>
+        </ul>
+      </div>
+    </li>
+
+    <li class="a11yAccordeonItem">
+      <div class="a11yAccordeonItemHeader">
+        <strong>Header #2</strong>
+      </div>
+      <div class="accordeonA11yHideArea">
+        <h2>My other content</h2>
+      </div>
+    </li>
+
+    <li class="a11yAccordeonItem">
+      <div class="a11yAccordeonItemHeader">
+        <strong>Header #3</strong>
+      </div>
+      <div class="accordeonA11yHideArea">
+        <img src="imgs/image.jpg" alt="example image for the presentation purposes">
+      </div>
+    </li>
+  </ul>
+
+</body>
+</html>
