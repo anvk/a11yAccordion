@@ -51,7 +51,7 @@ var a11yAccordeon = function (options) {
      */
     var showClassText = $(header).find("." + showHeaderLabelClass),
         hideClassText = $(header).find("." + hideHeaderLabelClass);
-    if (showClassText.length !== 0 || hideClassText !== 0) {
+    if (showClassText.length !== 0 || hideClassText.length !== 0) {
         showClassText.remove();
         hideClassText.remove();
     }
