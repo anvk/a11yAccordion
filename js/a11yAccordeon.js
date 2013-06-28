@@ -44,6 +44,18 @@ var a11yAccordeon = function (options) {
 
   // generate links
   $.each(headers, function(index, header) {
+
+    /*
+     * if Accordeon was hidden and then reinitialized
+     * this part of the code removes the previous links
+     */
+    var showClassText = $(header).find("." + showHeaderLabelClass),
+        hideClassText = $(header).find("." + hideHeaderLabelClass);
+    if (showClassText.length !== 0 || hideClassText.length !== 0) {
+        showClassText.remove();
+        hideClassText.remove();
+    }
+
     var link = $("<a>", {
         href: "#",
         "class": headerLinkSelector
