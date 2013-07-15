@@ -30,7 +30,42 @@ var a11yAccordeon = function (options) {
       hideHeaderLabelText = "Hide",
       hideHeaderLabelClass = "hideLabel",
       hiddenHeaderLabelDescriptionClss = "hiddenLabel",
-      hideEffectStyle = "linear";
+      hideEffectStyle = "linear",
+      headerCss, areaCss, headerLinkColor;
+
+  if (options.colorScheme) {
+    var dark = {
+        headerCss : {
+          "background-color" : "#2d292c",
+          color : "#f2f2eb"
+        },
+        areaCss : {
+          "background-color" : "#383330",
+          color : "#f2f2eb"
+        },
+        headerLinkColor : "#bfb7ae"
+      },
+      light = {
+        headerCss : {
+          "background-color" : "#f2f2eb",
+          color : "#261e14"
+        },
+        areaCss : {
+          "background-color" : "#fffefd",
+          color : "#0b254a"
+        },
+        headerLinkColor : "#595048"
+      };
+
+    eval("headerCss = " + options.colorScheme + ".headerCss;");
+    eval("areaCss = " + options.colorScheme + ".areaCss;");
+    eval("headerLinkColor = " + options.colorScheme + ".headerLinkColor;");
+
+  } else {
+    headerCss = options.colorOverride.headerCss || {};
+    areaCss = options.colorOverride.areaCss || {};
+    headerLinkColor = options.colorOverride.headerLinkColor || "";
+  }
 
   if (!options.headerSelector || !options.visibleAreaClass || container.length === 0 || accordeonHideAreas.length === 0) {
     return;
@@ -67,6 +102,12 @@ var a11yAccordeon = function (options) {
 
     link.appendTo(header);
   });
+
+  // Change Accordeon headers, hidden areas and header link colors
+  $(headers).css(headerCss);
+  $(accordeonHideAreas).css(areaCss);
+  $(options.headerSelector + ">a").css("color", headerLinkColor);
+  $(options.hiddenAreaSelector + ">a").css("color", headerLinkColor);
 
   // Bind the click event to the links
   var links = $("." + headerLinkSelector);
