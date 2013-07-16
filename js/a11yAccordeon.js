@@ -68,6 +68,22 @@ var a11yAccordeon = function (options) {
     link.appendTo(header);
   });
 
+  if (options.colorScheme) {
+    eval("$(headers).addClass('" + options.colorScheme + "-header');");
+    eval("$(accordeonHideAreas).addClass('" + options.colorScheme + "-area');");
+
+  } else if (options.colorOverride) {
+    var headerCss = options.colorOverride.headerCss || {},
+        areaCss = options.colorOverride.areaCss || {},
+        headerLinkColor = options.colorOverride.headerLinkColor || "";
+
+    // Change Accordeon headers, hidden areas and header link colors
+    $(headers).css(headerCss);
+    $(accordeonHideAreas).css(areaCss);
+    $(options.headerSelector + ">a").css("color", headerLinkColor);
+    $(options.hiddenAreaSelector + ">a").css("color", headerLinkColor);
+  }
+
   // Bind the click event to the links
   var links = $("." + headerLinkSelector);
   links.click(function (event) {
