@@ -216,7 +216,7 @@ var a11yAccordeon = function (options) {
         item;
 
     // One less iteration because the last one is for "no results found" rows
-    for (var i=0, length=items.length-1; i<length; i+=1) {
+    for (var i=0, length=items.length-1; i<length; ++i) {
       item = items[i];
       a11yAccordeonData.push({
         id: item.id,
