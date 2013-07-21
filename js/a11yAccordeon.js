@@ -88,7 +88,10 @@ var a11yAccordeon = function (options) {
 
   // If search bar is required, text box and no results found div are added
   if (options.showSearch) {
-    var wrapperDiv, wrapperLi, searchInputi, searchString;
+    var searchPlaceholder = "Search",
+        searchClass = "a11yAccordeonSearch",
+        noResultsText = "No Results Found",
+        wrapperDiv, wrapperLi, searchInputi, searchString;
 
     wrapperDiv = $("<div />", {
       id: searchDiv,
@@ -96,8 +99,8 @@ var a11yAccordeon = function (options) {
 
     searchInput = $("<input />", {
       type: "text",
-      placeholder: "Search",
-      "class": "a11yAccordeonSearch"
+      placeholder: searchPlaceholder,
+      "class": searchClass
     }).appendTo(wrapperDiv);
 
     wrapperLi = $("<li />", {
@@ -108,7 +111,7 @@ var a11yAccordeon = function (options) {
 
     $("<div />", {
       "class": accordeonItemHeader,
-      text: "No Results Found"
+      text: noResultsText
     }).appendTo(wrapperLi);
 
     // Set an id to each row
@@ -127,7 +130,8 @@ var a11yAccordeon = function (options) {
       searchString = searchInput.val().toLowerCase();
 
       $(a11yAccordeonData).each( function(index, data) {
-          data.text.indexOf(searchString) !== -1 ? $("#" + data.id).show() : $("#" + data.id).hide();
+          var action = data.text.indexOf(searchString) !== -1 ? "show" : "hide";
+          $("#" + data.id)[action]();
       });
 
       if (! $("." + accordeonItem + ":visible").length) {
@@ -208,13 +212,15 @@ var a11yAccordeon = function (options) {
 
   // Function to read Accordeon Rows and fill in data in a variable, it is done just once
   var populateAccordeonData = function () {
-    var items = $("." + accordeonItem);
+    var items = $("." + accordeonItem),
+        item;
 
     // One less iteration because the last one is for "no results found" rows
-    for (var i=0, length=items.length-1; i<length; i++) {
+    for (var i=0, length=items.length-1; i<length; i+=1) {
+      item = items[i];
       a11yAccordeonData.push({
-        id: items[i].id,
-        text: $(items[i]).text().replace(showHeaderLabelText +
+        id: item.id,
+        text: $(item).text().replace(showHeaderLabelText +
           hideHeaderLabelText + options.hiddenLinkDescription, "").toLowerCase()
       });
     }
