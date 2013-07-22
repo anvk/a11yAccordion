@@ -30,7 +30,13 @@ var a11yAccordeon = function (options) {
       hideHeaderLabelText = "Hide",
       hideHeaderLabelClass = "hideLabel",
       hiddenHeaderLabelDescriptionClss = "hiddenLabel",
-      hideEffectStyle = "linear";
+      hideEffectStyle = "linear",
+      noResults = "no-results-found",
+      searchDiv = "a11yAccordeonSearchDiv",
+      accordeonItem = "a11yAccordeonItem",
+      accordeonItemHeader = "a11yAccordeonItemHeader",
+      rowId = "accordeon-row-",
+      a11yAccordeonData = new Array();
 
   if (!options.headerSelector || !options.visibleAreaClass || container.length === 0 || accordeonHideAreas.length === 0) {
     return;
@@ -79,6 +85,60 @@ var a11yAccordeon = function (options) {
     link.focus();
     return false;
   });
+
+  // If search bar is required, text box and no results found div are added
+  if (options.showSearch) {
+    var searchPlaceholder = "Search",
+        searchClass = "a11yAccordeonSearch",
+        noResultsText = "No Results Found",
+        wrapperDiv, wrapperLi, searchInputi, searchString;
+
+    wrapperDiv = $("<div />", {
+      id: searchDiv,
+    }).insertBefore(container);
+
+    searchInput = $("<input />", {
+      type: "text",
+      placeholder: searchPlaceholder,
+      "class": searchClass
+    }).appendTo(wrapperDiv);
+
+    wrapperLi = $("<li />", {
+      "class": accordeonItem,
+      id: noResults,
+      style: "display:none;"
+    }).appendTo(container);
+
+    $("<div />", {
+      "class": accordeonItemHeader,
+      text: noResultsText
+    }).appendTo(wrapperLi);
+
+    // Set an id to each row
+    $("." + accordeonItem).each( function (index, item) {
+      $(item).attr("id", rowId + index);
+    });
+
+    // Bind search function to input field
+    searchInput.keyup( function () {
+      wrapperLi.hide();
+
+      if (!a11yAccordeonData.length) {
+        populateAccordeonData();
+      }
+
+      searchString = searchInput.val().toLowerCase();
+
+      $(a11yAccordeonData).each( function(index, data) {
+          var action = data.text.indexOf(searchString) !== -1 ? "show" : "hide";
+          $("#" + data.id)[action]();
+      });
+
+      if (! $("." + accordeonItem + ":visible").length) {
+        wrapperLi.show();
+      }
+    });
+  }
 
   /// Function which is executed upon the link click. It will either hide the related area OR show the area and hide all other ones
   // params:
@@ -148,5 +208,21 @@ var a11yAccordeon = function (options) {
     element.slideDown(speed, hideEffectStyle, function () {
       element.show();
     });
+  };
+
+  // Function to read Accordeon Rows and fill in data in a variable, it is done just once
+  var populateAccordeonData = function () {
+    var items = $("." + accordeonItem),
+        item;
+
+    // One less iteration because the last one is for "no results found" rows
+    for (var i=0, length=items.length-1; i<length; ++i) {
+      item = items[i];
+      a11yAccordeonData.push({
+        id: item.id,
+        text: $(item).text().replace(showHeaderLabelText +
+          hideHeaderLabelText + options.hiddenLinkDescription, "").toLowerCase()
+      });
+    }
   };
 };
