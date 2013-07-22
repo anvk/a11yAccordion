@@ -69,9 +69,8 @@ var a11yAccordeon = function (options) {
   });
 
   if (options.colorScheme) {
-    eval("$(headers).addClass('" + options.colorScheme + "-header');");
-    eval("$(accordeonHideAreas).addClass('" + options.colorScheme + "-area');");
-
+    $(headers).addClass(options.colorScheme + "-header");
+    $(accordeonHideAreas).addClass(options.colorScheme + "-area");
   } else if (options.colorOverride) {
     var headerCss = options.colorOverride.headerCss || {},
         areaCss = options.colorOverride.areaCss || {},
