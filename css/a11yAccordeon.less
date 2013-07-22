@@ -31,34 +31,26 @@
   }
 }
 
-.dark-header {
-  background-color: #2D292C;
-  color: #F2F2EB;
+.accordeon-theme(@background, @text, @link) {
+  background-color: @background;
+  color: @text;
   a, a:visited {
-    color: #BFB7AE;
+    color: @link;
   }
+}
+
+.dark-header {
+  .accordeon-theme(#2D292C, #F2F2EB, #BFB7AE);
 }
 
 .dark-area {
-  background-color: #383330;
-  color: #F2F2EB;
-  a, a:visited {
-    color: #BFB7AE;
-  }
+  .accordeon-theme(#383330, #F2F2EB, #BFB7AE);
 }
 
 .light-header {
-  background-color: #F2F2EB;
-  color: #261E14;
-  a, a:visited {
-    color: #595048;
-  }
+  .accordeon-theme(#F2F2EB, #261E14, #595048);
 }
 
 .light-area {
-  background-color: #FFFEFD;
-  color: #261E14;
-  a, a:visited {
-    color: #595048;
-  }
+  .accordeon-theme(#FFFEFD, #261E14, #595048);
 }
