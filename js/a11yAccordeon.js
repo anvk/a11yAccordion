@@ -71,16 +71,6 @@ var a11yAccordeon = function (options) {
   if (options.colorScheme) {
     $(headers).addClass(options.colorScheme + "-header");
     $(accordeonHideAreas).addClass(options.colorScheme + "-area");
-  } else if (options.colorOverride) {
-    var headerCss = options.colorOverride.headerCss || {},
-        areaCss = options.colorOverride.areaCss || {},
-        headerLinkColor = options.colorOverride.headerLinkColor || "";
-
-    // Change Accordeon headers, hidden areas and header link colors
-    $(headers).css(headerCss);
-    $(accordeonHideAreas).css(areaCss);
-    $(options.headerSelector + ">a").css("color", headerLinkColor);
-    $(options.hiddenAreaSelector + ">a").css("color", headerLinkColor);
   }
 
   // Bind the click event to the links
