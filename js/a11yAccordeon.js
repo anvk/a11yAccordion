@@ -30,7 +30,8 @@ var a11yAccordeon = function (options) {
       hideHeaderLabelText = "Hide",
       hideHeaderLabelClass = "hideLabel",
       hiddenHeaderLabelDescriptionClss = "hiddenLabel",
-      hideEffectStyle = "linear";
+      hideEffectStyle = "linear",
+      colorScheme = options.colorScheme;
 
   if (!options.headerSelector || !options.visibleAreaClass || container.length === 0 || accordeonHideAreas.length === 0) {
     return;
@@ -68,9 +69,9 @@ var a11yAccordeon = function (options) {
     link.appendTo(header);
   });
 
-  if (options.colorScheme) {
-    headers.addClass(options.colorScheme + "-header");
-    accordeonHideAreas.addClass(options.colorScheme + "-area");
+  if (colorScheme) {
+    headers.addClass(colorScheme + "-header");
+    accordeonHideAreas.addClass(colorScheme + "-area");
   }
 
   // Bind the click event to the links
