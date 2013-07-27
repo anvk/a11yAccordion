@@ -1,7 +1,3 @@
-/**
- * @author Alexey Novak
- */
-
 /*global jQuery*/
 
 /// This function would create an accordeon based on the markup and provided options
@@ -100,7 +96,7 @@ var a11yAccordeon = function (options) {
         wrapperDiv, wrapperLi, searchInputi, searchString;
 
     wrapperDiv = $("<div />", {
-      id: searchDiv,
+      id: searchDiv
     }).insertBefore(container);
 
     searchInput = $("<input />", {

@@ -1,0 +1,31 @@
+{
+  "name": "a11yAccordeon",
+  "version": "0.0.1",
+  "description": "An accessible Accordeon widget.",
+  "contributors": [
+    {
+      "name": "Alexey Novak",
+      "email": "alexey.novak.mail@gmail.com"
+    },
+    {
+      "name": "Shaumik Daityari",
+      "email": "sdaityari@gmail.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:anvk/a11yAccordeon.git"
+  },
+  "keywords": [
+    "a11y",
+    "accordeon",
+    "a11yAccordeon",
+    "widget"
+  ],
+  "dependencies" : {
+    "grunt": ">=0.4.1",
+    "grunt-contrib-uglify": ">=0.2.2",
+    "grunt-contrib-concat": ">=0.3.0"
+  },
+  "license": "MIT"
+}
