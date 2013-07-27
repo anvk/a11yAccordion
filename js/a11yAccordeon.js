@@ -36,7 +36,8 @@ var a11yAccordeon = function (options) {
       accordeonItem = "a11yAccordeonItem",
       accordeonItemHeader = "a11yAccordeonItemHeader",
       rowId = "accordeon-row-",
-      a11yAccordeonData = new Array();
+      a11yAccordeonData = [],
+      colorScheme = options.colorScheme;
 
   if (!options.headerSelector || !options.visibleAreaClass || container.length === 0 || accordeonHideAreas.length === 0) {
     return;
@@ -73,6 +74,11 @@ var a11yAccordeon = function (options) {
 
     link.appendTo(header);
   });
+
+  if (colorScheme) {
+    headers.addClass(colorScheme + "-header");
+    accordeonHideAreas.addClass(colorScheme + "-area");
+  }
 
   // Bind the click event to the links
   var links = $("." + headerLinkSelector);

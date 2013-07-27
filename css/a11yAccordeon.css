@@ -1,3 +1,8 @@
+.a11yAccordeon-centralPos {
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+}
 .a11yAccordeon li.a11yAccordeonItem {
   border-color: #206BA4;
   border-style: solid;
@@ -27,9 +32,8 @@
   -moz-box-shadow: inset 0 0 10px 1px #888;
   -webkit-box-shadow: inset 0 0 10px 1px #888;
   box-shadow: inset 0 0 10px 1px #888;
-  background-color: #EBF4FA;
 }
-.a11yAccordeonSearch{
+.a11yAccordeonSearch {
   background-image: url('../imgs/search.png');
   background-repeat: no-repeat;
   background-size: auto 80%;
@@ -39,7 +43,41 @@
   -moz-border-radius: 1em;
   -webkit-border-radius: 1em;
 }
-#a11yAccordeonSearchDiv{
-  text-align:right;
-  padding:0% 9.25%;
+#a11yAccordeonSearchDiv {
+  margin-left: auto;
+  margin-right: auto;
+  width: 80%;
+  text-align: right;
+}
+.dark-header {
+  background-color: #2d292c;
+  color: #f2f2eb;
+}
+.dark-header a,
+.dark-header a:visited {
+  color: #bfb7ae;
+}
+.dark-area {
+  background-color: #383330;
+  color: #f2f2eb;
+}
+.dark-area a,
+.dark-area a:visited {
+  color: #bfb7ae;
+}
+.light-header {
+  background-color: #f2f2eb;
+  color: #261e14;
+}
+.light-header a,
+.light-header a:visited {
+  color: #595048;
+}
+.light-area {
+  background-color: #fffefd;
+  color: #261e14;
+}
+.light-area a,
+.light-area a:visited {
+  color: #595048;
 }
