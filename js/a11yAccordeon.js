@@ -72,8 +72,8 @@ var a11yAccordeon = function (options) {
   });
 
   if (colorScheme) {
-    headers.addClass(colorScheme + "-header");
-    accordeonHideAreas.addClass(colorScheme + "-area");
+    headers.addClass(colorScheme + "-a11yAccordeon-header");
+    accordeonHideAreas.addClass(colorScheme + "-a11yAccordeon-area");
   }
 
   // Bind the click event to the links
