@@ -15,7 +15,7 @@ var a11yAccordeon = function (options) {
 
   options.headerSelector = options.headerSelector || ".a11yAccordeonItemHeader";
   options.visibleAreaClass = options.visibleAreaClass || "visibleA11yAccordeonItem";
-  options.hiddenAreaSelector = options.hiddenAreaSelector || ".accordeonA11yHideArea";
+  options.hiddenAreaSelector = options.hiddenAreaSelector || ".a11yAccordeonHideArea";
 
   var container = $(options.container),
       accordeonHideAreas = $(options.hiddenAreaSelector),
