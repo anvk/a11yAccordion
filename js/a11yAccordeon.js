@@ -93,7 +93,8 @@ var a11yAccordeon = function (options) {
     var searchPlaceholder = "Search",
         searchClass = "a11yAccordeonSearch",
         noResultsText = "No Results Found",
-        wrapperDiv, wrapperLi, searchInputi, searchString;
+        titleText = "Type your query to search",
+        wrapperDiv, wrapperLi, searchInput, searchString;
 
     wrapperDiv = $("<div />", {
       id: searchDiv
@@ -102,7 +103,8 @@ var a11yAccordeon = function (options) {
     searchInput = $("<input />", {
       type: "text",
       placeholder: searchPlaceholder,
-      "class": searchClass
+      "class": searchClass,
+      title: titleText
     }).appendTo(wrapperDiv);
 
     wrapperLi = $("<li />", {
@@ -132,9 +134,11 @@ var a11yAccordeon = function (options) {
       searchString = searchInput.val().toLowerCase();
 
       $(a11yAccordeonData).each( function(index, data) {
-          var action = data.text.indexOf(searchString) !== -1 ? "show" : "hide";
-          $("#" + data.id)[action]();
+        var action = data.text.indexOf(searchString) !== -1 ? "show" : "hide";
+        $("#" + data.id)[action]();
       });
+
+      updateTitleText(searchInput);
 
       if (! $("." + accordeonItem + ":visible").length) {
         wrapperLi.show();
@@ -226,5 +230,12 @@ var a11yAccordeon = function (options) {
           hideHeaderLabelText + options.hiddenLinkDescription, "").toLowerCase()
       });
     }
+  };
+
+  var updateTitleText = function (searchInput) {
+    var results = $("." + accordeonItemHeader + ":visible").length,
+        resultsMessage = "Number of results found: ";
+
+    searchInput.attr("title", resultsMessage + results);
   };
 };
