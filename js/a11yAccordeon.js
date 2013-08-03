@@ -234,8 +234,9 @@ var a11yAccordeon = function (options) {
 
   var updateTitleText = function (searchInput) {
     var results = $("." + accordeonItemHeader + ":visible").length,
-        resultsMessage = "Number of results found: ";
+        resultsMessage = "Number of results found: ",
+        leaveBlankMessage = " Please leave blank to see all the results.";
 
-    searchInput.attr("title", resultsMessage + results);
+    searchInput.attr("title", resultsMessage + results.toString() + leaveBlankMessage);
   };
 };
