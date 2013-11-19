@@ -4,17 +4,17 @@
   <title>a11y Accordeon</title>
   <link rel="stylesheet" href="dist/css/a11yAccordeon.css" />
   <script type="text/javascript" src="js/libs/jquery-1.10.0.min.js"></script>
-  <script type="text/javascript" src="dist/js/a11yAccordeon.min.js"></script>
+  <script type="text/javascript" src="js/a11yAccordeon.js"></script>
 </head>
 <body onload="load()">
 
   <script type="text/javascript">
     var load = function () {
       a11yAccordeon({
-        container: ".a11yAccordeon",
-        hiddenLinkDescription: "this is some row with data",
+        parentSelector: '.a11yAccordeon',
+        hiddenLinkDescription: 'this is some row with data',
         showSearch: true,
-        colorScheme: "light"
+        colorScheme: 'light'
       });
     };
   </script>
