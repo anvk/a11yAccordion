@@ -10,19 +10,20 @@
 
   <script type="text/javascript">
     var load = function () {
-      a11yAccordeon({
+      var accordeon = a11yAccordeon({
         parentSelector: '.a11yAccordeon',
         hiddenLinkDescription: 'this is some row with data',
-        showSearch: true,
-        colorScheme: 'light'
+        showSearch: true
       });
+
+      accordeon.uncollapseRow(1);
     };
   </script>
 
   <ul class="a11yAccordeon">
     <li class="a11yAccordeonItem">
       <div class="a11yAccordeonItemHeader">
-        <strong>Header #1</strong>
+        <strong>Some Header #1</strong>
       </div>
       <div class="a11yAccordeonHideArea">
         <ul>
@@ -36,7 +37,7 @@
 
     <li class="a11yAccordeonItem">
       <div class="a11yAccordeonItemHeader">
-        <strong>Header #2</strong>
+        <strong>Another Header #2</strong>
       </div>
       <div class="a11yAccordeonHideArea">
         <h2>My other content</h2>
@@ -45,7 +46,7 @@
 
     <li class="a11yAccordeonItem">
       <div class="a11yAccordeonItemHeader">
-        <strong>Header #3</strong>
+        <strong>Final Header #3</strong>
       </div>
       <div class="a11yAccordeonHideArea">
         <img src="assets/imgs/image.jpg" alt="example image for the presentation purposes">

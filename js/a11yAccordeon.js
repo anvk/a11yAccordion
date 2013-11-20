@@ -1,4 +1,4 @@
-/*global jQuery*/
+/*global $*/
 
 /// This function would create an accordeon based on the markup and provided options
 // params:
@@ -15,13 +15,16 @@ var a11yAccordeon = function(options) {
 
   // private variables
   var that = {},
-      showHeaderLabelClass = "showLabel",
-      hideHeaderLabelClass = "hideLabel",
-      hideEffectStyle = "linear";
+      showHeaderLabelSelector = ".showLabel",
+      hideHeaderLabelSelector = ".hideLabel",
+      hideEffectStyle = "linear",
+      a11yAccordeonData = [],
+      speed, visibleAreaClass, accordeonItems, accordeonHideAreas, kzz;
 
   // options which will be passed into the components with their default values
   var defaults = {
     parentSelector: undefined,
+    accordeonItemSelector: '.a11yAccordeonItem',
     headerSelector: '.a11yAccordeonItemHeader',
     hiddenAreaSelector: '.a11yAccordeonHideArea',
     visibleAreaClass: 'visibleA11yAccordeonItem',
@@ -35,25 +38,30 @@ var a11yAccordeon = function(options) {
     options = $.extend(true, {}, defaults, options);
 
     var parentDiv = $(options.parentSelector),
-        accordeonHideAreas = parentDiv.find(options.hiddenAreaSelector),
-        headers = parentDiv.find(options.headerSelector),
-        headerLinkSelector = "a11yAccordeonItemHeaderLink",
-        showHeaderLabelText = "Show",
-        hideHeaderLabelText = "Hide",
-        hiddenHeaderLabelDescriptionClss = "hiddenLabel",
-        noResults = "no-results-found",
-        searchDiv = "a11yAccordeonSearchDiv",
-        accordeonItem = "a11yAccordeonItem",
-        accordeonItemHeader = "a11yAccordeonItemHeader",
-        rowId = "accordeon-row-",
+        accordeonItemSelector = options.accordeonItemSelector,
+        headerSelector = options.headerSelector,
+        headerLinkClass = "a11yAccordeonItemHeaderLink",
+        hiddenHeaderLabelDescriptionClass = "hiddenLabel",
+        noResultsIDString = "no-results-found",
+        searchDivIDString = "a11yAccordeonSearchDiv",
+        rowIdString = "accordeon-row-",
         colorScheme = options.colorScheme,
-        speed = options.speed,
-        a11yAccordeonData = [];
+        showHeaderLabelText = "Show",
+        hideHeaderLabelText = "Hide";
 
+    speed = options.speed;
+    visibleAreaClass = options.visibleAreaClass;
+    accordeonItems = parentDiv.find(accordeonItemSelector);
+
+    var headers = accordeonItems.find(options.headerSelector),
+    accordeonHideAreas = accordeonItems.find(options.hiddenAreaSelector);
+    kzz = accordeonItems.find(options.hiddenAreaSelector);
+
+    // check that our initialization is proper
     if (!options.headerSelector) {
       console.log('a11yAccordeon - no headerSelector was specified');
       return;
-    } else if (!options.visibleAreaClass) {
+    } else if (!visibleAreaClass) {
       console.log('a11yAccordeon - no visibleAreaClass was specified');
       return;
     } else if (!parentDiv.length) {
@@ -71,16 +79,15 @@ var a11yAccordeon = function(options) {
     accordeonHideAreas.hide();
 
     // apply color scheme
-    if (colorScheme) {
-      headers.addClass(colorScheme + "-a11yAccordeon-header");
-      accordeonHideAreas.addClass(colorScheme + "-a11yAccordeon-area");
-    }
+    headers.addClass(colorScheme + "-a11yAccordeon-header");
+    accordeonHideAreas.addClass(colorScheme + "-a11yAccordeon-area");
 
+    // function for show/hide link clicks. We predefine the function not to define it in the loop
     var linkClick = function(event) {
       var link = (event.currentTarget) ? $(event.currentTarget) : $(event.srcElement),
-          accordeonHideArea = link.parent().siblings(options.hiddenAreaSelector);
+          elementHideArea = link.parent().siblings(options.hiddenAreaSelector);
 
-      collapseWork(accordeonHideAreas, accordeonHideArea, options.visibleAreaClass, speed);
+      collapseWork(elementHideArea);
 
       link.focus();
     };
@@ -89,7 +96,7 @@ var a11yAccordeon = function(options) {
     $.each(headers, function(index, header) {
       var link = $("<a>", {
             href: "#",
-            "class": headerLinkSelector
+            "class": headerLinkClass
           }),
           spans = [];
 
@@ -98,133 +105,135 @@ var a11yAccordeon = function(options) {
 
       spans.push($("<span>", {
         text: showHeaderLabelText,
-        "class": showHeaderLabelClass
+        "class": showHeaderLabelSelector.substring(1)
       }));
 
       spans.push($("<span>", {
         text: hideHeaderLabelText,
         style: "display: none;",
-        "class": hideHeaderLabelClass
+        "class": hideHeaderLabelSelector.substring(1)
       }));
 
       spans.push($("<span>", {
         text: options.hiddenLinkDescription,
-        "class": hiddenHeaderLabelDescriptionClss
+        "class": hiddenHeaderLabelDescriptionClass
       }));
 
       // bulk DOM insert for spans
-      link.prepend(spans);
-
-      link.appendTo(header);
+      link.prepend(spans).appendTo(header);
     });
 
-    // If search bar is required, text box and no results found div are added
-    if (options.showSearch) {
-      var searchPlaceholder = "Search",
-          searchClass = "a11yAccordeonSearch",
-          noResultsText = "No Results Found",
-          titleText = "Type your query to search",
-          wrapperDiv, wrapperLi, searchInput, searchString;
-
-      wrapperDiv = $("<div />", {
-        id: searchDiv
-      }).insertBefore(parentDiv);
-
-      searchInput = $("<input />", {
-        type: "text",
-        placeholder: searchPlaceholder,
-        "class": searchClass,
-        title: titleText
-      }).appendTo(wrapperDiv);
-
-      wrapperLi = $("<li />", {
-        "class": accordeonItem,
-        id: noResults,
-        style: "display:none;"
-      }).appendTo(parentDiv);
-
-      $("<div />", {
-        "class": accordeonItemHeader,
-        text: noResultsText
-      }).appendTo(wrapperLi);
-
-      // Set an id to each row
-      $("." + accordeonItem).each( function (index, item) {
-        $(item).attr("id", rowId + index);
-      });
-
-      // Bind search function to input field
-      searchInput.keyup( function () {
-        wrapperLi.hide();
-
-        if (!a11yAccordeonData.length) {
-          populateAccordeonData();
-        }
-
-        searchString = searchInput.val().toLowerCase();
-
-        $(a11yAccordeonData).each( function(index, data) {
-          var action = data.text.indexOf(searchString) !== -1 ? "show" : "hide";
-          $("#" + data.id)[action]();
-        });
-
-        updateTitleText(searchInput);
-
-        if (! $("." + accordeonItem + ":visible").length) {
-          wrapperLi.show();
-        }
-      });
+    // if there is NO search option then return component right away
+    if (!options.showSearch) {
+      return that;
     }
+
+    var searchPlaceholder = "Search",
+        searchClass = "a11yAccordeonSearch",
+        noResultsText = "No Results Found",
+        titleText = "Type your query to search",
+        resultsMessage = "Number of results found: ",
+        leaveBlankMessage = " Please leave blank to see all the results.",
+        wrapperDiv, wrapperLi, searchInput, searchString, results;
+
+    wrapperDiv = $("<div />", {
+      id: searchDivIDString
+    }).insertBefore(parentDiv);
+
+    searchInput = $("<input />", {
+      type: "text",
+      placeholder: searchPlaceholder,
+      "class": searchClass,
+      title: titleText
+    }).appendTo(wrapperDiv);
+
+    wrapperLi = $("<li />", {
+      "class": accordeonItemSelector.substring(1),
+      id: noResultsIDString,
+      style: "display:none;"
+    }).appendTo(parentDiv);
+
+    $("<div />", {
+      "class": headerSelector.substring(1),
+      text: noResultsText
+    }).appendTo(wrapperLi);
+
+    // Set an id to each row
+    accordeonItems.each(function(index, item) {
+      $(item).attr("id", rowIdString + ++index);
+    });
+
+    // Bind search function to input field
+    searchInput.keyup(function() {
+      wrapperLi.hide();
+
+      if (!a11yAccordeonData.length) {
+        populateAccordeonData();
+      }
+
+      searchString = searchInput.val().toLowerCase();
+
+      $(a11yAccordeonData).each(function(index, data) {
+        var action = data.text.indexOf(searchString) !== -1 ? "show" : "hide";
+        $("#" + data.id)[action]();
+      });
+
+
+      results = $(headerSelector + ":visible").length;
+      searchInput.attr("title", resultsMessage + results.toString() + leaveBlankMessage);
+
+
+      if (!$(accordeonItemSelector + ":visible").length) {
+        wrapperLi.show();
+      }
+    });
 
     return that;
   };
 
 
+
   /// Private functions
+
 
 
   /// Function which is executed upon the link click. It will either hide the related area OR show the area and hide all other ones
   // params:
-  //  accordeonHideAreas - all areas which could be collapsed
   //  element - element which relates to the link being clicked
-  //  visibleAreaClass - class which will be added or removed depending on the situation
-  //  speed - animation speed
   //
-  var collapseWork = function (accordeonHideAreas, element, visibleAreaClass, speed) {
+  var collapseWork = function(element) {
+    if (!element) {
+      return;
+    }
+
     if (element.hasClass(visibleAreaClass)) {
-      collapse(element, visibleAreaClass, speed);
+      collapse(element);
     } else {
-      collapseAll(accordeonHideAreas, visibleAreaClass, speed);
-      uncollapse(element, visibleAreaClass, speed);
+      collapseAll();
+      uncollapse(element);
     }
   };
 
   /// Function which will collapse all areas
-  // params:
-  //  accordeonHideAreas - array of jQuery elements which will be collapsed
-  //  visibleAreaClass - class which will be removed from those areas
-  //  speed - animation speed
   //
-  var collapseAll = function(accordeonHideAreas, visibleAreaClass, speed) {
-    $.each(accordeonHideAreas.filter("." + visibleAreaClass), function(index, element) {
-      collapse($(element), visibleAreaClass, speed);
+  var collapseAll = function() {
+    $.each(kzz.filter("." + visibleAreaClass), function(index, element) {
+      collapse($(element));
     });
   };
 
   /// Function which will collapses one element
   // params:
-  //  accordeonHideAreas - array of jQuery elements which will be collapsed
-  //  visibleAreaClass - class which will be removed from those areas
-  //  speed - animation speed
+  //  element - element which relates to the link being clicked
   //
-  var collapse = function(element, visibleAreaClass, speed) {
-    if (!element.hasClass(visibleAreaClass)) {
+  var collapse = function(element) {
+    if (!element || !element.hasClass(visibleAreaClass)) {
       return;
     }
 
     var topRow = element.siblings(options.headerSelector);
-    topRow.find("." + showHeaderLabelClass).show();
-    topRow.find("." + hideHeaderLabelClass).hide();
+    topRow.find(showHeaderLabelSelector).show();
+    topRow.find(hideHeaderLabelSelector).hide();
 
     element.slideUp(speed, hideEffectStyle, function () {
       element.removeClass(visibleAreaClass);
@@ -235,17 +244,15 @@ var a11yAccordeon = function(options) {
   /// Function which will show the area and convert from collapsed to be displayed one
   // params:
   //  element - element which will be shown
-  //  visibleAreaClass - class which will be removed from those areas
-  //  speed - animation speed
   //
-  var uncollapse = function (element, visibleAreaClass, speed) {
-    if (element.hasClass(visibleAreaClass)) {
+  var uncollapse = function(element) {
+    if (!element || element.hasClass(visibleAreaClass)) {
       return;
     }
 
     var topRow = element.siblings(options.headerSelector);
-    topRow.find("." + showHeaderLabelClass).hide();
-    topRow.find("." + hideHeaderLabelClass).show();
+    topRow.find(showHeaderLabelSelector).hide();
+    topRow.find(hideHeaderLabelSelector).show();
 
     element.addClass(visibleAreaClass);
     element.slideDown(speed, hideEffectStyle, function () {
@@ -254,27 +261,24 @@ var a11yAccordeon = function(options) {
   };
 
   // Function to read Accordeon Rows and fill in data in a variable, it is done just once
-  var populateAccordeonData = function () {
-    var items = $("." + accordeonItem),
-        item;
-
+  var populateAccordeonData = function() {
     // One less iteration because the last one is for "no results found" rows
-    for (var i=0, length=items.length-1; i<length; ++i) {
-      item = items[i];
+    for (var i=0, length=accordeonItems.length-1; i < length; ++i) {
+      var item = accordeonItems[i];
       a11yAccordeonData.push({
         id: item.id,
-        text: $(item).text().replace(showHeaderLabelText +
+        text: item.text().replace(showHeaderLabelText +
           hideHeaderLabelText + options.hiddenLinkDescription, "").toLowerCase()
       });
     }
   };
 
-  var updateTitleText = function (searchInput) {
-    var results = $("." + accordeonItemHeader + ":visible").length,
-        resultsMessage = "Number of results found: ",
-        leaveBlankMessage = " Please leave blank to see all the results.";
+  var checkIfIndexCorrect = function(rowIndex) {
+    return (rowIndex > 0 && rowIndex <= kzz.length);
+  };
 
-    searchInput.attr("title", resultsMessage + results.toString() + leaveBlankMessage);
+  var getHiddenArea = function(rowIndex) {
+    return (checkIfIndexCorrect(rowIndex)) ? $(kzz[rowIndex - 1]) : undefined;
   };
 
 
@@ -282,27 +286,28 @@ var a11yAccordeon = function(options) {
   /// Public functions
 
 
-  // that.collapseRow = function(rowIndex) {
 
-  // };
+  that.collapseRow = function(rowIndex) {
+    collapse(getHiddenArea(rowIndex));
+  };
 
-  // that.uncollapseRow = function(rowIndex) {
+  that.uncollapseRow = function(rowIndex) {
+    uncollapse(getHiddenArea(rowIndex));
+  };
 
-  // };
+  that.toggleRow = function(rowIndex) {
+    collapseWork(getHiddenArea(rowIndex));
+  };
+
+  that.getRowEl = function(rowIndex) {
+    return (checkIfIndexCorrect(rowIndex)) ? $(accordeonItems[rowIndex - 1]) : undefined;
+  };
 
   // that.enableRow = function(rowIndex) {
 
   // };
 
   // that.disableRow = function(rowIndex) {
-
-  // };
-
-  // that.toggleRow = function(rowIndex) {
-
-  // };
-
-  // that.getRowEl = function(rowIndex) {
 
   // };
 
