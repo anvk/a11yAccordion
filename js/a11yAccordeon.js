@@ -172,7 +172,7 @@ var a11yAccordeon = function(options) {
         $(accordeonItems[index])[action]();
       });
 
-      results = $(headerSelector + ':visible').length;
+      results = parentDiv.find(headerSelector + ':visible').length;
       searchInput.attr('title', resultsMessage + results.toString() + leaveBlankMessage);
 
       if (!results) {

@@ -11,16 +11,25 @@
   <script type="text/javascript">
     var load = function () {
       var accordeon = a11yAccordeon({
-        parentSelector: '.a11yAccordeon',
+        parentSelector: '#Accordeon1',
         hiddenLinkDescription: 'this is some row with data',
         showSearch: true
       });
 
-      accordeon.uncollapseRow(1);
+      accordeon.uncollapseRow(2);
+
+      var another_accordeon = a11yAccordeon({
+        parentSelector: '#Accordeon2',
+        hiddenLinkDescription: 'this is some row with data',
+        showSearch: true
+      });
+
     };
+
+
   </script>
 
-  <ul class="a11yAccordeon">
+  <ul class="a11yAccordeon" id="Accordeon1">
     <li class="a11yAccordeonItem">
       <div class="a11yAccordeonItemHeader">
         <strong>Some Header #1</strong>
@@ -47,6 +56,40 @@
     <li class="a11yAccordeonItem">
       <div class="a11yAccordeonItemHeader">
         <strong>Final Header #3</strong>
+      </div>
+      <div class="a11yAccordeonHideArea">
+        <img src="assets/imgs/image.jpg" alt="example image for the presentation purposes">
+      </div>
+    </li>
+  </ul>
+
+  <ul class="a11yAccordeon" id="Accordeon2">
+    <li class="a11yAccordeonItem">
+      <div class="a11yAccordeonItemHeader">
+        <strong>New Header #1</strong>
+      </div>
+      <div class="a11yAccordeonHideArea">
+        <ul>
+          <li>Point 1</li>
+          <li>Point 2</li>
+          <li>Point 3</li>
+          <li>Point 4</li>
+        </ul>
+      </div>
+    </li>
+
+    <li class="a11yAccordeonItem">
+      <div class="a11yAccordeonItemHeader">
+        <strong>Second Header #2</strong>
+      </div>
+      <div class="a11yAccordeonHideArea">
+        <h2>My other content</h2>
+      </div>
+    </li>
+
+    <li class="a11yAccordeonItem">
+      <div class="a11yAccordeonItemHeader">
+        <strong>The third Header #3</strong>
       </div>
       <div class="a11yAccordeonHideArea">
         <img src="assets/imgs/image.jpg" alt="example image for the presentation purposes">
