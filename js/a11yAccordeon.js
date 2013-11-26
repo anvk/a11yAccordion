@@ -168,7 +168,8 @@ var a11yAccordeon = function(options) {
       searchString = searchInput.val().toLowerCase();
 
       headers.each(function(index, data) {
-        var action = data.children[0].textContent.toLowerCase().indexOf(searchString) !== -1 ? 'show' : 'hide';
+        var action = (data.children[0].textContent.toLowerCase().indexOf(searchString) !== -1) ||
+                     (accordeonHideAreas[index].textContent.toLowerCase().indexOf(searchString) !== -1) ? 'show' : 'hide';
         $(accordeonItems[index])[action]();
       });
 
