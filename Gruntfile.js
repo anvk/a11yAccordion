@@ -1,6 +1,11 @@
 module.exports = function(grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    clean: {
+      production: {
+        src: [ 'dist' ]
+      },
+    },
     copy: {
       main: {
         files: [
@@ -9,29 +14,32 @@ module.exports = function(grunt) {
       }
     },
     less: {
-      development: {
+      production: {
         options: {
           paths: ["css"]
         },
         files: {
           "dist/css/<%= pkg.name %>.css": "assets/a11yAccordeon.less"
         }
+      }
+    },
+    cssmin: {
+      options: {
+        banner: '/*! <%= pkg.name %> <%= pkg.version %> / Last build on: <%= grunt.template.today("dd-mm-yyyy") %> / This file is under <%= pkg.version %> license. */'
       },
       production: {
-        options: {
-          paths: ["css"],
-          yuicompress: true
-        },
-        files: {
-          "dist/css/<%= pkg.name %>.css": "assets/a11yAccordeon.less"
-        }
+        expand: true,
+        cwd: 'dist/css/',
+        src: ['*.css', '!*.min.css'],
+        dest: 'dist/css/',
+        ext: '.min.css'
       }
     },
     concat: {
       options: {
         separator: ';'
       },
-      dist: {
+      production: {
         src: ['!js/libs', 'js/**/*.js'],
         dest: 'dist/js/<%= pkg.name %>-<%= pkg.version %>.min.js'
       }
@@ -40,18 +48,20 @@ module.exports = function(grunt) {
       options: {
         banner: '/*! <%= pkg.name %> <%= pkg.version %> / Last build on: <%= grunt.template.today("dd-mm-yyyy") %> / This file is under <%= pkg.version %> license. */\n'
       },
-      my_target: {
+      production: {
         files: {
-          'dist/js/<%= pkg.name %>-<%= pkg.version %>.min.js': ['<%= concat.dist.dest %>']
+          'dist/js/<%= pkg.name %>-<%= pkg.version %>.min.js': ['<%= concat.production.dest %>']
         }
       }
     }
   });
 
+  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-less');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-copy');
 
-  grunt.registerTask('default', ['copy', 'less', 'concat', 'uglify']);
+  grunt.registerTask('default', ['clean', 'copy', 'less', 'cssmin', 'concat', 'uglify']);
 };

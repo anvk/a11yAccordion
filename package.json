@@ -1,6 +1,6 @@
 {
   "name": "a11yAccordeon",
-  "version": "0.2",
+  "version": "0.2.0",
   "description": "An accessible Accordeon widget.",
   "contributors": [
     {
@@ -24,10 +24,14 @@
   ],
   "dependencies": {
     "grunt": ">=0.4.1",
-    "grunt-contrib-uglify": ">=0.2.2",
-    "grunt-contrib-concat": ">=0.3.0",
-    "grunt-contrib-less": ">= 0.6.4",
-    "grunt-contrib-copy": ">= 0.4.1"
+    "grunt-contrib-clean": "0.5.x",
+    "grunt-contrib-uglify": "0.2.x",
+    "grunt-contrib-concat": "0.3.x",
+    "grunt-contrib-less": "0.6.x",
+    "grunt-contrib-cssmin": "0.7.x",
+    "grunt-contrib-copy": "0.4.x"
   },
-  "license": "MIT"
+  "engine": "node >= 0.10.22",
+  "license": "MIT",
+  "private": true
 }
