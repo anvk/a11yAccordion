@@ -152,7 +152,7 @@ var a11yAccordeon = function(options) {
     }).appendTo(parentDiv);
 
     $('<div />', {
-      'class': headerSelector.substring(1),
+      'class': headerSelector.substring(1) + ' ' + colorScheme + '-a11yAccordeon-header',
       text: noResultsText
     }).appendTo(wrapperLi);
 
@@ -168,8 +168,7 @@ var a11yAccordeon = function(options) {
       searchString = searchInput.val().toLowerCase();
 
       headers.each(function(index, data) {
-        var action = (data.children[0].textContent.toLowerCase().indexOf(searchString) !== -1) ||
-                     (accordeonHideAreas[index].textContent.toLowerCase().indexOf(searchString) !== -1) ? 'show' : 'hide';
+        var action = data.children[0].textContent.toLowerCase().indexOf(searchString) !== -1 ? 'show' : 'hide';
         $(accordeonItems[index])[action]();
       });
 
