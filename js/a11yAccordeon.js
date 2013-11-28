@@ -46,7 +46,9 @@ var a11yAccordeon = function(options) {
         noResultsIDString = 'no-results-found',
         searchDivIDString = 'a11yAccordeonSearchDiv',
         rowIdString = 'accordeon-row-',
-        colorScheme = options.colorScheme;
+        colorScheme = options.colorScheme,
+        headerColorSchemeAppend = '-a11yAccordeon-header',
+        areaColorSchemeAppend = '-a11yAccordeon-area';
 
     speed = options.speed;
     visibleAreaClass = options.visibleAreaClass;
@@ -77,8 +79,8 @@ var a11yAccordeon = function(options) {
     accordeonHideAreas.hide();
 
     // apply color scheme
-    headers.addClass(colorScheme + '-a11yAccordeon-header');
-    accordeonHideAreas.addClass(colorScheme + '-a11yAccordeon-area');
+    headers.addClass(colorScheme + headerColorSchemeAppend);
+    accordeonHideAreas.addClass(colorScheme + areaColorSchemeAppend);
 
     // function for show/hide link clicks. We predefine the function not to define it in the loop
     var linkClick = function(event) {
@@ -152,7 +154,7 @@ var a11yAccordeon = function(options) {
     }).appendTo(parentDiv);
 
     $('<div />', {
-      'class': headerSelector.substring(1) + ' ' + colorScheme + '-a11yAccordeon-header',
+      'class': headerSelector.substring(1) + ' ' + colorScheme + headerColorSchemeAppend,
       text: noResultsText
     }).appendTo(wrapperLi);
 
