@@ -4,22 +4,22 @@
   <title>a11y Accordeon</title>
   <link rel="stylesheet" href="dist/css/a11yAccordeon.min.css" />
   <script type="text/javascript" src="js/libs/jquery-1.10.0.min.js"></script>
-  <script type="text/javascript" src="dist/js/a11yAccordeon-0.2.0.min.js"></script>
+  <script type="text/javascript" src="dist/js/a11yAccordeon-0.2.1.min.js"></script>
 </head>
 <body onload="load()">
 
   <script type="text/javascript">
     var load = function () {
       var accordeon = a11yAccordeon({
-        parentSelector: '#Accordeon1',
+        parentSelector: '#accordeon1',
         hiddenLinkDescription: 'this is some row with data',
         showSearch: true
       });
 
       accordeon.uncollapseRow(2);
 
-      var AnotherAccordeon = a11yAccordeon({
-        parentSelector: '#Accordeon2',
+      var anotherAccordeon = a11yAccordeon({
+        parentSelector: '#accordeon2',
         hiddenLinkDescription: 'this is some row with data',
         showSearch: true,
         colorScheme: 'dark'
@@ -28,7 +28,10 @@
     };
   </script>
 
-  <ul class="a11yAccordeon" id="Accordeon1">
+  <h1 align="center">a11yAccordeon widget</h1>
+  <h2 align="center">Building Web with accessibility in mind.</h2>
+
+  <ul class="a11yAccordeon" id="accordeon1">
     <li class="a11yAccordeonItem">
       <div class="a11yAccordeonItemHeader">
         <strong>Some Header #1</strong>
@@ -45,24 +48,28 @@
 
     <li class="a11yAccordeonItem">
       <div class="a11yAccordeonItemHeader">
-        <strong>Another Header #2</strong>
+        <strong>Header with a Link within</strong>
       </div>
       <div class="a11yAccordeonHideArea">
         <h2>My other content</h2>
+        <p>This content is accessible by Assistive Technology and Screen Readers only when the collapsible area is visible to the user.</p>
+        <a href="#">This link is also accessible only when the collapsible area is visible.</a>
       </div>
     </li>
 
     <li class="a11yAccordeonItem">
       <div class="a11yAccordeonItemHeader">
-        <strong>Final Header #3</strong>
+        <strong>Final Header with Controls#3</strong>
       </div>
       <div class="a11yAccordeonHideArea">
-        <img src="assets/imgs/image.jpg" alt="example image for the presentation purposes">
+        <p>These controls are accessible for interaction by Assistive Technology and Screen Readers only when the collapsible area is visible to the user.</p>
+        <input type='test' placeholder='Please enter some info here' style='width: 20%' /><br /><br />
+        <input type='test' placeholder='Another control' />
       </div>
     </li>
   </ul>
 
-  <ul class="a11yAccordeon" id="Accordeon2">
+  <ul class="a11yAccordeon" id="accordeon2">
     <li class="a11yAccordeonItem">
       <div class="a11yAccordeonItemHeader">
         <strong>Random Months</strong>

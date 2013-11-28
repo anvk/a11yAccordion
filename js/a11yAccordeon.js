@@ -41,24 +41,25 @@ var a11yAccordeon = function(options) {
     var parentDiv = $(options.parentSelector),
         accordeonItemSelector = options.accordeonItemSelector,
         headerSelector = options.headerSelector,
+        hiddenAreaSelector = options.hiddenAreaSelector,
         headerLinkClass = 'a11yAccordeonItemHeaderLink',
         hiddenHeaderLabelDescriptionClass = 'hiddenLabel',
         noResultsIDString = 'no-results-found',
         searchDivIDString = 'a11yAccordeonSearchDiv',
         rowIdString = 'accordeon-row-',
         colorScheme = options.colorScheme,
-        headerColorSchemeAppend = '-a11yAccordeon-header',
-        areaColorSchemeAppend = '-a11yAccordeon-area';
+        accordeonHeaderClass = colorScheme + '-a11yAccordeon-header',
+        accordeonHideAreaClass = colorScheme + '-a11yAccordeon-area';
 
     speed = options.speed;
     visibleAreaClass = options.visibleAreaClass;
     accordeonItems = parentDiv.find(accordeonItemSelector);
 
-    var headers = accordeonItems.find(options.headerSelector);
-    accordeonHideAreas = accordeonItems.find(options.hiddenAreaSelector);
+    var headers = accordeonItems.find(headerSelector);
+    accordeonHideAreas = accordeonItems.find(hiddenAreaSelector);
 
     // check that our initialization is proper
-    if (!options.headerSelector) {
+    if (!headerSelector) {
       console.log('a11yAccordeon - no headerSelector was specified');
       return;
     } else if (!visibleAreaClass) {
@@ -79,20 +80,22 @@ var a11yAccordeon = function(options) {
     accordeonHideAreas.hide();
 
     // apply color scheme
-    headers.addClass(colorScheme + headerColorSchemeAppend);
-    accordeonHideAreas.addClass(colorScheme + areaColorSchemeAppend);
+    headers.addClass(accordeonHeaderClass);
+    accordeonHideAreas.addClass(accordeonHideAreaClass);
 
     // function for show/hide link clicks. We predefine the function not to define it in the loop
     var linkClick = function(event) {
-      var link = (event.currentTarget) ? $(event.currentTarget) : $(event.srcElement),
-          elementHideArea = link.parent().siblings(options.hiddenAreaSelector);
-
-      collapseWork(elementHideArea);
-
-      link.focus();
+      event.preventDefault();
+      event.stopPropagation();
+      var accordeonItem = $(event.target).parents(accordeonItemSelector);
+      collapseWork(accordeonItem.find(hiddenAreaSelector));
+      accordeonItem.find('.' + headerLinkClass).focus();
     };
 
-    // generate links
+    // bind headers to a click event
+    headers.click(linkClick);
+
+    // generate assistive links
     $.each(headers, function(index, header) {
       var link = $('<a>', {
             href: '#',
@@ -154,7 +157,7 @@ var a11yAccordeon = function(options) {
     }).appendTo(parentDiv);
 
     $('<div />', {
-      'class': headerSelector.substring(1) + ' ' + colorScheme + headerColorSchemeAppend,
+      'class': headerSelector.substring(1) + ' ' + accordeonHeaderClass,
       text: noResultsText
     }).appendTo(wrapperLi);
 

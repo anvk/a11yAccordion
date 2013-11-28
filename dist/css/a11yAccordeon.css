@@ -12,7 +12,10 @@
 .a11yAccordeon li.a11yAccordeonItem .a11yAccordeonItemHeader {
   padding: 1.5em;
 }
-.a11yAccordeon li.a11yAccordeonItem .a11yAccordeonItemHeader .hiddenLabel {
+.a11yAccordeon li.a11yAccordeonItem .a11yAccordeonItemHeader .a11yAccordeonItemHeaderLink {
+  float: right;
+}
+.a11yAccordeon li.a11yAccordeonItem .a11yAccordeonItemHeader .a11yAccordeonItemHeaderLink .hiddenLabel {
   left: -900px;
   top: -900px;
   position: absolute;
