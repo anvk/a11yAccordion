@@ -20,7 +20,7 @@ var a11yAccordeon = function(options) {
       hideEffectStyle = 'linear',
       showHeaderLabelText = 'Show',
       hideHeaderLabelText = 'Hide',
-      speed, visibleAreaClass, accordeonItems, accordeonHideAreas;
+      speed, visibleAreaClass, accordeonItems, accordeonHideAreas, showOne;
 
   // options which will be passed into the components with their default values
   var defaults = {
@@ -32,7 +32,8 @@ var a11yAccordeon = function(options) {
     colorScheme: 'light',
     speed: 300,
     hiddenLinkDescription: '',
-    showSearch: true
+    showSearch: true,
+    showOne: true
   };
 
   var init = function(options) {
@@ -52,6 +53,7 @@ var a11yAccordeon = function(options) {
         accordeonHideAreaClass = colorScheme + '-a11yAccordeon-area';
 
     speed = options.speed;
+    showOne = (options.showOne !== undefined) ? options.showOne : defaults.showOne;
     visibleAreaClass = options.visibleAreaClass;
     accordeonItems = parentDiv.find(accordeonItemSelector);
 
@@ -59,11 +61,11 @@ var a11yAccordeon = function(options) {
     accordeonHideAreas = accordeonItems.find(hiddenAreaSelector);
 
     // check that our initialization is proper
-    if (!headerSelector) {
-      console.log('a11yAccordeon - no headerSelector was specified');
+    if (!headers.length) {
+      console.log('a11yAccordeon - no headers were found');
       return;
     } else if (!visibleAreaClass) {
-      console.log('a11yAccordeon - no visibleAreaClass was specified');
+      console.log('a11yAccordeon - no visibleAreaClass was specified. This class is used to determine what is collapsed and what is not');
       return;
     } else if (!parentDiv.length) {
       console.log('a11yAccordeon - no element(s) with parentSelector was found');
@@ -163,7 +165,7 @@ var a11yAccordeon = function(options) {
 
     // Set an id to each row
     accordeonItems.each(function(index, item) {
-      $(item).attr('id', rowIdString + (++index));
+      item.setAttribute('id', rowIdString + (++index));
     });
 
     // Bind search function to input field
@@ -206,7 +208,9 @@ var a11yAccordeon = function(options) {
     if (element.hasClass(visibleAreaClass)) {
       collapse(element);
     } else {
-      collapseAll();
+      if (showOne) {
+        collapseAll();
+      }
       uncollapse(element);
     }
   };

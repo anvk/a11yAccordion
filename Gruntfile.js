@@ -46,7 +46,7 @@ module.exports = function(grunt) {
     },
     uglify: {
       options: {
-        banner: '/*! <%= pkg.name %> <%= pkg.version %> / Last build on: <%= grunt.template.today("dd-mm-yyyy") %> / This file is under <%= pkg.version %> license. */\n'
+        banner: '/*! <%= pkg.name %> <%= pkg.version %> / Last build on: <%= grunt.template.today("dd-mm-yyyy") %> / This file is under <%= pkg.license %> license. */\n'
       },
       production: {
         files: {
