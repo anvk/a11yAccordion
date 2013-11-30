@@ -20,7 +20,7 @@ var a11yAccordeon = function(options) {
       hideEffectStyle = 'linear',
       showHeaderLabelText = 'Show',
       hideHeaderLabelText = 'Hide',
-      speed, visibleAreaClass, accordeonItems, accordeonHideAreas, showOne;
+      speed, visibleAreaClass, accordeonItems, accordeonHideAreas;
 
   // options which will be passed into the components with their default values
   var defaults = {
@@ -53,7 +53,7 @@ var a11yAccordeon = function(options) {
         accordeonHideAreaClass = colorScheme + '-a11yAccordeon-area';
 
     speed = options.speed;
-    showOne = (options.showOne !== undefined) ? options.showOne : defaults.showOne;
+    that.showOne = (options.showOne !== undefined) ? options.showOne : defaults.showOne;
     visibleAreaClass = options.visibleAreaClass;
     accordeonItems = parentDiv.find(accordeonItemSelector);
 
@@ -191,9 +191,7 @@ var a11yAccordeon = function(options) {
   };
 
 
-
   /// Private functions
-
 
 
   /// Function which is executed upon the link click. It will either hide the related area OR show the area and hide all other ones
@@ -208,7 +206,7 @@ var a11yAccordeon = function(options) {
     if (element.hasClass(visibleAreaClass)) {
       collapse(element);
     } else {
-      if (showOne) {
+      if (that.showOne) {
         collapseAll();
       }
       uncollapse(element);
@@ -261,40 +259,70 @@ var a11yAccordeon = function(options) {
     });
   };
 
+  /// Function which returns true if rowIndex is within range of the accordeon's existing collapsible elements
+  // params:
+  //  rowIndex - integer index of the row
+  //
   var checkIfIndexCorrect = function(rowIndex) {
     return (rowIndex > 0 && rowIndex <= accordeonHideAreas.length);
   };
 
+  /// Function which returns a jQuery element which represent a hidden area
+  // params:
+  //  rowIndex - integer index of the row of the hidden area
+  //
   var getHiddenArea = function(rowIndex) {
     return (checkIfIndexCorrect(rowIndex)) ? $(accordeonHideAreas[rowIndex - 1]) : undefined;
   };
 
 
-
   /// Public functions
 
 
-
+  /// Function which will show hidden area to the user
+  // params:
+  //  rowIndex - integer index of the row
+  //
   that.collapseRow = function(rowIndex) {
     collapse(getHiddenArea(rowIndex));
   };
 
+  /// Function which will hide hidden area to the user
+  // params:
+  //  rowIndex - integer index of the row
+  //
   that.uncollapseRow = function(rowIndex) {
     uncollapse(getHiddenArea(rowIndex));
   };
 
+  /// Function which will hide or show area to the user depending on what was the state of the area
+  // params:
+  //  rowIndex - integer index of the row
+  //
   that.toggleRow = function(rowIndex) {
     collapseWork(getHiddenArea(rowIndex));
   };
 
+  /// Function which returns a jQuery element which represent a row in accordeon
+  // params:
+  //  rowIndex - integer index of the row
+  //
   that.getRowEl = function(rowIndex) {
     return (checkIfIndexCorrect(rowIndex)) ? $(accordeonItems[rowIndex - 1]) : undefined;
   };
 
+  /// Function which will make row disabled and immune to the user clicks
+  // params:
+  //  rowIndex - integer index of the row
+  //
   // that.enableRow = function(rowIndex) {
 
   // };
 
+  /// Function which will make row enabled and available for the user clicks
+  // params:
+  //  rowIndex - integer index of the row
+  //
   // that.disableRow = function(rowIndex) {
 
   // };
