@@ -279,7 +279,7 @@ var a11yAccordeon = function(options) {
   /// Public functions
 
 
-  /// Function which will show hidden area to the user
+  /// Function which will hide hidden area in the row with index = rowIndex
   // params:
   //  rowIndex - integer index of the row
   //
@@ -287,7 +287,7 @@ var a11yAccordeon = function(options) {
     collapse(getHiddenArea(rowIndex));
   };
 
-  /// Function which will hide hidden area to the user
+  /// Function which will show hidden area in the row with index = rowIndex
   // params:
   //  rowIndex - integer index of the row
   //
@@ -295,7 +295,7 @@ var a11yAccordeon = function(options) {
     uncollapse(getHiddenArea(rowIndex));
   };
 
-  /// Function which will hide or show area to the user depending on what was the state of the area
+  /// Function which will hide or show hidden area in the row with index = rowIndex depending on its previous state
   // params:
   //  rowIndex - integer index of the row
   //
@@ -303,7 +303,7 @@ var a11yAccordeon = function(options) {
     collapseWork(getHiddenArea(rowIndex));
   };
 
-  /// Function which returns a jQuery element which represent a row in accordeon
+  /// Function which will return a jQuery row element with index = rowIndex
   // params:
   //  rowIndex - integer index of the row
   //

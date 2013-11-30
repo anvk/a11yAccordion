@@ -44,11 +44,11 @@ var defaults = {
 
 #### myAccordeon.collapseRow(rowIndex);
 
-> Function which will show hidden area in the row with index = rowIndex
+> Function which will hide hidden area in the row with index = rowIndex
 
 #### myAccordeon.uncollapseRow(rowIndex);
 
-> Function which will hide hidden area in the row with index = rowIndex
+> Function which will show hidden area in the row with index = rowIndex
 
 #### myAccordeon.toggleRow(rowIndex);
 
