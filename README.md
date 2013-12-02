@@ -1,4 +1,4 @@
-# a11yAccordeon
+# a11yAccordeon v0.2.2
 
 > An accessible easy to use Accordeon widget.
 
@@ -152,10 +152,11 @@ An example on how to use it could be found for a default **light** color-scheme.
 
 ## Release History
 
-* 2013-11-28   v0.2.1   Added basic user click interactions and advanced accordeon to be more configurable.
-* 2013-11-20   v0.2.0   Code completely refactored to be more performant and optimized. Proper web component structure.
-* 2013-07-27   v0.1.0   Grunt added to the project. Proper project build scripts are created.
-* 2013-06-26   v0.0.1   First working version of a standalone a11yAccordeon outside of AContent.
+* 2013-12-02   v0.2.2   Added few tests to the project. More tests coming. Changed markup for Search Div to be within the accordeon markup  
+* 2013-11-28   v0.2.1   Added basic user click interactions and advanced accordeon to be more configurable.  
+* 2013-11-20   v0.2.0   Code completely refactored to be more performant and optimized. Proper web component structure.  
+* 2013-07-27   v0.1.0   Grunt added to the project. Proper project build scripts are created.  
+* 2013-06-26   v0.0.1   First working version of a standalone a11yAccordeon outside of AContent.  
 
 ## License
 (The MIT License)
