@@ -64,6 +64,9 @@ var a11yAccordeon = function(options) {
     if (!headers.length) {
       console.log('a11yAccordeon - no headers were found');
       return;
+    } else if (!accordeonItems.length) {
+      console.log('a11yAccordeon - no accordeonItems were found. There are no rows in accordeon to create it');
+      return;
     } else if (!visibleAreaClass) {
       console.log('a11yAccordeon - no visibleAreaClass was specified. This class is used to determine what is collapsed and what is not');
       return;
@@ -143,7 +146,7 @@ var a11yAccordeon = function(options) {
 
     wrapperDiv = $('<div />', {
       id: searchDivIDString
-    }).insertBefore(parentDiv);
+    });
 
     searchInput = $('<input />', {
       type: 'text',
@@ -167,6 +170,8 @@ var a11yAccordeon = function(options) {
     accordeonItems.each(function(index, item) {
       item.setAttribute('id', rowIdString + (++index));
     });
+
+    wrapperDiv.prependTo(parentDiv);
 
     // Bind search function to input field
     searchInput.keyup(function() {
