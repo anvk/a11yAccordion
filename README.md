@@ -42,23 +42,25 @@ var defaults = {
 };
 ```
 
-#### myAccordeon.collapseRow(rowIndex);
+### API
+
+#### collapseRow(rowIndex);
 
 > Function which will hide hidden area in the row with index = rowIndex
 
-#### myAccordeon.uncollapseRow(rowIndex);
+#### uncollapseRow(rowIndex);
 
 > Function which will show hidden area in the row with index = rowIndex
 
-#### myAccordeon.toggleRow(rowIndex);
+#### toggleRow(rowIndex);
 
 > Function which will hide or show hidden area in the row with index = rowIndex depending on its previous state
 
-#### myAccordeon.getRowEl(rowIndex);
+#### getRowEl(rowIndex);
 
 > Function which will return a jQuery row element with index = rowIndex
 
-#### myAccordeon.showOne
+#### showOne
 
 > Boolean value which will make accordeon to show only 1 uncollapsed row at a time to the user if true
 
