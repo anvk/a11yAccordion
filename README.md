@@ -24,8 +24,8 @@ var myAccordeon = a11yAccordeon(options);
 **hiddenLinkDescription** - description for every Show/Hide link for users who use Assistive technology (AT)  
 **showSearch** - boolean option which will tell accordeon to render search options  
 **showOne** - boolean option which represents if accordeon can uncollapse only 1 row to the user  
-**overallSearch** - boolean option which will force Search to look for text matches not only header but within hidden elements as well  
-(WARNING! overallSearch can make your search VERY slow in cases when there is lots of data or HTML markup present in the hidden areas.)  
+**overallSearch** - boolean option which will tell search to look not only in headers but within collapsed areas as well  
+(WARNING! **overallSearch** option can slow down performance in cases when there is lots of data or HTML markup present in the hidden areas.)  
 
 ### Widget default options
 
