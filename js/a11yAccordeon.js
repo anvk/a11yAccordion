@@ -33,7 +33,8 @@ var a11yAccordeon = function(options) {
     speed: 300,
     hiddenLinkDescription: '',
     showSearch: true,
-    showOne: true
+    showOne: true,
+    overallSearch: false
   };
 
   var init = function(options) {
@@ -180,7 +181,8 @@ var a11yAccordeon = function(options) {
       searchString = searchInput.val().toLowerCase();
 
       headers.each(function(index, data) {
-        var action = data.children[0].textContent.toLowerCase().indexOf(searchString) !== -1 ? 'show' : 'hide';
+        var action = ((data.children[0].textContent.toLowerCase().indexOf(searchString) !== -1) ||
+                      (options.overallSearch && accordeonHideAreas[index].textContent.toLowerCase().indexOf(searchString) !== -1)) ? 'show' : 'hide';
         $(accordeonItems[index])[action]();
       });
 

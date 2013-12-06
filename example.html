@@ -10,18 +10,17 @@
     var load = function () {
       var accordeon = a11yAccordeon({
         parentSelector: '#accordeon1',
-        hiddenLinkDescription: 'this is some row with data',
-        showSearch: true
+        hiddenLinkDescription: 'this is some row with data in first accordeon'
       });
 
       accordeon.uncollapseRow(2);
 
       var anotherAccordeon = a11yAccordeon({
         parentSelector: '#accordeon2',
-        hiddenLinkDescription: 'this is some row with data',
-        showSearch: true,
+        hiddenLinkDescription: 'this is some row with data in second accordeon',
         colorScheme: 'dark',
-        showOne: false
+        showOne: false,
+        overallSearch: true
       });
 
     };
@@ -71,7 +70,7 @@
     </li>
   </ul>
 
-  <h3 align="center">Accordeon which can show multiple items</h3>
+  <h3 align="center">Accordeon which can show multiple items and with a search which looks within the accordeon hidden elements</h3>
 
   <ul class="a11yAccordeon" id="accordeon2">
     <li class="a11yAccordeonItem">
