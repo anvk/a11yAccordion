@@ -14,18 +14,18 @@ var myAccordeon = a11yAccordeon(options);
 
 ### Options
 
-**parentSelector** - selector for the parent container which has an accordeon markup  
-**accordeonItemSelector** - selector for accordeon row which contains header and hidden area  
-**headerSelector** - selector for a header within the row  
-**hiddenAreaSelector** - selector for hidden areas within the accordeon row  
-**visibleAreaClass** - class which would be added to every row which will be uncollapsed/visible to the user  
-**colorScheme** - color scheme for the accordeon  
-**speed** - speed of animation  
-**hiddenLinkDescription** - description for every Show/Hide link for users who use Assistive technology (AT)  
-**showSearch** - boolean option which will tell accordeon to render search options  
-**showOne** - boolean option which represents if accordeon can uncollapse only 1 row to the user  
-**overallSearch** - boolean option which will tell search to look not only in headers but within collapsed areas as well  
-(WARNING! **overallSearch** option can slow down performance in cases when there is lots of data or HTML markup present in the hidden areas.)  
+**parentSelector** - selector for the parent container which has an accordeon markup
+**accordeonItemSelector** - selector for accordeon row which contains header and hidden area
+**headerSelector** - selector for a header within the row
+**hiddenAreaSelector** - selector for hidden areas within the accordeon row
+**visibleAreaClass** - class which would be added to every row which will be uncollapsed/visible to the user
+**colorScheme** - color scheme for the accordeon
+**speed** - speed of animation
+**hiddenLinkDescription** - description for every Show/Hide link for users who use Assistive technology (AT)
+**showSearch** - boolean option which will tell accordeon to render search options
+**showOne** - boolean option which represents if accordeon can uncollapse only 1 row to the user
+**overallSearch** - boolean option which will tell search to look not only in headers but within collapsed areas as well
+(WARNING! **overallSearch** option can slow down performance in cases when there is lots of data or HTML markup present in the hidden areas.)
 
 ### Widget default options
 
@@ -164,23 +164,23 @@ An example on how to use it could be found for a default **light** color-scheme.
 * 2013-06-26   v0.0.1   First working version of a standalone a11yAccordeon outside of AContent.
 
 ## License
-(The MIT License)
+The MIT License (MIT)
 
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-'Software'), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
+Copyright (c) 2013 Alexey Novak
 
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
 
-THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
