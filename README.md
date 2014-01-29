@@ -14,18 +14,18 @@ var myAccordeon = a11yAccordeon(options);
 
 ### Options
 
-**parentSelector** - selector for the parent container which has an accordeon markup
-**accordeonItemSelector** - selector for accordeon row which contains header and hidden area
-**headerSelector** - selector for a header within the row
-**hiddenAreaSelector** - selector for hidden areas within the accordeon row
-**visibleAreaClass** - class which would be added to every row which will be uncollapsed/visible to the user
-**colorScheme** - color scheme for the accordeon
-**speed** - speed of animation
-**hiddenLinkDescription** - description for every Show/Hide link for users who use Assistive technology (AT)
-**showSearch** - boolean option which will tell accordeon to render search options
-**showOne** - boolean option which represents if accordeon can uncollapse only 1 row to the user
+**parentSelector** - selector for the parent container which has an accordeon markup  
+**accordeonItemSelector** - selector for accordeon row which contains header and hidden area  
+**headerSelector** - selector for a header within the row  
+**hiddenAreaSelector** - selector for hidden areas within the accordeon row  
+**visibleAreaClass** - class which would be added to every row which will be uncollapsed/visible to the user  
+**colorScheme** - color scheme for the accordeon  
+**speed** - speed of animation  
+**hiddenLinkDescription** - description for every Show/Hide link for users who use Assistive technology (AT)  
+**showSearch** - boolean option which will tell accordeon to render search options  
+**showOne** - boolean option which represents if accordeon can uncollapse only 1 row to the user  
 **overallSearch** - boolean option which will tell search to look not only in headers but within collapsed areas as well
-(WARNING! **overallSearch** option can slow down performance in cases when there is lots of data or HTML markup present in the hidden areas.)
+(WARNING! **overallSearch** option can slow down performance in cases when there is lots of data or HTML markup present in the hidden areas.)  
 
 ### Widget default options
 
@@ -157,11 +157,11 @@ An example on how to use it could be found for a default **light** color-scheme.
 
 ## Release History
 
-* 2013-12-02   v0.2.2   Added few tests to the project. More tests coming. Changed markup for Search Div to be within the accordeon markup
-* 2013-11-28   v0.2.1   Added basic user click interactions and advanced accordeon to be more configurable.
-* 2013-11-20   v0.2.0   Code completely refactored to be more performant and optimized. Proper web component structure.
-* 2013-07-27   v0.1.0   Grunt added to the project. Proper project build scripts are created.
-* 2013-06-26   v0.0.1   First working version of a standalone a11yAccordeon outside of AContent.
+* 2013-12-02   v0.2.2   Added few tests to the project. More tests coming. Changed markup for Search Div to be within the accordeon markup  
+* 2013-11-28   v0.2.1   Added basic user click interactions and advanced accordeon to be more configurable.  
+* 2013-11-20   v0.2.0   Code completely refactored to be more performant and optimized. Proper web component structure.  
+* 2013-07-27   v0.1.0   Grunt added to the project. Proper project build scripts are created.  
+* 2013-06-26   v0.0.1   First working version of a standalone a11yAccordeon outside of AContent.  
 
 ## License
 The MIT License (MIT)
