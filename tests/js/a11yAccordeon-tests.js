@@ -74,7 +74,7 @@
       ];
 
       _.each(testCases, function(options) {
-        expect(a11yAccordeon(options)).to.be.undefined;
+        expect(new A11yAccordeon(options)).to.be.undefined;
         testIndex = testIndex + 1;
       });
 
@@ -96,7 +96,7 @@
 
       _.each(testCases, function(options) {
         generateAccordeonMarkup();
-        expect(a11yAccordeon(options)).to.not.be.undefined;
+        expect(new A11yAccordeon(options)).to.not.be.undefined;
         testIndex = testIndex + 1;
       });
 

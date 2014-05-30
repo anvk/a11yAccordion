@@ -8,14 +8,14 @@
 
   <script type="text/javascript">
     var load = function () {
-      var accordeon = a11yAccordeon({
-        parentSelector: '#accordeon1',
+      var accordeon = new A11yAccordeon({
+        parentSelector: '#accordeon12',
         hiddenLinkDescription: 'this is some row with data in first accordeon'
       });
 
       accordeon.uncollapseRow(2);
 
-      var anotherAccordeon = a11yAccordeon({
+      var anotherAccordeon = new A11yAccordeon({
         parentSelector: '#accordeon2',
         hiddenLinkDescription: 'this is some row with data in second accordeon',
         colorScheme: 'dark',
@@ -109,7 +109,7 @@
 </body>
 </html>
 <script type="text/javascript" src="js/libs/jquery-1.10.0.min.js"></script>
-<script type="text/javascript" src="dist/js/a11yAccordeon-0.2.2.min.js"></script>
+<!-- <script type="text/javascript" src="dist/js/a11yAccordeon-0.2.2.min.js"></script> -->
 
 <!-- for debugging purposes -->
-<!-- <script type="text/javascript" src="js/a11yAccordeon.js"></script> -->
+<script type="text/javascript" src="js/a11yAccordeon.js"></script>
