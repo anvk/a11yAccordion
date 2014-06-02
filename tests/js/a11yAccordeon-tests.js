@@ -1,15 +1,28 @@
-/*global describe, afterEach, it, chai, a11yAccordeon*/
+/* global beforeEach, afterEach, _, $, it, describe, chai, A11yAccordeon */
 
 (function (expect) {
   describe('a11yAccordeon tests', function() {
 
+    var testAccordeonId = '#accordeon1',
+        hiddenLinkDescription = 'Hidden Link Description',
+        ms = 700;
+
+    var testOptions = {
+      parentSelector: testAccordeonId,
+      accordeonItemSelector: '.a11yAccordeonItem',
+      headerSelector: '.a11yAccordeonItemHeader',
+      hiddenAreaSelector: '.a11yAccordeonHideArea',
+      visibleAreaClass: 'visibleA11yAccordeonItem',
+      hiddenLinkDescription: hiddenLinkDescription
+    };
+
     var accordeonCleanUp = function() {
-      $('#accordeon1').empty();
+      $(testAccordeonId).empty();
     };
 
     var generateAccordeonMarkup = function() {
       accordeonCleanUp();
-      var markup = $('#accordeon1'),
+      var markup = $(testAccordeonId),
           rows = [];
 
       for (var i=0; i < 5; ++i) {
@@ -19,12 +32,12 @@
 
         $('<div>', {
           'class': 'a11yAccordeonItemHeader',
-          test: 'Header ' + i
+          text: 'Header ' + i
         }).appendTo(row);
 
         $('<div>', {
           'class': 'a11yAccordeonHideArea',
-          test: 'Item ' + i
+          text: 'Item ' + i
         }).appendTo(row);
 
         rows.push(row);
@@ -33,13 +46,10 @@
       markup.prepend(rows);
     };
 
-    afterEach(function () {
-      accordeonCleanUp();
-    });
+    beforeEach(generateAccordeonMarkup);
+    afterEach(accordeonCleanUp);
 
     it('a11yAccordeon fail creation tests', function() {
-      generateAccordeonMarkup();
-
       var testIndex = 0;
 
       var testCases = [
@@ -81,42 +91,138 @@
       expect(testIndex).to.equal(testCases.length);
     });
 
-    it('a11yAccordeon proper creation tests', function() {
-      var testIndex = 0;
+    describe('a11yAccordeon proper creation', function() {
 
-      var testCases = [
-        {
-          parentSelector: '#accordeon1',
-          accordeonItemSelector: undefined,
-          headerSelector: undefined,
-          hiddenAreaSelector: undefined,
-          visibleAreaClass: undefined
-        }
-      ];
+    });
 
-      _.each(testCases, function(options) {
-        generateAccordeonMarkup();
-        expect(new A11yAccordeon(options)).to.not.be.undefined;
-        testIndex = testIndex + 1;
+    // Public
+
+    describe('uncollapseRow() and _uncollapse()', function() {
+      it('regular functionality', function() {
+        var a11yAccordeon = new A11yAccordeon(testOptions);
+
+        expect(a11yAccordeon._getHiddenArea(2).is(":visible")).to.be.false;
+
+        a11yAccordeon.uncollapseRow(2);
+
+        expect(a11yAccordeon._getHiddenArea(2).is(":visible")).to.be.true;
       });
 
-      expect(testIndex).to.equal(testCases.length);
+      it('showOne is set to true', function(done) {
+        var a11yAccordeon = new A11yAccordeon(testOptions);
+
+        expect(a11yAccordeon._getHiddenArea(2).is(":visible")).to.be.false;
+
+        a11yAccordeon.uncollapseRow(2);
+
+        expect(a11yAccordeon._getHiddenArea(2).is(":visible")).to.be.true;
+
+        a11yAccordeon.uncollapseRow(3);
+
+        setTimeout(function() {
+          expect(a11yAccordeon._getHiddenArea(2).is(":visible")).to.be.false;
+          expect(a11yAccordeon._getHiddenArea(3).is(":visible")).to.be.true;
+          done();
+        }, ms);
+      });
+
+      it('showOne is set to false', function() {
+        var customOptions = _.clone(testOptions, true);
+        customOptions.showOne = false;
+
+        var a11yAccordeon = new A11yAccordeon(customOptions);
+
+        expect(a11yAccordeon._getHiddenArea(2).is(":visible")).to.be.false;
+
+        a11yAccordeon.uncollapseRow(2);
+
+        expect(a11yAccordeon._getHiddenArea(2).is(":visible")).to.be.true;
+
+        a11yAccordeon.uncollapseRow(3);
+
+        expect(a11yAccordeon._getHiddenArea(2).is(":visible")).to.be.true;
+        expect(a11yAccordeon._getHiddenArea(3).is(":visible")).to.be.true;
+      });
     });
 
-    it('collapseRow() tests', function() {
-      expect(true).to.be.ok;
+    it('collapseRow() and _collapse()', function(done) {
+      var a11yAccordeon = new A11yAccordeon(testOptions);
+
+      a11yAccordeon.uncollapseRow(2);
+
+      expect(a11yAccordeon._getHiddenArea(2).is(":visible")).to.be.true;
+
+      a11yAccordeon.collapseRow(2);
+
+      setTimeout(function() {
+        expect(a11yAccordeon._getHiddenArea(2).is(":visible")).to.be.false;
+        done();
+      }, ms);
     });
 
-    it('uncollapseRow() tests', function() {
-      expect(true).to.be.ok;
+    it('toggleRow()', function(done) {
+      var a11yAccordeon = new A11yAccordeon(testOptions);
+
+      expect(a11yAccordeon._getHiddenArea(2).is(":visible")).to.be.false;
+
+      a11yAccordeon.toggleRow(2);
+      expect(a11yAccordeon._getHiddenArea(2).is(":visible")).to.be.true;
+
+      a11yAccordeon.toggleRow(2);
+      setTimeout(function() {
+        expect(a11yAccordeon._getHiddenArea(2).is(":visible")).to.be.false;
+        done();
+      }, ms);
     });
 
-    it('toggleRow() tests', function() {
-      expect(true).to.be.ok;
+    it('getRowEl()', function() {
+      var a11yAccordeon = new A11yAccordeon(testOptions),
+          row;
+
+      row = a11yAccordeon.getRowEl(-1);
+      expect(row).to.be.undefined;
+
+      row = a11yAccordeon.getRowEl(2);
+      expect(row[0].id).to.equal('accordeon-row-2');
     });
 
-    it('getRowEl() tests', function() {
-      expect(true).to.be.ok;
+    // Private
+
+    it('_collapseAll()', function(done) {
+      var customOptions = _.clone(testOptions, true);
+      customOptions.showOne = false;
+
+      var a11yAccordeon = new A11yAccordeon(customOptions);
+
+      expect(a11yAccordeon._getHiddenArea(2).is(":visible")).to.be.false;
+      expect(a11yAccordeon._getHiddenArea(3).is(":visible")).to.be.false;
+
+      a11yAccordeon.uncollapseRow(2);
+      a11yAccordeon.uncollapseRow(3);
+
+      expect(a11yAccordeon._getHiddenArea(2).is(":visible")).to.be.true;
+      expect(a11yAccordeon._getHiddenArea(3).is(":visible")).to.be.true;
+
+      a11yAccordeon._collapseAll();
+
+      setTimeout(function() {
+        expect(a11yAccordeon._getHiddenArea(2).is(":visible")).to.be.false;
+        expect(a11yAccordeon._getHiddenArea(3).is(":visible")).to.be.false;
+        done();
+      }, ms);
+    });
+
+    it('_getHiddenArea()', function() {
+      var a11yAccordeon = new A11yAccordeon(testOptions),
+          hiddenArea;
+
+      hiddenArea = a11yAccordeon._getHiddenArea(-1);
+
+      expect(hiddenArea).to.be.undefined;
+
+      hiddenArea = a11yAccordeon._getHiddenArea(1);
+      expect(hiddenArea).not.to.be.undefined;
+      expect(hiddenArea.is(":visible")).to.be.false;
     });
 
   });

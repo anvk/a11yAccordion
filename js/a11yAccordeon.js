@@ -22,7 +22,6 @@ var A11yAccordeon = function(options) {
   this._collapseAll = this._collapseAll.bind(this);
   this._collapse = this._collapse.bind(this);
   this._uncollapse = this._uncollapse.bind(this);
-  this._checkIfIndexCorrect = this._checkIfIndexCorrect.bind(this);
   this._getHiddenArea = this._getHiddenArea.bind(this);
 
   // options which will be passed into the components with their default values
@@ -79,7 +78,7 @@ A11yAccordeon.prototype = {
   //  rowIndex - integer index of the row
   //
   getRowEl: function A11yAccordeon_getRowEl(rowIndex) {
-    return (this._checkIfIndexCorrect(rowIndex)) ? $(this._accordeonItems[rowIndex - 1]) : undefined;
+    return (rowIndex >= 0 && rowIndex < this._accordeonHideAreas.length) ? $(this._accordeonItems[rowIndex]) : undefined;
   },
 
   /// Function which will make row disabled and immune to the user clicks
@@ -111,6 +110,7 @@ A11yAccordeon.prototype = {
     var parentDiv = $(options.parentSelector),
         accordeonItemSelector = options.accordeonItemSelector,
         hiddenAreaSelector = options.hiddenAreaSelector,
+        headerSelector = options.headerSelector,
         headerLinkClass = 'a11yAccordeonItemHeaderLink',
         hiddenHeaderLabelDescriptionClass = 'hiddenLabel',
         noResultsIDString = 'no-results-found',
@@ -122,13 +122,13 @@ A11yAccordeon.prototype = {
         showHeaderLabelText = 'Show',
         hideHeaderLabelText = 'Hide';
 
-    this._headerSelector = options.headerSelector;
+    this._headerSelector = headerSelector;
     this._speed = options.speed;
     this._visibleAreaClass = options.visibleAreaClass;
     this._accordeonItems = parentDiv.find(accordeonItemSelector);
     this.showOne = options.showOne;
 
-    var headers = this._accordeonItems.find(this._headerSelector);
+    var headers = this._accordeonItems.find(headerSelector);
     this._accordeonHideAreas = this._accordeonItems.find(hiddenAreaSelector);
 
     // check that our initialization is proper
@@ -228,13 +228,13 @@ A11yAccordeon.prototype = {
     }).appendTo(parentDiv);
 
     $('<div />', {
-      'class': this._headerSelector.substring(1) + ' ' + accordeonHeaderClass,
+      'class': headerSelector.substring(1) + ' ' + accordeonHeaderClass,
       text: noResultsText
     }).appendTo(wrapperLi);
 
     // Set an id to each row
     this._accordeonItems.each(function initAccordeonItemsEach(index, item) {
-      item.setAttribute('id', rowIdString + (++index));
+      item.setAttribute('id', rowIdString + index);
     });
 
     wrapperDiv.prependTo(parentDiv);
@@ -251,7 +251,7 @@ A11yAccordeon.prototype = {
         $(this._accordeonItems[index])[action]();
       }.bind(this));
 
-      results = parentDiv.find(this._headerSelector + ':visible').length;
+      results = parentDiv.find(headerSelector + ':visible').length;
       searchInput.attr('title', resultsMessage + results.toString() + leaveBlankMessage);
 
       if (!results) {
@@ -262,37 +262,38 @@ A11yAccordeon.prototype = {
 
   /// Function which is executed upon the link click. It will either hide the related area OR show the area and hide all other ones
   // params:
-  //  element - element which relates to the link being clicked
+  //  element - accordeon hidden area DOM element which will become hidden or visible depending on its previous state
   //
   _collapseWork: function A11yAccordeon__collapseWork(element) {
+    element = $(element);
+
     if (!element) {
       return;
     }
 
-    if (element.hasClass(this._visibleAreaClass)) {
-      this._collapse(element);
-    } else {
-      if (this.showOne) {
-        this._collapseAll();
-      }
-      this._uncollapse(element);
-    }
+    this[element.hasClass(this._visibleAreaClass)? '_collapse' : '_uncollapse'](element);
   },
 
   /// Function which will collapse all areas
   //
   _collapseAll: function A11yAccordeon__collapseAll() {
+    var a11yAccordeon = this;
+
     $.each(this._accordeonHideAreas.filter('.' + this._visibleAreaClass), function collapseAllEach(index, element) {
-      this._collapse($(element));
-    }.bind(this));
+      a11yAccordeon._collapse(element);
+    });
   },
 
   /// Function which will collapses one element
   // params:
-  //  element - element which relates to the link being clicked
+  //  element - accordeon hidden area DOM element which will become hidden
   //
   _collapse: function A11yAccordeon__collapse(element) {
-    if (!element || !element.hasClass(this._visibleAreaClass)) {
+    var visibleAreaClass = this._visibleAreaClass;
+
+    element = $(element);
+
+    if (!element.length || !element.hasClass(visibleAreaClass)) {
       return;
     }
 
@@ -301,36 +302,34 @@ A11yAccordeon.prototype = {
     topRow.find(this._hideHeaderLabelSelector).hide();
 
     element.slideUp(this._speed, this._hideEffectStyle, function collapseSlideUp() {
-      element.removeClass(this._visibleAreaClass);
+      element.removeClass(visibleAreaClass);
       element.hide();
-    }.bind(this));
+    });
   },
 
   /// Function which will show the area and convert from collapsed to be displayed one
   // params:
-  //  element - element which will be shown
+  //  element - accordeon hidden area DOM element which will become visible
   //
   _uncollapse: function A11yAccordeon__uncollapse(element) {
-    if (!element || element.hasClass(this._visibleAreaClass)) {
+    var visibleAreaClass = this._visibleAreaClass;
+
+    element = $(element);
+
+    if (!element.length || element.hasClass(visibleAreaClass)) {
       return;
+    }
+
+    if (this.showOne) {
+      this._collapseAll();
     }
 
     var topRow = element.siblings(this._headerSelector);
     topRow.find(this._showHeaderLabelSelector).hide();
     topRow.find(this._hideHeaderLabelSelector).show();
 
-    element.addClass(this._visibleAreaClass);
-    element.slideDown(this._speed, this._hideEffectStyle, function uncollapseSlideDown() {
-      element.show();
-    });
-  },
-
-  /// Function which returns true if rowIndex is within range of the accordeon's existing collapsible elements
-  // params:
-  //  rowIndex - integer index of the row
-  //
-  _checkIfIndexCorrect: function A11yAccordeon__checkIfIndexCorrect(rowIndex) {
-    return (rowIndex > 0 && rowIndex <= this._accordeonHideAreas.length);
+    element.addClass(visibleAreaClass);
+    element.slideDown(this._speed, this._hideEffectStyle, element.show);
   },
 
   /// Function which returns a jQuery element which represent a hidden area
@@ -338,7 +337,7 @@ A11yAccordeon.prototype = {
   //  rowIndex - integer index of the row of the hidden area
   //
   _getHiddenArea: function A11yAccordeon__getHiddenArea(rowIndex) {
-    return (this._checkIfIndexCorrect(rowIndex)) ? $(this._accordeonHideAreas[rowIndex - 1]) : undefined;
+    return (rowIndex >= 0 && rowIndex < this._accordeonHideAreas.length) ? $(this._accordeonHideAreas[rowIndex]) : undefined;
   },
 
   _hideEffectStyle: 'linear',
