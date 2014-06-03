@@ -121,33 +121,85 @@
       });
 
       describe('good options. succeeded to create', function() {
+        it('Default creation', function() {
+          var a11yAccordeon = new A11yAccordeon(testOptions);
+        });
 
+        it('Custom theme', function() {
+          var customOptions = _.clone(testOptions, true);
+          customOptions.colorScheme = 'myColorScheme';
+
+          var a11yAccordeon = new A11yAccordeon(customOptions),
+              row = a11yAccordeon.getRowEl(1);
+
+          expect(row.find('.a11yAccordeonItemHeader').hasClass('myColorScheme-a11yAccordeon-header')).to.be.true;
+          expect(row.find('.a11yAccordeonHideArea').hasClass('myColorScheme-a11yAccordeon-area')).to.be.true;
+        });
+
+        it('Without search', function() {
+          var customOptions = _.clone(testOptions, true);
+          customOptions.showSearch = false;
+
+          var a11yAccordeon = new A11yAccordeon(customOptions);
+
+          expect(a11yAccordeon.el.find('.a11yAccordeonSearch').length).to.equal(0);
+        });
       });
     });
 
-    it('Search field tests', function() {
-      var a11yAccordeon = new A11yAccordeon(testOptions),
-          el = a11yAccordeon.el,
-          searchInput = el.find('.a11yAccordeonSearch');
+    describe('Search functionality', function() {
+      it('Regular search', function() {
+        var a11yAccordeon = new A11yAccordeon(testOptions),
+            el = a11yAccordeon.el,
+            searchInput = el.find('.a11yAccordeonSearch');
 
-      var triggerKeyUp = function(text, expectedNumberOfRows) {
-        searchInput.val(text);
-        searchInput.keyup();
+        var triggerKeyUp = function(text, expectedNumberOfRows) {
+          searchInput.val(text);
+          searchInput.keyup();
 
-        expect(el.find('.a11yAccordeonItem').filter(':visible').length).to.equal(expectedNumberOfRows);
+          expect(el.find('.a11yAccordeonItem').filter(':visible').length).to.equal(expectedNumberOfRows);
 
-        if (!expectedNumberOfRows) {
-          expect(!!el.find('#accordeon1-noResultsItem').length).to.be.true;
-        }
-      };
+          if (!expectedNumberOfRows) {
+            expect(!!el.find('#accordeon1-noResultsItem').length).to.be.true;
+          }
+        };
 
-      expect(!!searchInput.length).to.be.true;
+        expect(!!searchInput.length).to.be.true;
 
-      triggerKeyUp('Do not exist', 0);
+        triggerKeyUp('Do not exist', 0);
 
-      triggerKeyUp('Header 3', 1);
+        triggerKeyUp('Header 3', 1);
 
-      triggerKeyUp('', 5);
+        triggerKeyUp('', 5);
+      });
+
+      it('Overall search', function() {
+        var customOptions = _.clone(testOptions, true);
+        customOptions.overallSearch = true;
+
+        var a11yAccordeon = new A11yAccordeon(customOptions),
+            el = a11yAccordeon.el,
+            searchInput = el.find('.a11yAccordeonSearch');
+
+        var triggerKeyUp = function(text, expectedNumberOfRows) {
+          searchInput.val(text);
+          searchInput.keyup();
+
+          expect(el.find('.a11yAccordeonItem').filter(':visible').length).to.equal(expectedNumberOfRows);
+
+          if (!expectedNumberOfRows) {
+            expect(!!el.find('#accordeon1-noResultsItem').length).to.be.true;
+          }
+        };
+
+        expect(!!searchInput.length).to.be.true;
+
+        triggerKeyUp('Do not exist', 0);
+
+        triggerKeyUp('Item 3', 1);
+
+        triggerKeyUp('', 5);
+      });
     });
 
     // Public
