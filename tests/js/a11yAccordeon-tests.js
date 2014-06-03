@@ -61,60 +61,96 @@
     beforeEach(generateAccordeonMarkup);
     afterEach(accordeonCleanUp);
 
-    it('a11yAccordeon fail creation tests', function() {
-      var testIndex = 0;
+    describe('a11yAccordeon creation', function() {
+      it('bad options. failed to create', function() {
+        var testIndex = 0;
 
-      var testCases = [
-        {
-          throwMessage: '',
-          options: {
-            parentSelector: undefined,
-            accordeonItemSelector: '.a11yAccordeonItem',
-            headerSelector: '.a11yAccordeonItemHeader',
-            hiddenAreaSelector: '.a11yAccordeonHideArea',
-            visibleAreaClass: 'visibleA11yAccordeonItem'
+        var testCases = [
+          {
+            throwMessage: 'a11yAccordeon - no element(s) with parentSelector was found',
+            options: {
+              parentSelector: undefined,
+              accordeonItemSelector: '.a11yAccordeonItem',
+              headerSelector: '.a11yAccordeonItemHeader',
+              hiddenAreaSelector: '.a11yAccordeonHideArea',
+              visibleAreaClass: 'visibleA11yAccordeonItem'
+            }
+          },
+          {
+            throwMessage: 'a11yAccordeon - no element(s) with accordeonItemSelector was found',
+            options: {
+              parentSelector: '#accordeon1',
+              accordeonItemSelector: 'does not exist',
+              headerSelector: '.a11yAccordeonItemHeader',
+              hiddenAreaSelector: '.a11yAccordeonHideArea',
+              visibleAreaClass: 'visibleA11yAccordeonItem'
+            }
+          },
+          {
+            throwMessage: 'a11yAccordeon - no element(s) with headerSelector was found',
+            options: {
+              parentSelector: '#accordeon1',
+              accordeonItemSelector: '.a11yAccordeonItem',
+              headerSelector: 'does not exist',
+              hiddenAreaSelector: '.a11yAccordeonHideArea',
+              visibleAreaClass: 'visibleA11yAccordeonItem'
+            }
+          },
+          {
+            throwMessage: 'a11yAccordeon - no element(s) with hiddenAreaSelector was found',
+            options: {
+              parentSelector: '#accordeon1',
+              accordeonItemSelector: '.a11yAccordeonItem',
+              headerSelector: '.a11yAccordeonItemHeader',
+              hiddenAreaSelector: 'does not exist',
+              visibleAreaClass: 'visibleA11yAccordeonItem'
+            }
           }
-        },
-        {
-          parentSelector: '#accordeon1',
-          accordeonItemSelector: 'does not exist',
-          headerSelector: '.a11yAccordeonItemHeader',
-          hiddenAreaSelector: '.a11yAccordeonHideArea',
-          visibleAreaClass: 'visibleA11yAccordeonItem'
-        },
-        {
-          parentSelector: '#accordeon1',
-          accordeonItemSelector: '.a11yAccordeonItem',
-          headerSelector: 'does not exist',
-          hiddenAreaSelector: '.a11yAccordeonHideArea',
-          visibleAreaClass: 'visibleA11yAccordeonItem'
-        },
-        {
-          parentSelector: '#accordeon1',
-          accordeonItemSelector: '.a11yAccordeonItem',
-          headerSelector: '.a11yAccordeonItemHeader',
-          hiddenAreaSelector: 'does not exist',
-          visibleAreaClass: 'visibleA11yAccordeonItem'
-        }
-      ];
+        ];
 
-      _.each(testCases, function(testCase) {
-        expect(new A11yAccordeon(testCase.options)).to.throw(testCase.throwMessage);
-        testIndex = testIndex + 1;
+        _.each(testCases, function(testCase) {
+          try {
+            new A11yAccordeon(testCase.options);
+          } catch (exception) {
+            testIndex = testIndex + 1;
+            expect(exception).to.equal(testCase.throwMessage);
+          }
+        });
+
+        expect(testIndex).to.equal(testCases.length);
       });
 
-      expect(testIndex).to.equal(testCases.length);
+      describe('good options. succeeded to create', function() {
+
+      });
     });
 
-    describe('a11yAccordeon proper creation', function() {
+    it('Search field tests', function() {
+      var a11yAccordeon = new A11yAccordeon(testOptions),
+          el = a11yAccordeon.el,
+          searchInput = el.find('.a11yAccordeonSearch');
 
+      var triggerKeyUp = function(text, expectedNumberOfRows) {
+        searchInput.val(text);
+        searchInput.keyup();
+
+        expect(el.find('.a11yAccordeonItem').filter(':visible').length).to.equal(expectedNumberOfRows);
+
+        if (!expectedNumberOfRows) {
+          expect(!!el.find('#accordeon1-noResultsItem').length).to.be.true;
+        }
+      };
+
+      expect(!!searchInput.length).to.be.true;
+
+      triggerKeyUp('Do not exist', 0);
+
+      triggerKeyUp('Header 3', 1);
+
+      triggerKeyUp('', 5);
     });
 
     // Public
-
-    describe('Search field tests', function() {
-
-    });
 
     describe('uncollapseRow() and _uncollapse()', function() {
       it('regular functionality', function() {
@@ -202,7 +238,7 @@
       expect(row).to.be.undefined;
 
       row = a11yAccordeon.getRowEl(2);
-      expect(row[0].id).to.equal('accordeon-row-2');
+      expect(row[0].id).to.equal('accordeon1-row-2');
     });
 
     // Private

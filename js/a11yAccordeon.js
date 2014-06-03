@@ -108,14 +108,18 @@ A11yAccordeon.prototype = {
   //
   _init: function A11yAccordeon__init(options) {
     var parentDiv = $(options.parentSelector),
+        parentPrefix = options.parentSelector ? options.parentSelector.substring(1) : undefined,
         accordeonItemSelector = options.accordeonItemSelector,
         hiddenAreaSelector = options.hiddenAreaSelector,
         headerSelector = options.headerSelector,
         headerLinkClass = 'a11yAccordeonItemHeaderLink',
+        headerTextClass = 'a11yAccordeonItemHeaderText',
         hiddenHeaderLabelDescriptionClass = 'hiddenLabel',
-        noResultsIDString = 'no-results-found',
-        searchDivIDString = 'a11yAccordeonSearchDiv',
-        rowIdString = 'accordeon-row-',
+        noResultsDivID = parentPrefix + '-noResultsItem',
+        noResultsDivClass = 'a11yAccordeonNoResultsItem',
+        searchDivID = parentPrefix + '-searchPanel',
+        searchDivClass = 'a11yAccordeonSearchDiv',
+        rowIdString = parentPrefix + '-row-',
         colorScheme = options.colorScheme,
         accordeonHeaderClass = colorScheme + '-a11yAccordeon-header',
         accordeonHideAreaClass = colorScheme + '-a11yAccordeon-area',
@@ -132,14 +136,12 @@ A11yAccordeon.prototype = {
     this._accordeonHideAreas = this._accordeonItems.find(hiddenAreaSelector);
 
     // check that our initialization is proper
-    if (!headers.length) {
-      throw 'a11yAccordeon - no headers were found';
-    } else if (!this._accordeonItems.length) {
-      throw 'a11yAccordeon - no accordeonItems were found. There are no rows in accordeon to create it';
-    } else if (!this._visibleAreaClass) {
-      throw 'a11yAccordeon - no visibleAreaClass was specified. This class is used to determine what is collapsed and what is not';
-    } else if (!parentDiv.length) {
+    if (!parentDiv.length) {
       throw 'a11yAccordeon - no element(s) with parentSelector was found';
+    } else if (!this._accordeonItems.length) {
+      throw 'a11yAccordeon - no element(s) with accordeonItemSelector was found';
+    } else if (!headers.length) {
+      throw 'a11yAccordeon - no element(s) with headerSelector was found';
     } else if (!this._accordeonHideAreas.length) {
       throw 'a11yAccordeon - no element(s) with hiddenAreaSelector was found';
     }
@@ -168,11 +170,12 @@ A11yAccordeon.prototype = {
 
     // generate assistive links
     $.each(headers, function initHeadersEach(index, header) {
+      var spans = [];
+
       var link = $('<a>', {
-            href: '#',
-            'class': headerLinkClass
-          }),
-          spans = [];
+        href: '#',
+        'class': headerLinkClass
+      });
 
       // Bind the click event to the link
       link.click(linkClick);
@@ -194,6 +197,7 @@ A11yAccordeon.prototype = {
       }));
 
       // bulk DOM insert for spans
+      $(header).wrapInner('<span class="' + headerTextClass + '"></span>');
       link.prepend(spans).appendTo(header);
     }.bind(this));
 
@@ -211,7 +215,8 @@ A11yAccordeon.prototype = {
         wrapperDiv, wrapperLi, searchInput, searchString, results;
 
     wrapperDiv = $('<div />', {
-      id: searchDivIDString
+      id: searchDivID,
+      'class': searchDivClass
     });
 
     searchInput = $('<input />', {
@@ -222,8 +227,8 @@ A11yAccordeon.prototype = {
     }).appendTo(wrapperDiv);
 
     wrapperLi = $('<li />', {
-      'class': accordeonItemSelector.substring(1),
-      id: noResultsIDString,
+      'class': noResultsDivClass,
+      id: noResultsDivID,
       style: 'display:none;'
     }).appendTo(parentDiv);
 

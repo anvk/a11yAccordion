@@ -11,6 +11,7 @@
 }
 .a11yAccordeon li.a11yAccordeonItem .a11yAccordeonItemHeader {
   padding: 1.5em;
+  overflow: auto;
 }
 .a11yAccordeon li.a11yAccordeonItem .a11yAccordeonItemHeader .a11yAccordeonItemHeaderLink {
   float: right;
@@ -41,7 +42,7 @@
   -moz-border-radius: 1em;
   -webkit-border-radius: 1em;
 }
-#a11yAccordeonSearchDiv {
+.a11yAccordeonSearchDiv {
   margin-left: auto;
   margin-right: auto;
   width: 80%;
