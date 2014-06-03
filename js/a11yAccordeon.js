@@ -36,7 +36,9 @@ var A11yAccordeon = function(options) {
     hiddenLinkDescription: '',
     showSearch: true,
     showOne: true,
-    overallSearch: false
+    overallSearch: false,
+    onAreaShow: undefined,
+    onAreaHide: undefined
   };
 
   options = $.extend({}, defaults, options);
@@ -113,8 +115,8 @@ A11yAccordeon.prototype = {
         hiddenAreaSelector = options.hiddenAreaSelector,
         headerSelector = options.headerSelector,
         headerLinkClass = 'a11yAccordeonItemHeaderLink',
-        headerTextClass = 'a11yAccordeonItemHeaderText',
-        hiddenHeaderLabelDescriptionClass = 'hiddenLabel',
+        headerTextClass = 'a11yAccordeon-itemHeader-text',
+        hiddenHeaderLabelDescriptionClass = 'a11yAccordeon-itemHeader-link-hiddenLabel',
         noResultsDivID = parentPrefix + '-noResultsItem',
         noResultsDivClass = 'a11yAccordeonNoResultsItem',
         searchDivID = parentPrefix + '-searchPanel',
@@ -126,6 +128,8 @@ A11yAccordeon.prototype = {
         showHeaderLabelText = 'Show',
         hideHeaderLabelText = 'Hide';
 
+    this._onAreaShow = options.onAreaShow ? options.onAreaShow : function() {};
+    this._onAreaHide = options.onAreaHide ? options.onAreaHide : function() {};
     this._headerSelector = headerSelector;
     this._speed = options.speed;
     this._visibleAreaClass = options.visibleAreaClass;
@@ -309,7 +313,9 @@ A11yAccordeon.prototype = {
     element.slideUp(this._speed, this._hideEffectStyle, function collapseSlideUp() {
       element.removeClass(visibleAreaClass);
       element.hide();
-    });
+
+      this._onAreaHide(element);
+    }.bind(this));
   },
 
   /// Function which will show the area and convert from collapsed to be displayed one
@@ -326,7 +332,7 @@ A11yAccordeon.prototype = {
     }
 
     if (this.showOne) {
-      this._collapseAll();
+      this._collapseAll(element);
     }
 
     var topRow = element.siblings(this._headerSelector);
@@ -334,7 +340,11 @@ A11yAccordeon.prototype = {
     topRow.find(this._hideHeaderLabelSelector).show();
 
     element.addClass(visibleAreaClass);
-    element.slideDown(this._speed, this._hideEffectStyle, element.show);
+    element.slideDown(this._speed, this._hideEffectStyle, function collapseSlideUp() {
+      element.show();
+
+      this._onAreaShow(element);
+    }.bind(this));
   },
 
   /// Function which returns a jQuery element which represent a hidden area
@@ -352,6 +362,8 @@ A11yAccordeon.prototype = {
   _accordeonItems: null,
   _visibleAreaClass: null,
   _accordeonHideAreas: null,
-  _speed: null
+  _speed: null,
+  _onAreaShow: null,
+  _onAreaHide: null
 
 };

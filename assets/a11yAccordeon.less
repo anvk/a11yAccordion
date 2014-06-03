@@ -1,4 +1,5 @@
 @borderColor: #206BA4;
+@shadowColor: #888;
 
 .a11yAccordeon-centralPos() {
   margin-left: auto;
@@ -20,7 +21,7 @@
     overflow: auto;
     .a11yAccordeonItemHeaderLink {
       float: right;
-      .hiddenLabel {
+      .a11yAccordeon-itemHeader-link-hiddenLabel {
         left: -900px;
         top: -900px;
         position: absolute;
@@ -34,9 +35,9 @@
     border-top-width: 1px;
     border-top-color: @borderColor;
     &.visibleA11yAccordeonItem {
-      -moz-box-shadow: inset 0 0 10px 1px #888;
-      -webkit-box-shadow: inset 0 0 10px 1px #888;
-      box-shadow: inset 0 0 10px 1px #888;
+      -moz-box-shadow: inset 0 0 10px 1px @shadowColor;
+      -webkit-box-shadow: inset 0 0 10px 1px @shadowColor;
+      box-shadow: inset 0 0 10px 1px @shadowColor;
     }
   }
 }
