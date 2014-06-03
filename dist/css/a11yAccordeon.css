@@ -16,7 +16,7 @@
 .a11yAccordeon li.a11yAccordeonItem .a11yAccordeonItemHeader .a11yAccordeonItemHeaderLink {
   float: right;
 }
-.a11yAccordeon li.a11yAccordeonItem .a11yAccordeonItemHeader .a11yAccordeonItemHeaderLink .hiddenLabel {
+.a11yAccordeon li.a11yAccordeonItem .a11yAccordeonItemHeader .a11yAccordeonItemHeaderLink .a11yAccordeonItemHeaderLinkHiddenLabel {
   left: -900px;
   top: -900px;
   position: absolute;
@@ -28,9 +28,9 @@
   border-top-color: #206ba4;
 }
 .a11yAccordeon li.a11yAccordeonItem .a11yAccordeonHideArea.visibleA11yAccordeonItem {
-  -moz-box-shadow: inset 0 0 10px 1px #888;
-  -webkit-box-shadow: inset 0 0 10px 1px #888;
-  box-shadow: inset 0 0 10px 1px #888;
+  -moz-box-shadow: inset 0 0 10px 1px #888888;
+  -webkit-box-shadow: inset 0 0 10px 1px #888888;
+  box-shadow: inset 0 0 10px 1px #888888;
 }
 .a11yAccordeonSearch {
   background-image: url('../imgs/search.png');
