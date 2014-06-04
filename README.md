@@ -8,7 +8,7 @@ This widget was build with help of [jQuery v1.10.0](http://code.jquery.com/jquer
 
 ## Live Demo
 
-https://github.com/anvk/a11yAccordeon
+http://anvk.github.io/a11yAccordeon/example.html
 
 ## Configuration
 
