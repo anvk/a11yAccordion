@@ -182,8 +182,8 @@ css option for the grunt command will recreate CSS based on LESS file and place 
 
 ## Release History
 
-* 2014-06-03   v0.3.0   Refactored the whole component using ideas from the existing Gaia and FireFox components. Created the full Mocha+Chai test suit. Added new Grunt task for recreating CSS file in dist folder. Refactored and fixed issues in style sheets. Significantly improved example.html page. Hosted an example of the widget on my personal github page. Fixed couple of major bugs.
-* 2013-12-02   v0.2.2   Added few tests to the project. More tests coming. Changed markup for Search Div to be within the accordeon markup  
+* 2014-06-03   v0.3.0   Refactored the whole component using ideas from the existing Gaia and FireFox components. Created the full Mocha+Chai test suit. Added new Grunt task for recreating CSS file in dist folder. Refactored and fixed issues in style sheets. Significantly improved example.html page. Hosted an example of the widget on my personal github page. Fixed couple of major bugs.  
+* 2013-12-02   v0.2.2   Added few tests to the project. More tests coming. Changed markup for Search Div to be within the accordeon markup.  
 * 2013-11-28   v0.2.1   Added basic user click interactions and advanced accordeon to be more configurable.  
 * 2013-11-20   v0.2.0   Code completely refactored to be more performant and optimized. Proper web component structure.  
 * 2013-07-27   v0.1.0   Grunt added to the project. Proper project build scripts are created.  
