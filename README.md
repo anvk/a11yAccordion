@@ -1,14 +1,14 @@
-﻿# A11yAccordeon v0.3.0
+﻿# a11yAccordeon v0.3.0
 
 > An accessible easy to use Accordeon widget.
-
-## Live Demo
-
-https://github.com/anvk/a11yAccordeon
 
 ## Prerequisites
 
 This widget was build with help of [jQuery v1.10.0](http://code.jquery.com/jquery-1.10.0.min.js)
+
+## Live Demo
+
+https://github.com/anvk/a11yAccordeon
 
 ## Configuration
 
@@ -30,8 +30,8 @@ var myAccordeon = new A11yAccordeon(options);
 **showOne** - boolean option which represents if accordeon can uncollapse only 1 row to the user  
 **overallSearch** - boolean option which will tell search to look not only in headers but within collapsed areas as well
 (WARNING! **overallSearch** option can slow down performance in cases when there is lots of data or HTML markup present in the hidden areas.)  
-**onAreaShow** - custom callback which will be called after making visible an accordeon's area  
-**onAreaHide** - user defined callback which will be called after hiding an accordeon's area  
+**onAreaShow** - custom callback which will be called after making visible an accordeon's area. Argument is jQuery DOM element for an area to become shown  
+**onAreaHide** - user defined callback which will be called after hiding an accordeon's area. Argument is jQuery DOM element for an area to become hidden  
 
 ### Widget default options
 
@@ -84,7 +84,7 @@ var defaults = {
 Create the following HTML markup:
 
 ```html
-<ul class="a11yAccordeon" id="accordeon1">
+<ul id="accordeon1" class="a11yAccordeon">
   <li class="a11yAccordeonItem">
     <div class="a11yAccordeonItemHeader">
       Header #1
@@ -182,7 +182,7 @@ css option for the grunt command will recreate CSS based on LESS file and place 
 
 ## Release History
 
-* 2014-06-03   v0.3.0   Refactored the whole component using ideas from the existing Gaia and FireFox components. Created the full Mocha+Chai test suit. Added new Grunt task for recreating CSS file in dist folder. Refactored and fixed issues in style sheets. Significantly improved example.html page. Hosted an example of the widget on my personal github page. Fixed couple of major bugs.
+* 2014-06-03   v0.3.0   Refactored the whole component using ideas from the existing Gaia and FireFox components. Created the full Mocha+Chai test suit. Added new Grunt task for recreating CSS file in dist folder. Refactored and fixed issues in style sheets. Significantly improved example.html page. Hosted an example of the widget on my personal github page. Fixed couple of major bugs.
 * 2013-12-02   v0.2.2   Added few tests to the project. More tests coming. Changed markup for Search Div to be within the accordeon markup  
 * 2013-11-28   v0.2.1   Added basic user click interactions and advanced accordeon to be more configurable.  
 * 2013-11-20   v0.2.0   Code completely refactored to be more performant and optimized. Proper web component structure.  

@@ -1,5 +1,6 @@
 @borderColor: #206BA4;
 @shadowColor: #888;
+@borderRadius: 7px;
 
 .a11yAccordeon-centralPos() {
   margin-left: auto;
@@ -29,12 +30,13 @@
     border-color: @borderColor;
     border-style: solid;
     border-width: 1px;
-    border-radius: 5px;
+    border-radius: @borderRadius;
     margin-top: 1em;
     list-style-type: none;
 
     .a11yAccordeonItemHeader {
       cursor:pointer;
+      border-radius: @borderRadius;
       padding: 1.5em;
       overflow: auto;
       .a11yAccordeonItemHeaderLink {

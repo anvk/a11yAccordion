@@ -22,13 +22,14 @@
   border-color: #206ba4;
   border-style: solid;
   border-width: 1px;
-  border-radius: 5px;
+  border-radius: 7px;
   margin-top: 1em;
   list-style-type: none;
 }
 .a11yAccordeon .a11yAccordeonItem .a11yAccordeonItemHeader,
 .a11yAccordeon .a11yAccordeonNoResultsItem .a11yAccordeonItemHeader {
   cursor: pointer;
+  border-radius: 7px;
   padding: 1.5em;
   overflow: auto;
 }

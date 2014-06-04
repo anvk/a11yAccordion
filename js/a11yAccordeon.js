@@ -12,8 +12,8 @@
 //    showSearch - boolean option which will tell accordeon to render search options
 //    showOne - boolean option which represents if accordeon can uncollapse only 1 row to the user
 //    overallSearch - boolean option which will tell search to look not only in headers but within collapsed areas as well
-//    onAreaShow - custom callback which will be called after making visible an accordeon's area
-//    onAreaHide - user defined callback which will be called after hiding an accordeon's area
+//    onAreaShow - custom callback which will be called after making visible an accordeon's area. Argument is jQuery DOM element for an area to become hidden
+//    onAreaHide - user defined callback which will be called after hiding an accordeon's area. Argument is jQuery DOM element for an area to become shown
 //
 var A11yAccordeon = function(options) {
 
