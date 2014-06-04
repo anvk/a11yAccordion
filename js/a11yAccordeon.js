@@ -9,6 +9,11 @@
 //    visibleAreaClass - Class which will be applied to every uncollapsed accordeon element
 //    speed - speed of collapsing animation
 //    hiddenLinkDescription - some string which will be played by AT once user has a keyboard focus on Show/Hide link
+//    showSearch - boolean option which will tell accordeon to render search options
+//    showOne - boolean option which represents if accordeon can uncollapse only 1 row to the user
+//    overallSearch - boolean option which will tell search to look not only in headers but within collapsed areas as well
+//    onAreaShow - custom callback which will be called after making visible an accordeon's area
+//    onAreaHide - user defined callback which will be called after hiding an accordeon's area
 //
 var A11yAccordeon = function(options) {
 

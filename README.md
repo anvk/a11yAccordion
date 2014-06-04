@@ -1,6 +1,10 @@
-﻿# a11yAccordeon v0.2.2
+﻿# A11yAccordeon v0.3.0
 
 > An accessible easy to use Accordeon widget.
+
+## Live Demo
+
+https://github.com/anvk/a11yAccordeon
 
 ## Prerequisites
 
@@ -9,7 +13,7 @@ This widget was build with help of [jQuery v1.10.0](http://code.jquery.com/jquer
 ## Configuration
 
 ```javascript
-var myAccordeon = a11yAccordeon(options);
+var myAccordeon = new A11yAccordeon(options);
 ```
 
 ### Options
@@ -26,6 +30,8 @@ var myAccordeon = a11yAccordeon(options);
 **showOne** - boolean option which represents if accordeon can uncollapse only 1 row to the user  
 **overallSearch** - boolean option which will tell search to look not only in headers but within collapsed areas as well
 (WARNING! **overallSearch** option can slow down performance in cases when there is lots of data or HTML markup present in the hidden areas.)  
+**onAreaShow** - custom callback which will be called after making visible an accordeon's area  
+**onAreaHide** - user defined callback which will be called after hiding an accordeon's area  
 
 ### Widget default options
 
@@ -41,7 +47,9 @@ var defaults = {
   hiddenLinkDescription: '',
   showSearch: true,
   showOne: true,
-  overallSearch: false
+  overallSearch: false,
+  onAreaShow: undefined,
+  onAreaHide: undefined
 };
 ```
 
@@ -66,6 +74,10 @@ var defaults = {
 #### showOne
 
 > Boolean value which will make accordeon to show only 1 uncollapsed row at a time to the user if true
+
+#### el
+
+> JQuery element which contains DOM markup of the A11yAccordeon
 
 ## Quick Start
 
@@ -105,7 +117,7 @@ Create the following HTML markup:
 Then execute in JavaScript
 
 ```javascript
-var myAccordeon = a11yAccordeon({
+var myAccordeon = new A11yAccordeon({
   parentSelector: '#accordeon1'
 });
 ```
@@ -146,17 +158,31 @@ You just need to prefix your CSS class.
 An example on how to use it could be found for a default **light** color-scheme.
 
 ```less
-.light-a11yAccordeon-header {
-  .a11yAccordeon-theme(#F2F2EB, #261E14, #595048);
-}
+/* light schema */
+
+@light-headerBackground: #F2F2EB;
+@light-areaBackground: #FFFEFD;
+@light-textColor: #261E14;
+@light-linkColor: #595048;
 
 .light-a11yAccordeon-header {
-  .a11yAccordeon-theme(#FFFEFD, #261E14, #595048);
+  .a11yAccordeon-theme(@light-headerBackground, @light-textColor, @light-linkColor);
+}
+
+.light-a11yAccordeon-area {
+  .a11yAccordeon-theme(@light-areaBackground, @light-textColor, @light-linkColor);
 }
 ```
 
+```
+grunt css
+```
+
+css option for the grunt command will recreate CSS based on LESS file and place it into dist folder
+
 ## Release History
 
+* 2014-06-03   v0.3.0   Refactored the whole component using ideas from the existing Gaia and FireFox components. Created the full Mocha+Chai test suit. Added new Grunt task for recreating CSS file in dist folder. Refactored and fixed issues in style sheets. Significantly improved example.html page. Hosted an example of the widget on my personal github page. Fixed couple of major bugs.
 * 2013-12-02   v0.2.2   Added few tests to the project. More tests coming. Changed markup for Search Div to be within the accordeon markup  
 * 2013-11-28   v0.2.1   Added basic user click interactions and advanced accordeon to be more configurable.  
 * 2013-11-20   v0.2.0   Code completely refactored to be more performant and optimized. Proper web component structure.  

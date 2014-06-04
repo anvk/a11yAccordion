@@ -64,4 +64,5 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
 
   grunt.registerTask('default', ['clean', 'copy', 'less', 'cssmin', 'concat', 'uglify']);
+  grunt.registerTask('css', ['less', 'cssmin']);
 };
