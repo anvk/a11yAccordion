@@ -19,7 +19,7 @@ module.exports = function(grunt) {
           paths: ["css"]
         },
         files: {
-          "dist/css/<%= pkg.name %>.css": "assets/a11yAccordeon.less"
+          "dist/css/<%= pkg.name %>.css": "assets/a11yAccordion.less"
         }
       }
     },

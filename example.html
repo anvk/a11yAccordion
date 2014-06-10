@@ -3,30 +3,30 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="robots" content="index, follow" />
   <meta name="author" content="Alexey Novak" />
-  <meta name="description" content="a11yAccordeon widget. Building Web with accessibility in mind." />
-  <meta name="keywords" content="a11y, widget, a11yAccordeon, accordeon, element" />
+  <meta name="description" content="a11yAccordion widget. Building Web with accessibility in mind." />
+  <meta name="keywords" content="a11y, widget, a11yAccordion, accordion, element" />
 
-  <title>a11yAccordeon</title>
-  <link rel="stylesheet" href="dist/css/a11yAccordeon.min.css" />
+  <title>a11yAccordion</title>
+  <link rel="stylesheet" href="dist/css/a11yAccordion.min.css" />
 </head>
 <body onload="load()">
 
-  <a href="https://github.com/anvk/a11yAccordeon">
+  <a href="https://github.com/anvk/a11yAccordion">
     <img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/365986a132ccd6a44c23a9169022c0b5c890c387/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f7265645f6161303030302e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png">
   </a>
 
   <script type="text/javascript">
     var load = function () {
-      var accordeon = new A11yAccordeon({
-        parentSelector: '#accordeon1',
-        hiddenLinkDescription: 'this is some row with data in first accordeon'
+      var accordion = new A11yAccordion({
+        parentSelector: '#accordion1',
+        hiddenLinkDescription: 'this is some row with data in first accordion'
       });
 
-      accordeon.uncollapseRow(1);
+      accordion.uncollapseRow(1);
 
-      var anotherAccordeon = new A11yAccordeon({
-        parentSelector: '#accordeon2',
-        hiddenLinkDescription: 'this is some row with data in second accordeon',
+      var anotheraccordion = new A11yAccordion({
+        parentSelector: '#accordion2',
+        hiddenLinkDescription: 'this is some row with data in second accordion',
         colorScheme: 'dark',
         showOne: false,
         overallSearch: true
@@ -35,29 +35,29 @@
     };
   </script>
 
-  <h1 align="center">a11yAccordeon widget</h1>
+  <h1 align="center">a11yAccordion widget</h1>
   <h2 align="center">Building Web with accessibility in mind</h2>
   <hr />
 
-  <h3 align="center">Default accordeon</h3>
+  <h3 align="center">Default accordion</h3>
 
-  <ul id="accordeon1" class="a11yAccordeon">
-    <li class="a11yAccordeonItem">
-      <div class="a11yAccordeonItemHeader">
+  <ul id="accordion1" class="a11yAccordion">
+    <li class="a11yAccordionItem">
+      <div class="a11yAccordionItemHeader">
         <strong>Random Information</strong>
       </div>
-      <div class="a11yAccordeonHideArea">
+      <div class="a11yAccordionHideArea">
         <h2>My other content</h2>
         <p>This content is accessible by Assistive Technology and Screen Readers only when the collapsible area is visible to the user.</p>
         <a href="#">This link is also accessible only when the collapsible area is visible.</a>
       </div>
     </li>
 
-    <li class="a11yAccordeonItem">
-      <div class="a11yAccordeonItemHeader">
+    <li class="a11yAccordionItem">
+      <div class="a11yAccordionItemHeader">
         <strong>Dummy Text and Controls</strong>
       </div>
-      <div class="a11yAccordeonHideArea">
+      <div class="a11yAccordionHideArea">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
         <p>These controls are accessible for interaction by Assistive Technology and Screen Readers only when the collapsible area is visible to the user.</p>
@@ -66,51 +66,51 @@
       </div>
     </li>
 
-    <li class="a11yAccordeonItem">
-      <div class="a11yAccordeonItemHeader">
+    <li class="a11yAccordionItem">
+      <div class="a11yAccordionItemHeader">
         <strong>Header with image</strong>
       </div>
-      <div class="a11yAccordeonHideArea">
+      <div class="a11yAccordionHideArea">
         <img src="assets/imgs/image.jpg" alt="example image for the presentation purposes with a description Y U NO COLLAPSE">
       </div>
     </li>
   </ul>
 
-  <h3 align="center">Accordeon which can display multiple items at a time. Search can lookup data within the accordeon hide areas</h3>
+  <h3 align="center">accordion which can display multiple items at a time. Search can lookup data within the accordion hide areas</h3>
 
-  <ul id="accordeon2" class="a11yAccordeon">
-    <li class="a11yAccordeonItem">
-      <div class="a11yAccordeonItemHeader">
-        <strong>a11yAccordeon Quick Start</strong>
+  <ul id="accordion2" class="a11yAccordion">
+    <li class="a11yAccordionItem">
+      <div class="a11yAccordionItemHeader">
+        <strong>a11yAccordion Quick Start</strong>
       </div>
-      <div class="a11yAccordeonHideArea">
+      <div class="a11yAccordionHideArea">
         <h3>HTML markup:</h3>
         <pre>
           <code>
-    &lt;ul id=&quot;accordeon1&quot; class=&quot;a11yAccordeon&quot;&gt;
-      &lt;li class=&quot;a11yAccordeonItem&quot;&gt;
-        &lt;div class=&quot;a11yAccordeonItemHeader&quot;&gt;
+    &lt;ul id=&quot;accordion1&quot; class=&quot;a11yAccordion&quot;&gt;
+      &lt;li class=&quot;a11yAccordionItem&quot;&gt;
+        &lt;div class=&quot;a11yAccordionItemHeader&quot;&gt;
           Header #1
         &lt;/div&gt;
-        &lt;div class=&quot;a11yAccordeonHideArea&quot;&gt;
+        &lt;div class=&quot;a11yAccordionHideArea&quot;&gt;
           First row content
         &lt;/div&gt;
       &lt;/li&gt;
 
-      &lt;li class=&quot;a11yAccordeonItem&quot;&gt;
-        &lt;div class=&quot;a11yAccordeonItemHeader&quot;&gt;
+      &lt;li class=&quot;a11yAccordionItem&quot;&gt;
+        &lt;div class=&quot;a11yAccordionItemHeader&quot;&gt;
           Header #2
         &lt;/div&gt;
-        &lt;div class=&quot;a11yAccordeonHideArea&quot;&gt;
+        &lt;div class=&quot;a11yAccordionHideArea&quot;&gt;
           Second row content
         &lt;/div&gt;
       &lt;/li&gt;
 
-      &lt;li class=&quot;a11yAccordeonItem&quot;&gt;
-        &lt;div class=&quot;a11yAccordeonItemHeader&quot;&gt;
+      &lt;li class=&quot;a11yAccordionItem&quot;&gt;
+        &lt;div class=&quot;a11yAccordionItemHeader&quot;&gt;
           Header #3
         &lt;/div&gt;
-        &lt;div class=&quot;a11yAccordeonHideArea&quot;&gt;
+        &lt;div class=&quot;a11yAccordionHideArea&quot;&gt;
           Third row content
         &lt;/div&gt;
       &lt;/li&gt;
@@ -121,41 +121,41 @@
         <h3>JavaScript Code:</h3>
         <pre>
           <code>
-    var myAccordeon = new A11yAccordeon({
-      parentSelector: '#accordeon1'
+    var myaccordion = new A11yAccordion({
+      parentSelector: '#accordion1'
     });
           </code>
         </pre>
       </div>
     </li>
 
-    <li class="a11yAccordeonItem">
-      <div class="a11yAccordeonItemHeader">
-        <strong>a11yAccordeon Options</strong>
+    <li class="a11yAccordionItem">
+      <div class="a11yAccordionItemHeader">
+        <strong>a11yAccordion Options</strong>
       </div>
-      <div class="a11yAccordeonHideArea">
-        <p><strong>parentSelector</strong> - selector for the parent container which has an accordeon markup</p>
-        <p><strong>accordeonItemSelector</strong> - selector for accordeon row which contains header and hidden area</p>
+      <div class="a11yAccordionHideArea">
+        <p><strong>parentSelector</strong> - selector for the parent container which has an accordion markup</p>
+        <p><strong>accordionItemSelector</strong> - selector for accordion row which contains header and hidden area</p>
         <p><strong>headerSelector</strong> - selector for a header within the row</p>
-        <p><strong>hiddenAreaSelector</strong> - selector for hidden areas within the accordeon row</p>
+        <p><strong>hiddenAreaSelector</strong> - selector for hidden areas within the accordion row</p>
         <p><strong>visibleAreaClass</strong> - class which would be added to every row which will be uncollapsed/visible to the user</p>
-        <p><strong>colorScheme</strong> - color scheme for the accordeon</p>
+        <p><strong>colorScheme</strong> - color scheme for the accordion</p>
         <p><strong>speed</strong> - speed of animation</p>
         <p><strong>hiddenLinkDescription</strong> - description for every Show/Hide link for users who use Assistive technology (AT)</p>
-        <p><strong>showSearch</strong> - boolean option which will tell accordeon to render search options</p>
-        <p><strong>showOne</strong> - boolean option which represents if accordeon can uncollapse only 1 row to the user</p>
+        <p><strong>showSearch</strong> - boolean option which will tell accordion to render search options</p>
+        <p><strong>showOne</strong> - boolean option which represents if accordion can uncollapse only 1 row to the user</p>
         <p><strong>overallSearch</strong> - boolean option which will tell search to look not only in headers but within collapsed areas as well
           (WARNING! <strong>overallSearch</strong> option can slow down performance in cases when there is lots of data or HTML markup present in the hidden areas.)</p>
-        <p><strong>onAreaShow</strong> - custom callback which will be called after making visible an accordeon's area. Argument is jQuery DOM element for an area to become shown</p>
-        <p><strong>onAreaHide</strong> - user defined callback which will be called after hiding an accordeon's area. Argument is jQuery DOM element for an area to become hidden</p>
+        <p><strong>onAreaShow</strong> - custom callback which will be called after making visible an accordion's area. Argument is jQuery DOM element for an area to become shown</p>
+        <p><strong>onAreaHide</strong> - user defined callback which will be called after hiding an accordion's area. Argument is jQuery DOM element for an area to become hidden</p>
       </div>
     </li>
 
-    <li class="a11yAccordeonItem">
-      <div class="a11yAccordeonItemHeader">
-        <strong>a11yAccordeon API</strong>
+    <li class="a11yAccordionItem">
+      <div class="a11yAccordionItemHeader">
+        <strong>a11yAccordion API</strong>
       </div>
-      <div class="a11yAccordeonHideArea">
+      <div class="a11yAccordionHideArea">
         <h3>collapseRow(rowIndex);</h3>
         <p>Function which will hide hidden area in the row with index = rowIndex</p>
 
@@ -169,18 +169,18 @@
         <p>Function which will return a jQuery row element with index = rowIndex</p>
 
         <h3>showOne</h3>
-        <p>Boolean value which will make accordeon to show only 1 uncollapsed row at a time to the user if true</p>
+        <p>Boolean value which will make accordion to show only 1 uncollapsed row at a time to the user if true</p>
 
         <h3>el</h3>
-        <p>JQuery element which contains DOM markup of the A11yAccordeon</p>
+        <p>JQuery element which contains DOM markup of the a11yAccordion</p>
 
       </div>
     </li>
   </ul>
   <script type="text/javascript" src="js/libs/jquery-1.10.0.min.js"></script>
-  <script type="text/javascript" src="dist/js/a11yAccordeon-0.3.0.min.js"></script>
+  <script type="text/javascript" src="dist/js/a11yAccordion-0.3.1.min.js"></script>
 
   <!-- for debugging purposes -->
-  <!-- <script type="text/javascript" src="js/a11yAccordeon.js"></script> -->
+  <!-- <script type="text/javascript" src="js/a11yAccordion.js"></script> -->
 </body>
 </html>

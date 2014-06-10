@@ -1,7 +1,7 @@
 {
-  "name": "a11yAccordeon",
-  "version": "0.3.0",
-  "description": "An accessible Accordeon widget. Building Web with accessibility in mind.",
+  "name": "a11yAccordion",
+  "version": "0.3.1",
+  "description": "An accessible accordion widget. Building Web with accessibility in mind.",
   "contributors": [
     {
       "name": "Alexey Novak",
@@ -14,12 +14,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git@github.com:anvk/a11yAccordeon.git"
+    "url": "git@github.com:anvk/a11yAccordion.git"
   },
   "keywords": [
     "a11y",
-    "accordeon",
-    "a11yAccordeon",
+    "accordion",
+    "a11yAccordion",
     "widget"
   ],
   "dependencies": {
