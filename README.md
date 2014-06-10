@@ -84,7 +84,7 @@ var defaults = {
 Create the following HTML markup:
 
 ```html
-<ul id="Accordion1" class="a11yAccordion">
+<ul id="accordion1" class="a11yAccordion">
   <li class="a11yAccordionItem">
     <div class="a11yAccordionItemHeader">
       Header #1
@@ -118,7 +118,7 @@ Then execute in JavaScript
 
 ```javascript
 var myAccordion = new A11yAccordion({
-  parentSelector: '#Accordion1'
+  parentSelector: '#accordion1'
 });
 ```
 
