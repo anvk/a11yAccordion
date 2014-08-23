@@ -1,6 +1,6 @@
 ﻿# a11yAccordion v0.3.1
 
-> An accessible easy to use Accordion widget.
+> An accessible and easy to use Accordion widget.
 
 ## Prerequisites
 
