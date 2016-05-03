@@ -15,43 +15,59 @@
 //    onAreaShow - custom callback which will be called after making visible an accordion's area. Argument is jQuery DOM element for an area to become hidden
 //    onAreaHide - user defined callback which will be called after hiding an accordion's area. Argument is jQuery DOM element for an area to become shown
 //
-var A11yAccordion = function(options) {
+class A11yAccordion {
 
-  this.collapseRow = this.collapseRow.bind(this);
-  this.uncollapseRow = this.uncollapseRow.bind(this);
-  this.toggleRow = this.toggleRow.bind(this);
-  this.getRowEl = this.getRowEl.bind(this);
+  constructor(options = {}) {
+    this.el = null;
+    this.showOne = null;
 
-  this._init = this._init.bind(this);
-  this._collapseWork = this._collapseWork.bind(this);
-  this._collapseAll = this._collapseAll.bind(this);
-  this._collapse = this._collapse.bind(this);
-  this._uncollapse = this._uncollapse.bind(this);
-  this._getHiddenArea = this._getHiddenArea.bind(this);
+    this._hideEffectStyle = 'linear';
+    this._showHeaderLabelSelector = '.a11yAccordionItemHeaderLinkShowLabel';
+    this._hideHeaderLabelSelector = '.a11yAccordionItemHeaderLinkHideLabel';
+    this._headerSelector = null;
+    this._accordionItems = null;
+    this._visibleAreaClass = null;
+    this._accordionHideAreas = null;
+    this._speed = null;
+    this._onAreaShow = null;
+    this._onAreaHide = null;
 
-  // options which will be passed into the components with their default values
-  var defaults = {
-    parentSelector: undefined,
-    accordionItemSelector: '.a11yAccordionItem',
-    headerSelector: '.a11yAccordionItemHeader',
-    hiddenAreaSelector: '.a11yAccordionHideArea',
-    visibleAreaClass: 'visiblea11yAccordionItem',
-    colorScheme: 'light',
-    speed: 300,
-    hiddenLinkDescription: '',
-    showSearch: true,
-    showOne: true,
-    overallSearch: false,
-    onAreaShow: undefined,
-    onAreaHide: undefined
-  };
+    this.collapseRow = this.collapseRow.bind(this);
+    this.uncollapseRow = this.uncollapseRow.bind(this);
+    this.toggleRow = this.toggleRow.bind(this);
+    this.getRowEl = this.getRowEl.bind(this);
 
-  options = $.extend({}, defaults, options);
-  this._init(options);
-};
+    this._init = this._init.bind(this);
+    this._collapseWork = this._collapseWork.bind(this);
+    this._collapseAll = this._collapseAll.bind(this);
+    this._collapse = this._collapse.bind(this);
+    this._uncollapse = this._uncollapse.bind(this);
+    this._getHiddenArea = this._getHiddenArea.bind(this);
 
-A11yAccordion.prototype = {
+    // options which will be passed into the components with their default values
+    const defaults = {
+      parentSelector: undefined,
+      accordionItemSelector: '.a11yAccordionItem',
+      headerSelector: '.a11yAccordionItemHeader',
+      hiddenAreaSelector: '.a11yAccordionHideArea',
+      visibleAreaClass: 'visiblea11yAccordionItem',
+      colorScheme: 'light',
+      speed: 300,
+      hiddenLinkDescription: '',
+      showSearch: true,
+      showOne: true,
+      overallSearch: false,
+      onAreaShow: undefined,
+      onAreaHide: undefined
+    };
 
+    options = {
+      ...defaults,
+      ...options
+    };
+
+    this._init(options);
+  }
 
   /// Public functions and variables
 
@@ -60,39 +76,61 @@ A11yAccordion.prototype = {
   // params:
   //  rowIndex - integer index of the row
   //
-  collapseRow: function a11yAccordion_collapseRow(rowIndex) {
-    this._collapse(this._getHiddenArea(rowIndex));
-  },
+  collapseRow(rowIndex) {
+    const {
+      _collapse,
+      _getHiddenArea
+    } = this;
+
+    _collapse(_getHiddenArea(rowIndex));
+  }
 
   /// Function which will show hidden area in the row with index = rowIndex
   // params:
   //  rowIndex - integer index of the row
   //
-  uncollapseRow: function a11yAccordion_uncollapseRow(rowIndex) {
-    this._uncollapse(this._getHiddenArea(rowIndex));
-  },
+  uncollapseRow(rowIndex) {
+    const {
+      _uncollapse,
+      _getHiddenArea
+    } = this;
+
+    _uncollapse(_getHiddenArea(rowIndex));
+  }
 
   /// Function which will hide or show hidden area in the row with index = rowIndex depending on its previous state
   // params:
   //  rowIndex - integer index of the row
   //
-  toggleRow: function a11yAccordion_toggleRow(rowIndex) {
-    this._collapseWork(this._getHiddenArea(rowIndex));
-  },
+  toggleRow(rowIndex) {
+    const {
+      _collapseWork,
+      _getHiddenArea
+    } = this;
+
+    _collapseWork(_getHiddenArea(rowIndex));
+  }
 
   /// Function which will return a jQuery row element with index = rowIndex
   // params:
   //  rowIndex - integer index of the row
   //
-  getRowEl: function a11yAccordion_getRowEl(rowIndex) {
-    return (rowIndex >= 0 && rowIndex < this._accordionHideAreas.length) ? $(this._accordionItems[rowIndex]) : undefined;
-  },
+  getRowEl(rowIndex) {
+    const {
+      _accordionHideAreas,
+      _accordionItems
+    } = this;
+
+    return (rowIndex >= 0 && rowIndex < _accordionHideAreas.length)
+      ? $(_accordionItems[rowIndex])
+      : undefined;
+  }
 
   /// Function which will make row disabled and immune to the user clicks
   // params:
   //  rowIndex - integer index of the row
   //
-  // enableRow: function a11yAccordion_enableRow(rowIndex) {
+  // enableRow(rowIndex) {
 
   // };
 
@@ -100,12 +138,9 @@ A11yAccordion.prototype = {
   // params:
   //  rowIndex - integer index of the row
   //
-  // disableRow: function a11yAccordion_disableRow(rowIndex) {
+  // disableRow(rowIndex) {
 
   // };
-
-  el: null,
-  showOne: null,
 
 
   /// Private functions and variables
@@ -113,7 +148,7 @@ A11yAccordion.prototype = {
 
   /// Starting point
   //
-  _init: function a11yAccordion__init(options) {
+  _init(options = {}) {
     var parentDiv = $(options.parentSelector),
         parentPrefix = options.parentSelector ? options.parentSelector.substring(1) : undefined,
         accordionItemSelector = options.accordionItemSelector,
@@ -133,8 +168,8 @@ A11yAccordion.prototype = {
         showHeaderLabelText = 'Show',
         hideHeaderLabelText = 'Hide';
 
-    this._onAreaShow = options.onAreaShow ? options.onAreaShow : function() {};
-    this._onAreaHide = options.onAreaHide ? options.onAreaHide : function() {};
+    this._onAreaShow = options.onAreaShow ? options.onAreaShow : () => {};
+    this._onAreaHide = options.onAreaHide ? options.onAreaHide : () => {};
     this._headerSelector = headerSelector;
     this._speed = options.speed;
     this._visibleAreaClass = options.visibleAreaClass;
@@ -206,7 +241,7 @@ A11yAccordion.prototype = {
       }));
 
       // bulk DOM insert for spans
-      $(header).wrapInner('<span class="' + headerTextClass + '"></span>');
+      $(header).wrapInner(`<span class="${headerTextClass}"></span>`);
       link.prepend(spans).appendTo(header);
     }.bind(this));
 
@@ -265,74 +300,97 @@ A11yAccordion.prototype = {
         $(this._accordionItems[index])[action]();
       }.bind(this));
 
-      results = parentDiv.find(headerSelector + ':visible').length;
+      results = parentDiv.find(`${headerSelector}:visible`).length;
       searchInput.attr('title', resultsMessage + results.toString() + leaveBlankMessage);
 
       if (!results) {
         wrapperLi.show();
       }
     }.bind(this));
-  },
+  }
 
   /// Function which is executed upon the link click. It will either hide the related area OR show the area and hide all other ones
   // params:
   //  element - accordion hidden area DOM element which will become hidden or visible depending on its previous state
   //
-  _collapseWork: function a11yAccordion__collapseWork(element) {
-    element = $(element);
+  _collapseWork(element) {
+    const { _visibleAreaClass } = this;
 
     if (!element) {
       return;
     }
 
-    this[element.hasClass(this._visibleAreaClass)? '_collapse' : '_uncollapse'](element);
-  },
+    this[element.hasClass(_visibleAreaClass)
+      ? '_collapse'
+      : '_uncollapse'
+    ](element);
+  }
 
   /// Function which will collapse all areas
   //
-  _collapseAll: function a11yAccordion__collapseAll() {
-    var a11yAccordion = this;
+  _collapseAll() {
+    const {
+      _accordionHideAreas,
+      _visibleAreaClass,
+      _collapse
+    } = this;
 
-    $.each(this._accordionHideAreas.filter('.' + this._visibleAreaClass), function collapseAllEach(index, element) {
-      a11yAccordion._collapse(element);
-    });
-  },
+    const visibleAreas = _accordionHideAreas.filter(`.${_visibleAreaClass}`);
+
+    $.each(visibleAreas, (index, element) => _collapse(element));
+  }
 
   /// Function which will collapses one element
   // params:
   //  element - accordion hidden area DOM element which will become hidden
   //
-  _collapse: function a11yAccordion__collapse(element) {
-    var visibleAreaClass = this._visibleAreaClass;
+  _collapse(element) {
+    const {
+      _visibleAreaClass,
+      _headerSelector,
+      _showHeaderLabelSelector,
+      _hideHeaderLabelSelector,
+      _speed,
+      _hideEffectStyle,
+      _onAreaHide
+    } = this;
 
     element = $(element);
 
-    if (!element.length || !element.hasClass(visibleAreaClass)) {
+    if (!element.length || !element.hasClass(_visibleAreaClass)) {
       return;
     }
 
-    var topRow = element.siblings(this._headerSelector);
-    topRow.find(this._showHeaderLabelSelector).show();
-    topRow.find(this._hideHeaderLabelSelector).hide();
+    const topRow = element.siblings(_headerSelector);
+    topRow.find(_showHeaderLabelSelector).show();
+    topRow.find(_hideHeaderLabelSelector).hide();
 
-    element.slideUp(this._speed, this._hideEffectStyle, function collapseSlideUp() {
-      element.removeClass(visibleAreaClass);
+    element.slideUp(_speed, _hideEffectStyle, () => {
+      element.removeClass(_visibleAreaClass);
       element.hide();
 
-      this._onAreaHide(element);
-    }.bind(this));
-  },
+      _onAreaHide(element);
+    });
+  }
 
   /// Function which will show the area and convert from collapsed to be displayed one
   // params:
   //  element - accordion hidden area DOM element which will become visible
   //
-  _uncollapse: function a11yAccordion__uncollapse(element) {
-    var visibleAreaClass = this._visibleAreaClass;
+  _uncollapse(element) {
+    const {
+      _visibleAreaClass,
+      _headerSelector,
+      _showHeaderLabelSelector,
+      _hideHeaderLabelSelector,
+      _speed,
+      _hideEffectStyle,
+      _onAreaShow
+    } = this;
 
     element = $(element);
 
-    if (!element.length || element.hasClass(visibleAreaClass)) {
+    if (!element.length || element.hasClass(_visibleAreaClass)) {
       return;
     }
 
@@ -340,35 +398,27 @@ A11yAccordion.prototype = {
       this._collapseAll(element);
     }
 
-    var topRow = element.siblings(this._headerSelector);
-    topRow.find(this._showHeaderLabelSelector).hide();
-    topRow.find(this._hideHeaderLabelSelector).show();
+    const topRow = element.siblings(_headerSelector);
+    topRow.find(_showHeaderLabelSelector).hide();
+    topRow.find(_hideHeaderLabelSelector).show();
 
-    element.addClass(visibleAreaClass);
-    element.slideDown(this._speed, this._hideEffectStyle, function collapseSlideUp() {
+    element.addClass(_visibleAreaClass);
+    element.slideDown(_speed, _hideEffectStyle, () => {
       element.show();
 
-      this._onAreaShow(element);
-    }.bind(this));
-  },
+      _onAreaShow(element);
+    });
+  }
 
   /// Function which returns a jQuery element which represent a hidden area
   // params:
   //  rowIndex - integer index of the row of the hidden area
   //
-  _getHiddenArea: function a11yAccordion__getHiddenArea(rowIndex) {
-    return (rowIndex >= 0 && rowIndex < this._accordionHideAreas.length) ? $(this._accordionHideAreas[rowIndex]) : undefined;
-  },
+  _getHiddenArea(rowIndex) {
+    const { _accordionHideAreas } = this;
 
-  _hideEffectStyle: 'linear',
-  _showHeaderLabelSelector: '.a11yAccordionItemHeaderLinkShowLabel',
-  _hideHeaderLabelSelector: '.a11yAccordionItemHeaderLinkHideLabel',
-  _headerSelector: null,
-  _accordionItems: null,
-  _visibleAreaClass: null,
-  _accordionHideAreas: null,
-  _speed: null,
-  _onAreaShow: null,
-  _onAreaHide: null
-
-};
+    return (rowIndex >= 0 && rowIndex < _accordionHideAreas.length)
+      ? $(_accordionHideAreas[rowIndex])
+      : undefined;
+  }
+}

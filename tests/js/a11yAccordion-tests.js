@@ -52,9 +52,9 @@
       var row = a11yAccordion.getRowEl(rowIndex),
           hiddenArea = a11yAccordion._getHiddenArea(rowIndex),
           hiddenAreaIsVisible = isVisible ? 'true' : 'false';
-      expect(row.find(a11yAccordion._showHeaderLabelSelector).is(":visible")).to.be[!isVisible ? 'true' : 'false'];
-      expect(row.find(a11yAccordion._hideHeaderLabelSelector).is(":visible")).to.be[isVisible ? 'true' : 'false'];
-      expect(hiddenArea.is(":visible")).to.be[hiddenAreaIsVisible];
+      expect(row.find(a11yAccordion._showHeaderLabelSelector).is(':visible')).to.be[!isVisible ? 'true' : 'false'];
+      expect(row.find(a11yAccordion._hideHeaderLabelSelector).is(':visible')).to.be[isVisible ? 'true' : 'false'];
+      expect(hiddenArea.is(':visible')).to.be[hiddenAreaIsVisible];
       expect(hiddenArea.hasClass(a11yAccordion._visibleAreaClass)).to.be[hiddenAreaIsVisible];
     };
 
@@ -132,10 +132,10 @@
           expect(a11yAccordion.el.attr('id')).to.equal('accordion1');
           expect(a11yAccordion._accordionHideAreas.length).to.equal(5);
           hasSearchDiv(a11yAccordion, true);
-          expect(a11yAccordion.el.find(a11yAccordion._visibleAreaClass).filter(":visible").length).to.equal(0);
+          expect(a11yAccordion.el.find(a11yAccordion._visibleAreaClass).filter(':visible').length).to.equal(0);
 
           row = a11yAccordion.getRowEl(1);
-          expect(row.find(a11yAccordion._visibleAreaClass).filter(":visible").length).to.equal(0);
+          expect(row.find(a11yAccordion._visibleAreaClass).filter(':visible').length).to.equal(0);
 
           checkVisibility(a11yAccordion, 1, false);
 
@@ -394,7 +394,7 @@
 
       hiddenArea = a11yAccordion._getHiddenArea(1);
       expect(hiddenArea).not.to.be.undefined;
-      expect(hiddenArea.is(":visible")).to.be.false;
+      expect(hiddenArea.is(':visible')).to.be.false;
     });
 
   });
