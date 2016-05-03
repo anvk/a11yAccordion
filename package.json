@@ -15,7 +15,8 @@
   ],
   "scripts": {
     "clean": "rimraf dist",
-    "build:dev": "npm run clean && babel ./src/ --out-dir ./dist/js && lessc --clean-css ./assets/a11yAccordion.less ./dist/css/a11yAccordion.min.css && ncp ./assets/imgs ./dist/imgs",
+    "build:css": "lessc --clean-css ./assets/a11yAccordion.less ./dist/css/a11yAccordion.min.css",
+    "build:dev": "npm run clean && babel ./src/ --out-dir ./dist/js && npm run build:css && ncp ./assets/imgs ./dist/imgs",
     "build:prod": "npm run build:dev && uglifyjs ./dist/js/a11yAccordion.js -o ./dist/js/a11yAccordion.min.js --source-map ./dist/js/a11yAccordion.min.js.map -c -m --comments"
   },
   "directories": {},
