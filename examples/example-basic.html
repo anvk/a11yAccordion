@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>basic a11yAccordion</title>
+  <link rel="stylesheet" type="text/css" href="css/a11yAccordion.min.css" />
+</head>
+<body onload="load()">
+
+  <script type="text/javascript">
+    var load = function () {
+      new A11yAccordion({
+        parentSelector: '.accordion',
+        accordionItemSelector: 'section',
+        headerSelector: 'h2',
+        hiddenAreaSelector: 'div'
+      });
+    };
+  </script>
+
+  <!-- Basic Accordion -->
+
+  <div class="accordion pane">
+    <section>
+      <h2>
+        Header #1
+      </h2>
+      <div>
+        First row content
+      </div>
+    </section>
+
+    <section>
+      <h2>
+        Header #2
+      </h2>
+      <div>
+        Second row content
+      </div>
+    </section>
+  </div>
+
+  <!-- Advanced Accordion -->
+
+  <script type="text/javascript" src="libs/jquery-1.10.0.min.js"></script>
+  <script type="text/javascript" src="js/a11yAccordion-0.3.1.min.js"></script>
+</body>
+</html>
