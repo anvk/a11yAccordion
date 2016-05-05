@@ -49,7 +49,7 @@ var A11yAccordion = function () {
     this.toggleRow = this.toggleRow.bind(this);
     this.getRowEl = this.getRowEl.bind(this);
 
-    this._init = this._init.bind(this);
+    this._render = this._render.bind(this);
     this._collapseWork = this._collapseWork.bind(this);
     this._collapseAll = this._collapseAll.bind(this);
     this._collapse = this._collapse.bind(this);
@@ -75,7 +75,7 @@ var A11yAccordion = function () {
 
     options = _extends({}, defaults, options);
 
-    this._init(options);
+    this._render(options);
   }
 
   /// Public functions and variables
@@ -163,8 +163,8 @@ var A11yAccordion = function () {
     //
 
   }, {
-    key: '_init',
-    value: function _init() {
+    key: '_render',
+    value: function _render() {
       var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
       var parentDiv = $(options.parentSelector),
@@ -315,9 +315,19 @@ var A11yAccordion = function () {
         wrapperLi.hide();
 
         searchString = searchInput.val().toLowerCase();
+        var regex = new RegExp(searchInput.val(), 'ig');
 
         headers.each(function searchInputKeyupEach(index, data) {
           var action = data.children[0].textContent.toLowerCase().indexOf(searchString) !== -1 || options.overallSearch && this._accordionHideAreas[index].textContent.toLowerCase().indexOf(searchString) !== -1 ? 'show' : 'hide';
+
+          debugger;
+          //data.firstChild.innerHTML = data.firstChild.innerHTML
+          //  .replace(regex, '<mark>$&</mark>');
+
+          traverseChildNodes(data, regex);
+          // data.children[0].textContent = data.children[0]
+          //   .textContent.replace(regex, '<mark>$&</mark>');
+
           $(this._accordionItems[index])[action]();
         }.bind(this));
 
@@ -457,3 +467,57 @@ var A11yAccordion = function () {
 
   return A11yAccordion;
 }();
+
+function traverseChildNodes(node, regex) {
+
+  var next;
+
+  if (node.nodeType === 1) {
+
+    // (Element node)
+
+    if (node = node.firstChild) {
+      do {
+        // Recursively call traverseChildNodes
+        // on each child node
+        next = node.nextSibling;
+        traverseChildNodes(node, regex);
+      } while (node = next);
+    }
+  } else if (node.nodeType === 3) {
+
+    // (Text node)
+
+    if (regex.test(node.data)) {
+      wrapMatchesInNode(node, regex);
+    }
+  }
+}
+
+function wrapMatchesInNode(textNode, regex) {
+  debugger;
+  return textNode.parentNode.innerHTML = textNode.parentNode.innerHTML.replace(regex, '<mark>$&</mark>');
+  return textNode.textContent.replace(regex, '<mark>$&</mark>');
+
+  debugger;
+  var temp = document.createElement('div');
+  debugger;
+  temp.innerHTML = textNode.data.replace(regex, '<mark>$&</mark>');
+
+  // temp.innerHTML is now:
+  // "n    This order's reference number is <a href="/order/RF83297">RF83297</a>.n"
+  // |_______________________________________|__________________________________|___|
+  //                     |                                      |                 |
+  //                 TEXT NODE                             ELEMENT NODE       TEXT NODE
+
+  // Extract produced nodes and insert them
+  // before original textNode:
+  while (temp.firstChild) {
+    console.log(temp.firstChild.nodeType);
+    textNode.parentNode.insertBefore(textNode, temp.firstChild);
+  }
+  // Logged: 3,1,3
+
+  // Remove original text-node:
+  textNode.parentNode.removeChild(textNode);
+}
