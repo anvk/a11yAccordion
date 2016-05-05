@@ -33,6 +33,10 @@ var A11yAccordion = function () {
     this.el = null;
     this.showOne = null;
 
+    this._constants = {
+      SEARCH_ACTION_TYPE_HIDE: 'hide',
+      SEARCH_ACTION_TYPE_COLLAPSE: 'collapse'
+    };
     this._hideEffectStyle = 'linear';
     this._showHeaderLabelSelector = '.a11yAccordionItemHeaderLinkShowLabel';
     this._hideHeaderLabelSelector = '.a11yAccordionItemHeaderLinkHideLabel';
@@ -68,9 +72,13 @@ var A11yAccordion = function () {
       hiddenLinkDescription: '',
       showSearch: true,
       showOne: true,
+      searchActionType: this._constants.SEARCH_ACTION_TYPE_HIDE,
       overallSearch: false,
       onAreaShow: undefined,
-      onAreaHide: undefined
+      onAreaHide: undefined,
+      classes: {
+        markedTextClass: 'a11yAccordion-markedText'
+      }
     };
 
     options = _extends({}, defaults, options);
@@ -166,6 +174,9 @@ var A11yAccordion = function () {
     key: '_render',
     value: function _render() {
       var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+      var classes = options.classes;
+      var markedTextClass = classes.markedTextClass;
+
 
       var parentDiv = $(options.parentSelector),
           parentPrefix = options.parentSelector ? options.parentSelector.substring(1) : undefined,
@@ -206,6 +217,8 @@ var A11yAccordion = function () {
         throw 'a11yAccordion - no element(s) with headerSelector was found';
       } else if (!this._accordionHideAreas.length) {
         throw 'a11yAccordion - no element(s) with hiddenAreaSelector was found';
+      } else if (options.searchActionType !== this._constants.SEARCH_ACTION_TYPE_HIDE && options.searchActionType !== this._constants.SEARCH_ACTION_TYPE_COLLAPSE) {
+        throw 'a11yAccordion - invalid searchActionType. It can only be: ' + this._constants.SEARCH_ACTION_TYPE_HIDE + ' or ' + this._constants.SEARCH_ACTION_TYPE_COLLAPSE;
       }
 
       // store component's DOM element
@@ -311,25 +324,57 @@ var A11yAccordion = function () {
       wrapperDiv.prependTo(parentDiv);
 
       // Bind search function to input field
-      searchInput.keyup(function searchInputKeyup() {
+      searchInput.keyup(function (event) {
+        var value = event.target.value;
+
+        // hide no results found <li>
+
         wrapperLi.hide();
 
-        searchString = searchInput.val().toLowerCase();
-        var regex = new RegExp(searchInput.val(), 'ig');
+        // lowercase search string
+        searchString = value.toLowerCase();
 
-        headers.each(function searchInputKeyupEach(index, data) {
-          var action = data.children[0].textContent.toLowerCase().indexOf(searchString) !== -1 || options.overallSearch && this._accordionHideAreas[index].textContent.toLowerCase().indexOf(searchString) !== -1 ? 'show' : 'hide';
+        var regex = new RegExp(searchString, 'ig');
 
-          debugger;
-          //data.firstChild.innerHTML = data.firstChild.innerHTML
-          //  .replace(regex, '<mark>$&</mark>');
+        for (var i = 0, action; i < this._accordionItems.length; i++) {
+          var headerTextNode = headers[i].children[0];
 
-          traverseChildNodes(data, regex);
-          // data.children[0].textContent = data.children[0]
-          //   .textContent.replace(regex, '<mark>$&</mark>');
+          // remove all markings from the DOM
+          $(headerTextNode).find('.' + markedTextClass).each(function (index, element) {
+            return $(element).contents().unwrap();
+          });
+          headerTextNode.normalize();
 
-          $(this._accordionItems[index])[action]();
-        }.bind(this));
+          // only if there is something in the input only then perform search
+          action = searchString.length ? this._traverseChildNodes(headerTextNode, regex, markedTextClass) : true;
+
+          if (options.overallSearch) {
+            var bodyTextNode = this._accordionHideAreas[i];
+
+            // remove all markings from the DOM
+            $(bodyTextNode).find('.' + markedTextClass).each(function (index, element) {
+              return $(element).contents().unwrap();
+            });
+            bodyTextNode.normalize();
+
+            // only if there is something in the input only then perform search
+            action = searchString.length ? this._traverseChildNodes(bodyTextNode, regex, markedTextClass) : true;
+          }
+
+          // action on the item. Hide or Show
+          if (options.searchActionType === this._constants.SEARCH_ACTION_TYPE_HIDE) {
+            $(this._accordionItems[i])[action ? 'show' : 'hide']();
+          } else if (options.searchActionType === this._constants.SEARCH_ACTION_TYPE_COLLAPSE) {
+            var hiddenArea = this._getHiddenArea(i);
+            if (!searchString.length && hiddenArea[0].style.display === 'block') {
+              this.collapseRow(i);
+            } else if (hiddenArea[0].style.display === 'none' && action) {
+              this.uncollapseRow(i);
+            } else if (hiddenArea[0].style.display === 'block' && !action) {
+              this.collapseRow(i);
+            }
+          }
+        }
 
         results = parentDiv.find(headerSelector + ':visible').length;
         searchInput.attr('title', resultsMessage + results.toString() + leaveBlankMessage);
@@ -463,61 +508,47 @@ var A11yAccordion = function () {
 
       return rowIndex >= 0 && rowIndex < _accordionHideAreas.length ? $(_accordionHideAreas[rowIndex]) : undefined;
     }
+
+    // this function is based on
+    // http://james.padolsey.com/javascript/replacing-text-in-the-dom-its-not-that-simple/
+
+  }, {
+    key: '_traverseChildNodes',
+    value: function _traverseChildNodes(node, regex, markedTextClass) {
+      var _this = this;
+
+      // if node is a text node andstring appears in text
+      if (node.nodeType === 3 && regex.test(node.data)) {
+        if (node.textContent.match(regex)) {
+          var temp = document.createElement('div');
+
+          temp.innerHTML = node.data.replace(regex, '<mark class="' + markedTextClass + '">$&</mark>');
+          while (temp.firstChild) {
+            node.parentNode.insertBefore(temp.firstChild, node);
+          }
+          node.parentNode.removeChild(node);
+
+          return true;
+        }
+        return;
+      }
+
+      var childNodes = node.childNodes;
+
+
+      if (!childNodes.length) {
+        return;
+      }
+
+      var foundMatch = void 0;
+
+      $(childNodes).each(function (index, node) {
+        foundMatch = _this._traverseChildNodes(node, regex, markedTextClass) || foundMatch;
+      });
+
+      return foundMatch;
+    }
   }]);
 
   return A11yAccordion;
 }();
-
-function traverseChildNodes(node, regex) {
-
-  var next;
-
-  if (node.nodeType === 1) {
-
-    // (Element node)
-
-    if (node = node.firstChild) {
-      do {
-        // Recursively call traverseChildNodes
-        // on each child node
-        next = node.nextSibling;
-        traverseChildNodes(node, regex);
-      } while (node = next);
-    }
-  } else if (node.nodeType === 3) {
-
-    // (Text node)
-
-    if (regex.test(node.data)) {
-      wrapMatchesInNode(node, regex);
-    }
-  }
-}
-
-function wrapMatchesInNode(textNode, regex) {
-  debugger;
-  return textNode.parentNode.innerHTML = textNode.parentNode.innerHTML.replace(regex, '<mark>$&</mark>');
-  return textNode.textContent.replace(regex, '<mark>$&</mark>');
-
-  debugger;
-  var temp = document.createElement('div');
-  debugger;
-  temp.innerHTML = textNode.data.replace(regex, '<mark>$&</mark>');
-
-  // temp.innerHTML is now:
-  // "n    This order's reference number is <a href="/order/RF83297">RF83297</a>.n"
-  // |_______________________________________|__________________________________|___|
-  //                     |                                      |                 |
-  //                 TEXT NODE                             ELEMENT NODE       TEXT NODE
-
-  // Extract produced nodes and insert them
-  // before original textNode:
-  while (temp.firstChild) {
-    console.log(temp.firstChild.nodeType);
-    textNode.parentNode.insertBefore(textNode, temp.firstChild);
-  }
-  // Logged: 3,1,3
-
-  // Remove original text-node:
-  textNode.parentNode.removeChild(textNode);
-}
