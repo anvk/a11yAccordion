@@ -46,6 +46,26 @@
           top: -900px;
           position: absolute;
         }
+        .a11yAccordion-triangle {
+          width: 0;
+          height: 0;
+          margin-left: 5px;
+          margin-top: 5px;
+          border-left: 8px solid transparent;
+          border-right: 8px solid transparent;
+          border-top: 8px solid black;
+          float: right;
+          -moz-transition: -moz-transform .3s;
+          -webkit-transition: -webkit-transform .3s;
+          -o-transition: -o-transform .3s;
+          transition: transform .3s;
+          &.toggle {
+            -moz-transform: rotate(-180deg);
+             -o-transform: rotate(-180deg);
+            -webkit-transform: rotate(-180deg);
+            transform: rotate(-180deg);
+          }
+        }
       }
     }
 

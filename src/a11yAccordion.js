@@ -177,6 +177,8 @@ class A11yAccordion {
         colorScheme = options.colorScheme,
         accordionHeaderClass = colorScheme + '-a11yAccordion-header',
         accordionHideAreaClass = colorScheme + '-a11yAccordion-area',
+        triangleClass = 'a11yAccordion-triangle',
+        toggleClass = 'toggle',
         showHeaderLabelText = 'Show',
         hideHeaderLabelText = 'Hide';
 
@@ -185,6 +187,8 @@ class A11yAccordion {
     this._headerSelector = headerSelector;
     this._speed = options.speed;
     this._visibleAreaClass = options.visibleAreaClass;
+    this._triangleClass = triangleClass;
+    this._toggleClass = toggleClass;
     this._accordionItems = parentDiv.find(accordionItemSelector);
     this.showOne = options.showOne;
 
@@ -255,6 +259,10 @@ class A11yAccordion {
       spans.push($('<span>', {
         text: options.hiddenLinkDescription,
         'class': hiddenHeaderLabelDescriptionClass
+      }));
+
+      spans.push($('<div>', {
+        'class': triangleClass
       }));
 
       // bulk DOM insert for spans
@@ -411,7 +419,9 @@ class A11yAccordion {
       _hideHeaderLabelSelector,
       _speed,
       _hideEffectStyle,
-      _onAreaHide
+      _onAreaHide,
+      _triangleClass,
+      _toggleClass
     } = this;
 
     element = $(element);
@@ -421,8 +431,10 @@ class A11yAccordion {
     }
 
     const topRow = element.siblings(_headerSelector);
+
     topRow.find(_showHeaderLabelSelector).show();
     topRow.find(_hideHeaderLabelSelector).hide();
+    topRow.find(`.${_triangleClass}`).toggleClass(_toggleClass);
 
     element.slideUp(_speed, _hideEffectStyle, () => {
       element.removeClass(_visibleAreaClass);
@@ -444,7 +456,9 @@ class A11yAccordion {
       _hideHeaderLabelSelector,
       _speed,
       _hideEffectStyle,
-      _onAreaShow
+      _onAreaShow,
+      _triangleClass,
+      _toggleClass
     } = this;
 
     element = $(element);
@@ -458,8 +472,10 @@ class A11yAccordion {
     }
 
     const topRow = element.siblings(_headerSelector);
+
     topRow.find(_showHeaderLabelSelector).hide();
     topRow.find(_hideHeaderLabelSelector).show();
+    topRow.find(`.${_triangleClass}`).toggleClass(_toggleClass);
 
     element.addClass(_visibleAreaClass);
     element.slideDown(_speed, _hideEffectStyle, () => {

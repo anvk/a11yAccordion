@@ -194,6 +194,8 @@ var A11yAccordion = function () {
           colorScheme = options.colorScheme,
           accordionHeaderClass = colorScheme + '-a11yAccordion-header',
           accordionHideAreaClass = colorScheme + '-a11yAccordion-area',
+          triangleClass = 'a11yAccordion-triangle',
+          toggleClass = 'toggle',
           showHeaderLabelText = 'Show',
           hideHeaderLabelText = 'Hide';
 
@@ -202,6 +204,8 @@ var A11yAccordion = function () {
       this._headerSelector = headerSelector;
       this._speed = options.speed;
       this._visibleAreaClass = options.visibleAreaClass;
+      this._triangleClass = triangleClass;
+      this._toggleClass = toggleClass;
       this._accordionItems = parentDiv.find(accordionItemSelector);
       this.showOne = options.showOne;
 
@@ -269,6 +273,10 @@ var A11yAccordion = function () {
         spans.push($('<span>', {
           text: options.hiddenLinkDescription,
           'class': hiddenHeaderLabelDescriptionClass
+        }));
+
+        spans.push($('<div>', {
+          'class': triangleClass
         }));
 
         // bulk DOM insert for spans
@@ -436,6 +444,8 @@ var A11yAccordion = function () {
       var _speed = this._speed;
       var _hideEffectStyle = this._hideEffectStyle;
       var _onAreaHide = this._onAreaHide;
+      var _triangleClass = this._triangleClass;
+      var _toggleClass = this._toggleClass;
 
 
       element = $(element);
@@ -445,8 +455,10 @@ var A11yAccordion = function () {
       }
 
       var topRow = element.siblings(_headerSelector);
+
       topRow.find(_showHeaderLabelSelector).show();
       topRow.find(_hideHeaderLabelSelector).hide();
+      topRow.find('.' + _triangleClass).toggleClass(_toggleClass);
 
       element.slideUp(_speed, _hideEffectStyle, function () {
         element.removeClass(_visibleAreaClass);
@@ -471,6 +483,8 @@ var A11yAccordion = function () {
       var _speed = this._speed;
       var _hideEffectStyle = this._hideEffectStyle;
       var _onAreaShow = this._onAreaShow;
+      var _triangleClass = this._triangleClass;
+      var _toggleClass = this._toggleClass;
 
 
       element = $(element);
@@ -484,8 +498,10 @@ var A11yAccordion = function () {
       }
 
       var topRow = element.siblings(_headerSelector);
+
       topRow.find(_showHeaderLabelSelector).hide();
       topRow.find(_hideHeaderLabelSelector).show();
+      topRow.find('.' + _triangleClass).toggleClass(_toggleClass);
 
       element.addClass(_visibleAreaClass);
       element.slideDown(_speed, _hideEffectStyle, function () {
