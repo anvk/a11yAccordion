@@ -66,7 +66,6 @@ var A11yAccordion = function () {
       accordionItemSelector: '.a11yAccordionItem',
       headerSelector: '.a11yAccordionItemHeader',
       hiddenAreaSelector: '.a11yAccordionHideArea',
-      visibleAreaClass: 'visiblea11yAccordionItem',
       colorScheme: 'light',
       speed: 300,
       hiddenLinkDescription: '',
@@ -74,14 +73,50 @@ var A11yAccordion = function () {
       showOne: true,
       searchActionType: this._constants.SEARCH_ACTION_TYPE_HIDE,
       overallSearch: false,
-      onAreaShow: undefined,
-      onAreaHide: undefined,
+      onAreaShow: function onAreaShow() {},
+      onAreaHide: function onAreaHide() {},
       classes: {
-        markedTextClass: 'a11yAccordion-markedText'
+        markedTextClass: 'a11yAccordion-markedText',
+        visibleAreaClass: 'visiblea11yAccordionItem',
+        noResultsDivClass: 'a11yAccordionNoResultsItem',
+        searchDivClass: 'a11yAccordionSearchDiv',
+        headerLinkClass: 'a11yAccordionItemHeaderLink',
+        headerTextClass: 'a11yAccordionItemHeaderText',
+        hiddenHeaderLabelDescriptionClass: 'a11yAccordionItemHeaderLinkHiddenLabel',
+        toggleClass: 'toggle',
+        triangleClass: 'a11yAccordion-triangle',
+        searchClass: 'a11yAccordionSearch'
+      },
+      labels: {
+        showHeaderLabelText: 'Show',
+        hideHeaderLabelText: 'Hide',
+        searchPlaceholder: 'Search',
+        noResultsText: 'No Results Found',
+        titleText: 'Type your query to search',
+        resultsMessage: 'Number of results found: ',
+        leaveBlankMessage: ' Please leave blank to see all the results.'
       }
     };
 
     options = _extends({}, defaults, options);
+
+    var _options = options;
+    var colorScheme = _options.colorScheme;
+    var parentSelector = _options.parentSelector;
+
+    var parentPrefix = parentSelector ? parentSelector.substring(1) : undefined;
+
+    options = _extends({}, options, {
+      classes: _extends({}, options.classes, {
+        accordionHeaderClass: colorScheme + '-a11yAccordion-header',
+        accordionHideAreaClass: colorScheme + '-a11yAccordion-area'
+      }),
+      ids: {
+        noResultsDivID: parentPrefix + '-noResultsItem',
+        searchDivID: parentPrefix + '-searchPanel',
+        rowIdStringPrefix: parentPrefix + '-row-'
+      }
+    });
 
     this._render(options);
   }
@@ -174,40 +209,61 @@ var A11yAccordion = function () {
     key: '_render',
     value: function _render() {
       var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+      var parentSelector = options.parentSelector;
+      var accordionItemSelector = options.accordionItemSelector;
+      var hiddenAreaSelector = options.hiddenAreaSelector;
+      var headerSelector = options.headerSelector;
+      var hiddenLinkDescription = options.hiddenLinkDescription;
+      var colorScheme = options.colorScheme;
+      var onAreaShow = options.onAreaShow;
+      var onAreaHide = options.onAreaHide;
+      var speed = options.speed;
+      var showOne = options.showOne;
+      var showSearch = options.showSearch;
+      var overallSearch = options.overallSearch;
+      var searchActionType = options.searchActionType;
       var classes = options.classes;
+      var ids = options.ids;
+      var labels = options.labels;
       var markedTextClass = classes.markedTextClass;
+      var visibleAreaClass = classes.visibleAreaClass;
+      var noResultsDivClass = classes.noResultsDivClass;
+      var searchDivClass = classes.searchDivClass;
+      var headerLinkClass = classes.headerLinkClass;
+      var headerTextClass = classes.headerTextClass;
+      var hiddenHeaderLabelDescriptionClass = classes.hiddenHeaderLabelDescriptionClass;
+      var toggleClass = classes.toggleClass;
+      var triangleClass = classes.triangleClass;
+      var searchClass = classes.searchClass;
+      var accordionHeaderClass = classes.accordionHeaderClass;
+      var accordionHideAreaClass = classes.accordionHideAreaClass;
+      var noResultsDivID = ids.noResultsDivID;
+      var searchDivID = ids.searchDivID;
+      var rowIdStringPrefix = ids.rowIdStringPrefix;
+      var showHeaderLabelText = labels.showHeaderLabelText;
+      var hideHeaderLabelText = labels.hideHeaderLabelText;
+      var searchPlaceholder = labels.searchPlaceholder;
+      var noResultsText = labels.noResultsText;
+      var titleText = labels.titleText;
+      var resultsMessage = labels.resultsMessage;
+      var leaveBlankMessage = labels.leaveBlankMessage;
+      var _collapseWork = this._collapseWork;
+      var _constants = this._constants;
+      var _showHeaderLabelSelector = this._showHeaderLabelSelector;
+      var _hideHeaderLabelSelector = this._hideHeaderLabelSelector;
 
 
-      var parentDiv = $(options.parentSelector),
-          parentPrefix = options.parentSelector ? options.parentSelector.substring(1) : undefined,
-          accordionItemSelector = options.accordionItemSelector,
-          hiddenAreaSelector = options.hiddenAreaSelector,
-          headerSelector = options.headerSelector,
-          headerLinkClass = 'a11yAccordionItemHeaderLink',
-          headerTextClass = 'a11yAccordionItemHeaderText',
-          hiddenHeaderLabelDescriptionClass = 'a11yAccordionItemHeaderLinkHiddenLabel',
-          noResultsDivID = parentPrefix + '-noResultsItem',
-          noResultsDivClass = 'a11yAccordionNoResultsItem',
-          searchDivID = parentPrefix + '-searchPanel',
-          searchDivClass = 'a11yAccordionSearchDiv',
-          rowIdString = parentPrefix + '-row-',
-          colorScheme = options.colorScheme,
-          accordionHeaderClass = colorScheme + '-a11yAccordion-header',
-          accordionHideAreaClass = colorScheme + '-a11yAccordion-area',
-          triangleClass = 'a11yAccordion-triangle',
-          toggleClass = 'toggle',
-          showHeaderLabelText = 'Show',
-          hideHeaderLabelText = 'Hide';
+      var parentDiv = $(parentSelector);
 
-      this._onAreaShow = options.onAreaShow ? options.onAreaShow : function () {};
-      this._onAreaHide = options.onAreaHide ? options.onAreaHide : function () {};
+      this._onAreaShow = onAreaShow;
+      this._onAreaHide = onAreaHide;
       this._headerSelector = headerSelector;
-      this._speed = options.speed;
-      this._visibleAreaClass = options.visibleAreaClass;
+      this._speed = speed;
+      this._visibleAreaClass = visibleAreaClass;
       this._triangleClass = triangleClass;
       this._toggleClass = toggleClass;
       this._accordionItems = parentDiv.find(accordionItemSelector);
-      this.showOne = options.showOne;
+      this.showOne = showOne;
 
       var headers = this._accordionItems.find(headerSelector);
       this._accordionHideAreas = this._accordionItems.find(hiddenAreaSelector);
@@ -221,8 +277,8 @@ var A11yAccordion = function () {
         throw 'a11yAccordion - no element(s) with headerSelector was found';
       } else if (!this._accordionHideAreas.length) {
         throw 'a11yAccordion - no element(s) with hiddenAreaSelector was found';
-      } else if (options.searchActionType !== this._constants.SEARCH_ACTION_TYPE_HIDE && options.searchActionType !== this._constants.SEARCH_ACTION_TYPE_COLLAPSE) {
-        throw 'a11yAccordion - invalid searchActionType. It can only be: ' + this._constants.SEARCH_ACTION_TYPE_HIDE + ' or ' + this._constants.SEARCH_ACTION_TYPE_COLLAPSE;
+      } else if (searchActionType !== _constants.SEARCH_ACTION_TYPE_HIDE && searchActionType !== _constants.SEARCH_ACTION_TYPE_COLLAPSE) {
+        throw 'a11yAccordion - invalid searchActionType. It can only be: ' + _constants.SEARCH_ACTION_TYPE_HIDE + ' or ' + _constants.SEARCH_ACTION_TYPE_COLLAPSE;
       }
 
       // store component's DOM element
@@ -236,13 +292,13 @@ var A11yAccordion = function () {
       this._accordionHideAreas.addClass(accordionHideAreaClass);
 
       // function for show/hide link clicks. We predefine the function not to define it in the loop
-      var linkClick = function (event) {
+      var linkClick = function linkClick(event) {
         event.preventDefault();
         event.stopPropagation();
         var accordionItem = $(event.target).parents(accordionItemSelector);
-        this._collapseWork(accordionItem.find(hiddenAreaSelector));
+        _collapseWork(accordionItem.find(hiddenAreaSelector));
         accordionItem.find('.' + headerLinkClass).focus();
-      }.bind(this);
+      };
 
       // bind headers to a click event
       headers.click(linkClick);
@@ -261,17 +317,17 @@ var A11yAccordion = function () {
 
         spans.push($('<span>', {
           text: showHeaderLabelText,
-          'class': this._showHeaderLabelSelector.substring(1)
+          'class': _showHeaderLabelSelector.substring(1)
         }));
 
         spans.push($('<span>', {
           text: hideHeaderLabelText,
           style: 'display: none;',
-          'class': this._hideHeaderLabelSelector.substring(1)
+          'class': _hideHeaderLabelSelector.substring(1)
         }));
 
         spans.push($('<span>', {
-          text: options.hiddenLinkDescription,
+          text: hiddenLinkDescription,
           'class': hiddenHeaderLabelDescriptionClass
         }));
 
@@ -282,51 +338,39 @@ var A11yAccordion = function () {
         // bulk DOM insert for spans
         $(header).wrapInner('<span class="' + headerTextClass + '"></span>');
         link.prepend(spans).appendTo(header);
-      }.bind(this));
+      });
 
       // if there is NO search option then return component right away
-      if (!options.showSearch) {
+      if (!showSearch) {
         return;
       }
 
-      var searchPlaceholder = 'Search',
-          searchClass = 'a11yAccordionSearch',
-          noResultsText = 'No Results Found',
-          titleText = 'Type your query to search',
-          resultsMessage = 'Number of results found: ',
-          leaveBlankMessage = ' Please leave blank to see all the results.',
-          wrapperDiv,
-          wrapperLi,
-          searchInput,
-          searchString,
-          results;
-
-      wrapperDiv = $('<div />', {
+      var wrapperDiv = $('<div>', {
         id: searchDivID,
         'class': searchDivClass
       });
 
-      searchInput = $('<input />', {
+      var searchInput = $('<input>', {
         type: 'text',
         placeholder: searchPlaceholder,
         'class': searchClass,
         title: titleText
       }).appendTo(wrapperDiv);
 
-      wrapperLi = $('<li />', {
+      var wrapperLi = $('<li>', {
         'class': noResultsDivClass,
         id: noResultsDivID,
         style: 'display:none;'
       }).appendTo(parentDiv);
 
-      $('<div />', {
+      $('<div>', {
         'class': headerSelector.substring(1) + ' ' + accordionHeaderClass,
         text: noResultsText
       }).appendTo(wrapperLi);
 
       // Set an id to each row
       this._accordionItems.each(function initaccordionItemsEach(index, item) {
-        item.setAttribute('id', rowIdString + index);
+        item.setAttribute('id', rowIdStringPrefix + index);
       });
 
       wrapperDiv.prependTo(parentDiv);
@@ -334,13 +378,12 @@ var A11yAccordion = function () {
       // Bind search function to input field
       searchInput.keyup(function (event) {
         var value = event.target.value;
+        // lowercase search string
+
+        var searchString = value.toLowerCase();
 
         // hide no results found <li>
-
         wrapperLi.hide();
-
-        // lowercase search string
-        searchString = value.toLowerCase();
 
         var regex = new RegExp(searchString, 'ig');
 
@@ -356,7 +399,7 @@ var A11yAccordion = function () {
           // only if there is something in the input only then perform search
           action = searchString.length ? this._traverseChildNodes(headerTextNode, regex, markedTextClass) : true;
 
-          if (options.overallSearch) {
+          if (overallSearch) {
             var bodyTextNode = this._accordionHideAreas[i];
 
             // remove all markings from the DOM
@@ -370,9 +413,9 @@ var A11yAccordion = function () {
           }
 
           // action on the item. Hide or Show
-          if (options.searchActionType === this._constants.SEARCH_ACTION_TYPE_HIDE) {
+          if (searchActionType === _constants.SEARCH_ACTION_TYPE_HIDE) {
             $(this._accordionItems[i])[action ? 'show' : 'hide']();
-          } else if (options.searchActionType === this._constants.SEARCH_ACTION_TYPE_COLLAPSE) {
+          } else if (searchActionType === _constants.SEARCH_ACTION_TYPE_COLLAPSE) {
             var hiddenArea = this._getHiddenArea(i);
             if (!searchString.length && hiddenArea[0].style.display === 'block') {
               this.collapseRow(i);
@@ -384,7 +427,7 @@ var A11yAccordion = function () {
           }
         }
 
-        results = parentDiv.find(headerSelector + ':visible').length;
+        var results = parentDiv.find(headerSelector + ':visible').length;
         searchInput.attr('title', resultsMessage + results.toString() + leaveBlankMessage);
 
         if (!results) {
