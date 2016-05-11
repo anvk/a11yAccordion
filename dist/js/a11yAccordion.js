@@ -6,7 +6,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-/*global $*/
+/* global $ */
 
 /// This function would create an accordion based on the markup and provided options
 // params:
@@ -30,23 +30,10 @@ var A11yAccordion = function () {
 
     _classCallCheck(this, A11yAccordion);
 
-    this.el = null;
-    this.showOne = null;
-
     this._constants = {
       SEARCH_ACTION_TYPE_HIDE: 'hide',
       SEARCH_ACTION_TYPE_COLLAPSE: 'collapse'
     };
-    this._hideEffectStyle = 'linear';
-    this._showHeaderLabelSelector = '.a11yAccordionItemHeaderLinkShowLabel';
-    this._hideHeaderLabelSelector = '.a11yAccordionItemHeaderLinkHideLabel';
-    this._headerSelector = null;
-    this._accordionItems = null;
-    this._visibleAreaClass = null;
-    this._accordionHideAreas = null;
-    this._speed = null;
-    this._onAreaShow = null;
-    this._onAreaHide = null;
 
     this.collapseRow = this.collapseRow.bind(this);
     this.uncollapseRow = this.uncollapseRow.bind(this);
@@ -54,19 +41,19 @@ var A11yAccordion = function () {
     this.getRowEl = this.getRowEl.bind(this);
 
     this._render = this._render.bind(this);
+    this._renderSearch = this._renderSearch.bind(this);
     this._collapseWork = this._collapseWork.bind(this);
     this._collapseAll = this._collapseAll.bind(this);
     this._collapse = this._collapse.bind(this);
     this._uncollapse = this._uncollapse.bind(this);
     this._getHiddenArea = this._getHiddenArea.bind(this);
+    this._traverseChildNodes = this._traverseChildNodes.bind(this);
 
     // options which will be passed into the components with their default values
     var defaults = {
       parentSelector: undefined,
-      accordionItemSelector: '.a11yAccordionItem',
-      headerSelector: '.a11yAccordionItemHeader',
-      hiddenAreaSelector: '.a11yAccordionHideArea',
       colorScheme: 'light',
+      hideEffectStyle: 'linear',
       speed: 300,
       hiddenLinkDescription: '',
       showSearch: true,
@@ -95,6 +82,13 @@ var A11yAccordion = function () {
         titleText: 'Type your query to search',
         resultsMessage: 'Number of results found: ',
         leaveBlankMessage: ' Please leave blank to see all the results.'
+      },
+      selectors: {
+        headerSelector: '.a11yAccordionItemHeader',
+        accordionItemSelector: '.a11yAccordionItem',
+        hiddenAreaSelector: '.a11yAccordionHideArea',
+        showHeaderLabelSelector: '.a11yAccordionItemHeaderLinkShowLabel',
+        hideHeaderLabelSelector: '.a11yAccordionItemHeaderLinkHideLabel'
       }
     };
 
@@ -118,7 +112,9 @@ var A11yAccordion = function () {
       }
     });
 
-    this._render(options);
+    this.props = options;
+
+    this._render();
   }
 
   /// Public functions and variables
@@ -177,11 +173,12 @@ var A11yAccordion = function () {
   }, {
     key: 'getRowEl',
     value: function getRowEl(rowIndex) {
-      var _accordionHideAreas = this._accordionHideAreas;
-      var _accordionItems = this._accordionItems;
+      var _refs = this.refs;
+      var accordionHideAreas = _refs.accordionHideAreas;
+      var accordionItems = _refs.accordionItems;
 
 
-      return rowIndex >= 0 && rowIndex < _accordionHideAreas.length ? $(_accordionItems[rowIndex]) : undefined;
+      return rowIndex >= 0 && rowIndex < accordionHideAreas.length ? $(accordionItems[rowIndex]) : undefined;
     }
 
     /// Function which will make row disabled and immune to the user clicks
@@ -202,94 +199,75 @@ var A11yAccordion = function () {
 
     /// Private functions and variables
 
-    /// Starting point
+    /// Rendering accordion control
     //
 
   }, {
     key: '_render',
     value: function _render() {
-      var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-      var parentSelector = options.parentSelector;
-      var accordionItemSelector = options.accordionItemSelector;
-      var hiddenAreaSelector = options.hiddenAreaSelector;
-      var headerSelector = options.headerSelector;
-      var hiddenLinkDescription = options.hiddenLinkDescription;
-      var colorScheme = options.colorScheme;
-      var onAreaShow = options.onAreaShow;
-      var onAreaHide = options.onAreaHide;
-      var speed = options.speed;
-      var showOne = options.showOne;
-      var showSearch = options.showSearch;
-      var overallSearch = options.overallSearch;
-      var searchActionType = options.searchActionType;
-      var classes = options.classes;
-      var ids = options.ids;
-      var labels = options.labels;
-      var markedTextClass = classes.markedTextClass;
+      var props = this.props;
+      var _collapseWork = this._collapseWork;
+      var _constants = this._constants;
+      var parentSelector = props.parentSelector;
+      var hiddenLinkDescription = props.hiddenLinkDescription;
+      var colorScheme = props.colorScheme;
+      var onAreaShow = props.onAreaShow;
+      var onAreaHide = props.onAreaHide;
+      var speed = props.speed;
+      var showSearch = props.showSearch;
+      var searchActionType = props.searchActionType;
+      var classes = props.classes;
+      var labels = props.labels;
+      var selectors = props.selectors;
       var visibleAreaClass = classes.visibleAreaClass;
-      var noResultsDivClass = classes.noResultsDivClass;
-      var searchDivClass = classes.searchDivClass;
       var headerLinkClass = classes.headerLinkClass;
       var headerTextClass = classes.headerTextClass;
       var hiddenHeaderLabelDescriptionClass = classes.hiddenHeaderLabelDescriptionClass;
       var toggleClass = classes.toggleClass;
       var triangleClass = classes.triangleClass;
-      var searchClass = classes.searchClass;
       var accordionHeaderClass = classes.accordionHeaderClass;
       var accordionHideAreaClass = classes.accordionHideAreaClass;
-      var noResultsDivID = ids.noResultsDivID;
-      var searchDivID = ids.searchDivID;
-      var rowIdStringPrefix = ids.rowIdStringPrefix;
       var showHeaderLabelText = labels.showHeaderLabelText;
       var hideHeaderLabelText = labels.hideHeaderLabelText;
-      var searchPlaceholder = labels.searchPlaceholder;
-      var noResultsText = labels.noResultsText;
-      var titleText = labels.titleText;
-      var resultsMessage = labels.resultsMessage;
-      var leaveBlankMessage = labels.leaveBlankMessage;
-      var _collapseWork = this._collapseWork;
-      var _constants = this._constants;
-      var _showHeaderLabelSelector = this._showHeaderLabelSelector;
-      var _hideHeaderLabelSelector = this._hideHeaderLabelSelector;
+      var showHeaderLabelSelector = selectors.showHeaderLabelSelector;
+      var hideHeaderLabelSelector = selectors.hideHeaderLabelSelector;
+      var headerSelector = selectors.headerSelector;
+      var accordionItemSelector = selectors.accordionItemSelector;
+      var hiddenAreaSelector = selectors.hiddenAreaSelector;
 
 
       var parentDiv = $(parentSelector);
+      var accordionItems = parentDiv.find(accordionItemSelector);
+      var accordionHideAreas = accordionItems.find(hiddenAreaSelector);
+      var headers = accordionItems.find(headerSelector);
 
-      this._onAreaShow = onAreaShow;
-      this._onAreaHide = onAreaHide;
-      this._headerSelector = headerSelector;
-      this._speed = speed;
-      this._visibleAreaClass = visibleAreaClass;
-      this._triangleClass = triangleClass;
-      this._toggleClass = toggleClass;
-      this._accordionItems = parentDiv.find(accordionItemSelector);
-      this.showOne = showOne;
-
-      var headers = this._accordionItems.find(headerSelector);
-      this._accordionHideAreas = this._accordionItems.find(hiddenAreaSelector);
+      // store component's DOM elements
+      this.refs = {
+        el: parentDiv,
+        accordionItems: accordionItems,
+        accordionHideAreas: accordionHideAreas,
+        headers: headers
+      };
 
       // check that our initialization is proper
       if (!parentDiv.length) {
         throw 'a11yAccordion - no element(s) with parentSelector was found';
-      } else if (!this._accordionItems.length) {
+      } else if (!accordionItems.length) {
         throw 'a11yAccordion - no element(s) with accordionItemSelector was found';
       } else if (!headers.length) {
         throw 'a11yAccordion - no element(s) with headerSelector was found';
-      } else if (!this._accordionHideAreas.length) {
+      } else if (!accordionHideAreas.length) {
         throw 'a11yAccordion - no element(s) with hiddenAreaSelector was found';
       } else if (searchActionType !== _constants.SEARCH_ACTION_TYPE_HIDE && searchActionType !== _constants.SEARCH_ACTION_TYPE_COLLAPSE) {
         throw 'a11yAccordion - invalid searchActionType. It can only be: ' + _constants.SEARCH_ACTION_TYPE_HIDE + ' or ' + _constants.SEARCH_ACTION_TYPE_COLLAPSE;
       }
 
-      // store component's DOM element
-      this.el = parentDiv;
-
       // hide all areas by default
-      this._accordionHideAreas.hide();
+      accordionHideAreas.hide();
 
       // apply color scheme
       headers.addClass(accordionHeaderClass);
-      this._accordionHideAreas.addClass(accordionHideAreaClass);
+      accordionHideAreas.addClass(accordionHideAreaClass);
 
       // function for show/hide link clicks. We predefine the function not to define it in the loop
       var linkClick = function linkClick(event) {
@@ -317,13 +295,13 @@ var A11yAccordion = function () {
 
         spans.push($('<span>', {
           text: showHeaderLabelText,
-          'class': _showHeaderLabelSelector.substring(1)
+          'class': showHeaderLabelSelector.substring(1)
         }));
 
         spans.push($('<span>', {
           text: hideHeaderLabelText,
           style: 'display: none;',
-          'class': _hideHeaderLabelSelector.substring(1)
+          'class': hideHeaderLabelSelector.substring(1)
         }));
 
         spans.push($('<span>', {
@@ -341,9 +319,49 @@ var A11yAccordion = function () {
       });
 
       // if there is NO search option then return component right away
-      if (!showSearch) {
-        return;
+      if (showSearch) {
+        this._renderSearch();
       }
+    }
+
+    /// Rendering search DOM
+    //
+
+  }, {
+    key: '_renderSearch',
+    value: function _renderSearch() {
+      var refs = this.refs;
+      var props = this.props;
+      var collapseRow = this.collapseRow;
+      var uncollapseRow = this.uncollapseRow;
+      var _traverseChildNodes = this._traverseChildNodes;
+      var _getHiddenArea = this._getHiddenArea;
+      var _constants = this._constants;
+      var overallSearch = props.overallSearch;
+      var classes = props.classes;
+      var ids = props.ids;
+      var labels = props.labels;
+      var selectors = props.selectors;
+      var searchActionType = props.searchActionType;
+      var el = refs.el;
+      var accordionItems = refs.accordionItems;
+      var accordionHideAreas = refs.accordionHideAreas;
+      var headers = refs.headers;
+      var noResultsDivID = ids.noResultsDivID;
+      var searchDivID = ids.searchDivID;
+      var rowIdStringPrefix = ids.rowIdStringPrefix;
+      var markedTextClass = classes.markedTextClass;
+      var noResultsDivClass = classes.noResultsDivClass;
+      var searchDivClass = classes.searchDivClass;
+      var searchClass = classes.searchClass;
+      var accordionHeaderClass = classes.accordionHeaderClass;
+      var searchPlaceholder = labels.searchPlaceholder;
+      var noResultsText = labels.noResultsText;
+      var titleText = labels.titleText;
+      var resultsMessage = labels.resultsMessage;
+      var leaveBlankMessage = labels.leaveBlankMessage;
+      var headerSelector = selectors.headerSelector;
+
 
       var wrapperDiv = $('<div>', {
         id: searchDivID,
@@ -361,7 +379,7 @@ var A11yAccordion = function () {
         'class': noResultsDivClass,
         id: noResultsDivID,
         style: 'display:none;'
-      }).appendTo(parentDiv);
+      }).appendTo(el);
 
       $('<div>', {
         'class': headerSelector.substring(1) + ' ' + accordionHeaderClass,
@@ -369,14 +387,15 @@ var A11yAccordion = function () {
       }).appendTo(wrapperLi);
 
       // Set an id to each row
-      this._accordionItems.each(function initaccordionItemsEach(index, item) {
+      accordionItems.each(function initaccordionItemsEach(index, item) {
         item.setAttribute('id', rowIdStringPrefix + index);
       });
 
-      wrapperDiv.prependTo(parentDiv);
+      wrapperDiv.prependTo(el);
 
       // Bind search function to input field
       searchInput.keyup(function (event) {
+        debugger;
         var value = event.target.value;
         // lowercase search string
 
@@ -387,7 +406,7 @@ var A11yAccordion = function () {
 
         var regex = new RegExp(searchString, 'ig');
 
-        for (var i = 0, action; i < this._accordionItems.length; i++) {
+        for (var i = 0, action; i < accordionItems.length; i++) {
           var headerTextNode = headers[i].children[0];
 
           // remove all markings from the DOM
@@ -397,10 +416,10 @@ var A11yAccordion = function () {
           headerTextNode.normalize();
 
           // only if there is something in the input only then perform search
-          action = searchString.length ? this._traverseChildNodes(headerTextNode, regex, markedTextClass) : true;
+          action = searchString.length ? _traverseChildNodes(headerTextNode, regex, markedTextClass) : true;
 
           if (overallSearch) {
-            var bodyTextNode = this._accordionHideAreas[i];
+            var bodyTextNode = accordionHideAreas[i];
 
             // remove all markings from the DOM
             $(bodyTextNode).find('.' + markedTextClass).each(function (index, element) {
@@ -409,31 +428,31 @@ var A11yAccordion = function () {
             bodyTextNode.normalize();
 
             // only if there is something in the input only then perform search
-            action = searchString.length ? this._traverseChildNodes(bodyTextNode, regex, markedTextClass) : true;
+            action = searchString.length ? _traverseChildNodes(bodyTextNode, regex, markedTextClass) : true;
           }
 
           // action on the item. Hide or Show
           if (searchActionType === _constants.SEARCH_ACTION_TYPE_HIDE) {
-            $(this._accordionItems[i])[action ? 'show' : 'hide']();
+            $(accordionItems[i])[action ? 'show' : 'hide']();
           } else if (searchActionType === _constants.SEARCH_ACTION_TYPE_COLLAPSE) {
-            var hiddenArea = this._getHiddenArea(i);
+            var hiddenArea = _getHiddenArea(i);
             if (!searchString.length && hiddenArea[0].style.display === 'block') {
-              this.collapseRow(i);
+              collapseRow(i);
             } else if (hiddenArea[0].style.display === 'none' && action) {
-              this.uncollapseRow(i);
+              uncollapseRow(i);
             } else if (hiddenArea[0].style.display === 'block' && !action) {
-              this.collapseRow(i);
+              collapseRow(i);
             }
           }
         }
 
-        var results = parentDiv.find(headerSelector + ':visible').length;
+        var results = el.find(headerSelector + ':visible').length;
         searchInput.attr('title', resultsMessage + results.toString() + leaveBlankMessage);
 
         if (!results) {
           wrapperLi.show();
         }
-      }.bind(this));
+      });
     }
 
     /// Function which is executed upon the link click. It will either hide the related area OR show the area and hide all other ones
@@ -444,14 +463,15 @@ var A11yAccordion = function () {
   }, {
     key: '_collapseWork',
     value: function _collapseWork(element) {
-      var _visibleAreaClass = this._visibleAreaClass;
+      var classes = this.props.classes;
+      var visibleAreaClass = classes.visibleAreaClass;
 
 
       if (!element) {
         return;
       }
 
-      this[element.hasClass(_visibleAreaClass) ? '_collapse' : '_uncollapse'](element);
+      this[element.hasClass(visibleAreaClass) ? '_collapse' : '_uncollapse'](element);
     }
 
     /// Function which will collapse all areas
@@ -460,12 +480,14 @@ var A11yAccordion = function () {
   }, {
     key: '_collapseAll',
     value: function _collapseAll() {
-      var _accordionHideAreas = this._accordionHideAreas;
-      var _visibleAreaClass = this._visibleAreaClass;
+      var refs = this.refs;
+      var props = this.props;
       var _collapse = this._collapse;
+      var visibleAreaClass = props.classes.visibleAreaClass;
+      var accordionHideAreas = refs.accordionHideAreas;
 
 
-      var visibleAreas = _accordionHideAreas.filter('.' + _visibleAreaClass);
+      var visibleAreas = accordionHideAreas.filter('.' + visibleAreaClass);
 
       $.each(visibleAreas, function (index, element) {
         return _collapse(element);
@@ -480,34 +502,37 @@ var A11yAccordion = function () {
   }, {
     key: '_collapse',
     value: function _collapse(element) {
-      var _visibleAreaClass = this._visibleAreaClass;
-      var _headerSelector = this._headerSelector;
-      var _showHeaderLabelSelector = this._showHeaderLabelSelector;
-      var _hideHeaderLabelSelector = this._hideHeaderLabelSelector;
-      var _speed = this._speed;
-      var _hideEffectStyle = this._hideEffectStyle;
-      var _onAreaHide = this._onAreaHide;
-      var _triangleClass = this._triangleClass;
-      var _toggleClass = this._toggleClass;
+      var _props = this.props;
+      var onAreaHide = _props.onAreaHide;
+      var speed = _props.speed;
+      var classes = _props.classes;
+      var selectors = _props.selectors;
+      var hideEffectStyle = _props.hideEffectStyle;
+      var toggleClass = classes.toggleClass;
+      var triangleClass = classes.triangleClass;
+      var visibleAreaClass = classes.visibleAreaClass;
+      var headerSelector = selectors.headerSelector;
+      var showHeaderLabelSelector = selectors.showHeaderLabelSelector;
+      var hideHeaderLabelSelector = selectors.hideHeaderLabelSelector;
 
 
       element = $(element);
 
-      if (!element.length || !element.hasClass(_visibleAreaClass)) {
+      if (!element.length || !element.hasClass(visibleAreaClass)) {
         return;
       }
 
-      var topRow = element.siblings(_headerSelector);
+      var topRow = element.siblings(headerSelector);
 
-      topRow.find(_showHeaderLabelSelector).show();
-      topRow.find(_hideHeaderLabelSelector).hide();
-      topRow.find('.' + _triangleClass).toggleClass(_toggleClass);
+      topRow.find(showHeaderLabelSelector).show();
+      topRow.find(hideHeaderLabelSelector).hide();
+      topRow.find('.' + triangleClass).toggleClass(toggleClass);
 
-      element.slideUp(_speed, _hideEffectStyle, function () {
-        element.removeClass(_visibleAreaClass);
+      element.slideUp(speed, hideEffectStyle, function () {
+        element.removeClass(visibleAreaClass);
         element.hide();
 
-        _onAreaHide(element);
+        onAreaHide(element);
       });
     }
 
@@ -519,38 +544,42 @@ var A11yAccordion = function () {
   }, {
     key: '_uncollapse',
     value: function _uncollapse(element) {
-      var _visibleAreaClass = this._visibleAreaClass;
-      var _headerSelector = this._headerSelector;
-      var _showHeaderLabelSelector = this._showHeaderLabelSelector;
-      var _hideHeaderLabelSelector = this._hideHeaderLabelSelector;
-      var _speed = this._speed;
-      var _hideEffectStyle = this._hideEffectStyle;
-      var _onAreaShow = this._onAreaShow;
-      var _triangleClass = this._triangleClass;
-      var _toggleClass = this._toggleClass;
+      var _props2 = this.props;
+      var onAreaShow = _props2.onAreaShow;
+      var speed = _props2.speed;
+      var classes = _props2.classes;
+      var selectors = _props2.selectors;
+      var hideEffectStyle = _props2.hideEffectStyle;
+      var showOne = _props2.showOne;
+      var toggleClass = classes.toggleClass;
+      var triangleClass = classes.triangleClass;
+      var visibleAreaClass = classes.visibleAreaClass;
+      var headerSelector = selectors.headerSelector;
+      var showHeaderLabelSelector = selectors.showHeaderLabelSelector;
+      var hideHeaderLabelSelector = selectors.hideHeaderLabelSelector;
 
 
       element = $(element);
 
-      if (!element.length || element.hasClass(_visibleAreaClass)) {
+      if (!element.length || element.hasClass(visibleAreaClass)) {
         return;
       }
 
-      if (this.showOne) {
+      if (showOne) {
         this._collapseAll(element);
       }
 
-      var topRow = element.siblings(_headerSelector);
+      var topRow = element.siblings(headerSelector);
 
-      topRow.find(_showHeaderLabelSelector).hide();
-      topRow.find(_hideHeaderLabelSelector).show();
-      topRow.find('.' + _triangleClass).toggleClass(_toggleClass);
+      topRow.find(showHeaderLabelSelector).hide();
+      topRow.find(hideHeaderLabelSelector).show();
+      topRow.find('.' + triangleClass).toggleClass(toggleClass);
 
-      element.addClass(_visibleAreaClass);
-      element.slideDown(_speed, _hideEffectStyle, function () {
+      element.addClass(visibleAreaClass);
+      element.slideDown(speed, hideEffectStyle, function () {
         element.show();
 
-        _onAreaShow(element);
+        onAreaShow(element);
       });
     }
 
@@ -562,10 +591,10 @@ var A11yAccordion = function () {
   }, {
     key: '_getHiddenArea',
     value: function _getHiddenArea(rowIndex) {
-      var _accordionHideAreas = this._accordionHideAreas;
+      var accordionHideAreas = this.refs.accordionHideAreas;
 
 
-      return rowIndex >= 0 && rowIndex < _accordionHideAreas.length ? $(_accordionHideAreas[rowIndex]) : undefined;
+      return rowIndex >= 0 && rowIndex < accordionHideAreas.length ? $(accordionHideAreas[rowIndex]) : undefined;
     }
 
     // this function is based on
