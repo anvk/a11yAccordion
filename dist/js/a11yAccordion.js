@@ -30,7 +30,7 @@ var A11yAccordion = function () {
 
     _classCallCheck(this, A11yAccordion);
 
-    this._constants = {
+    var constants = {
       SEARCH_ACTION_TYPE_HIDE: 'hide',
       SEARCH_ACTION_TYPE_COLLAPSE: 'collapse'
     };
@@ -51,6 +51,7 @@ var A11yAccordion = function () {
 
     // options which will be passed into the components with their default values
     var defaults = {
+      constants: constants,
       parentSelector: undefined,
       colorScheme: 'light',
       hideEffectStyle: 'linear',
@@ -58,11 +59,16 @@ var A11yAccordion = function () {
       hiddenLinkDescription: '',
       showSearch: true,
       showOne: true,
-      searchActionType: this._constants.SEARCH_ACTION_TYPE_HIDE,
+      searchActionType: constants.SEARCH_ACTION_TYPE_HIDE,
       overallSearch: false,
       onAreaShow: function onAreaShow() {},
       onAreaHide: function onAreaHide() {},
       classes: {
+        headerClass: 'a11yAccordionItemHeader',
+        accordionItemClass: 'a11yAccordionItem',
+        hiddenAreaClass: 'a11yAccordionHideArea',
+        showHeaderLabelClass: 'a11yAccordionItemHeaderLinkShowLabel',
+        hideHeaderLabelClass: 'a11yAccordionItemHeaderLinkHideLabel',
         markedTextClass: 'a11yAccordion-markedText',
         visibleAreaClass: 'visiblea11yAccordionItem',
         noResultsDivClass: 'a11yAccordionNoResultsItem',
@@ -72,7 +78,9 @@ var A11yAccordion = function () {
         hiddenHeaderLabelDescriptionClass: 'a11yAccordionItemHeaderLinkHiddenLabel',
         toggleClass: 'toggle',
         triangleClass: 'a11yAccordion-triangle',
-        searchClass: 'a11yAccordionSearch'
+        searchClass: 'a11yAccordionSearch',
+        accordionHeaderClass: 'a11yAccordion-header',
+        accordionHideAreaClass: 'a11yAccordion-area'
       },
       labels: {
         showHeaderLabelText: 'Show',
@@ -83,32 +91,30 @@ var A11yAccordion = function () {
         resultsMessage: 'Number of results found: ',
         leaveBlankMessage: ' Please leave blank to see all the results.'
       },
-      selectors: {
-        headerSelector: '.a11yAccordionItemHeader',
-        accordionItemSelector: '.a11yAccordionItem',
-        hiddenAreaSelector: '.a11yAccordionHideArea',
-        showHeaderLabelSelector: '.a11yAccordionItemHeaderLinkShowLabel',
-        hideHeaderLabelSelector: '.a11yAccordionItemHeaderLinkHideLabel'
+      ids: {
+        noResultsDivID: 'a11yAccordion-noResultsItem',
+        searchDivID: 'a11yAccordion-searchPanel',
+        rowIdStringPrefix: 'a11yAccordion-row-'
       }
     };
 
     options = _extends({}, defaults, options);
 
     var _options = options;
-    var colorScheme = _options.colorScheme;
-    var parentSelector = _options.parentSelector;
+    var classes = _options.classes;
 
-    var parentPrefix = parentSelector ? parentSelector.substring(1) : undefined;
 
     options = _extends({}, options, {
-      classes: _extends({}, options.classes, {
-        accordionHeaderClass: colorScheme + '-a11yAccordion-header',
-        accordionHideAreaClass: colorScheme + '-a11yAccordion-area'
-      }),
-      ids: {
-        noResultsDivID: parentPrefix + '-noResultsItem',
-        searchDivID: parentPrefix + '-searchPanel',
-        rowIdStringPrefix: parentPrefix + '-row-'
+      selectors: {
+        triangleSelector: '.' + classes.triangleClass,
+        visibleAreaSelector: '.' + classes.visibleAreaClass,
+        markedTextSelector: '.' + classes.markedTextClass,
+        headerLinkSelector: '.' + classes.headerLinkClass,
+        headerSelector: '.' + classes.headerClass,
+        showHeaderLabelSelector: '.' + classes.showHeaderLabelClass,
+        hideHeaderLabelSelector: '.' + classes.hideHeaderLabelClass,
+        accordionItemSelector: '.' + classes.accordionItemClass,
+        hiddenAreaSelector: '.' + classes.hiddenAreaClass
       }
     });
 
@@ -207,7 +213,6 @@ var A11yAccordion = function () {
     value: function _render() {
       var props = this.props;
       var _collapseWork = this._collapseWork;
-      var _constants = this._constants;
       var parentSelector = props.parentSelector;
       var hiddenLinkDescription = props.hiddenLinkDescription;
       var colorScheme = props.colorScheme;
@@ -219,6 +224,7 @@ var A11yAccordion = function () {
       var classes = props.classes;
       var labels = props.labels;
       var selectors = props.selectors;
+      var constants = props.constants;
       var visibleAreaClass = classes.visibleAreaClass;
       var headerLinkClass = classes.headerLinkClass;
       var headerTextClass = classes.headerTextClass;
@@ -227,8 +233,11 @@ var A11yAccordion = function () {
       var triangleClass = classes.triangleClass;
       var accordionHeaderClass = classes.accordionHeaderClass;
       var accordionHideAreaClass = classes.accordionHideAreaClass;
+      var showHeaderLabelClass = classes.showHeaderLabelClass;
+      var hideHeaderLabelClass = classes.hideHeaderLabelClass;
       var showHeaderLabelText = labels.showHeaderLabelText;
       var hideHeaderLabelText = labels.hideHeaderLabelText;
+      var headerLinkSelector = labels.headerLinkSelector;
       var showHeaderLabelSelector = selectors.showHeaderLabelSelector;
       var hideHeaderLabelSelector = selectors.hideHeaderLabelSelector;
       var headerSelector = selectors.headerSelector;
@@ -258,8 +267,8 @@ var A11yAccordion = function () {
         throw 'a11yAccordion - no element(s) with headerSelector was found';
       } else if (!accordionHideAreas.length) {
         throw 'a11yAccordion - no element(s) with hiddenAreaSelector was found';
-      } else if (searchActionType !== _constants.SEARCH_ACTION_TYPE_HIDE && searchActionType !== _constants.SEARCH_ACTION_TYPE_COLLAPSE) {
-        throw 'a11yAccordion - invalid searchActionType. It can only be: ' + _constants.SEARCH_ACTION_TYPE_HIDE + ' or ' + _constants.SEARCH_ACTION_TYPE_COLLAPSE;
+      } else if (searchActionType !== constants.SEARCH_ACTION_TYPE_HIDE && searchActionType !== constants.SEARCH_ACTION_TYPE_COLLAPSE) {
+        throw 'a11yAccordion - invalid searchActionType. It can only be: ' + constants.SEARCH_ACTION_TYPE_HIDE + ' or ' + constants.SEARCH_ACTION_TYPE_COLLAPSE;
       }
 
       // hide all areas by default
@@ -275,7 +284,7 @@ var A11yAccordion = function () {
         event.stopPropagation();
         var accordionItem = $(event.target).parents(accordionItemSelector);
         _collapseWork(accordionItem.find(hiddenAreaSelector));
-        accordionItem.find('.' + headerLinkClass).focus();
+        accordionItem.find(headerLinkSelector).focus();
       };
 
       // bind headers to a click event
@@ -295,13 +304,13 @@ var A11yAccordion = function () {
 
         spans.push($('<span>', {
           text: showHeaderLabelText,
-          'class': showHeaderLabelSelector.substring(1)
+          'class': showHeaderLabelClass
         }));
 
         spans.push($('<span>', {
           text: hideHeaderLabelText,
           style: 'display: none;',
-          'class': hideHeaderLabelSelector.substring(1)
+          'class': hideHeaderLabelClass
         }));
 
         spans.push($('<span>', {
@@ -336,13 +345,13 @@ var A11yAccordion = function () {
       var uncollapseRow = this.uncollapseRow;
       var _traverseChildNodes = this._traverseChildNodes;
       var _getHiddenArea = this._getHiddenArea;
-      var _constants = this._constants;
       var overallSearch = props.overallSearch;
       var classes = props.classes;
       var ids = props.ids;
       var labels = props.labels;
       var selectors = props.selectors;
       var searchActionType = props.searchActionType;
+      var constants = props.constants;
       var el = refs.el;
       var accordionItems = refs.accordionItems;
       var accordionHideAreas = refs.accordionHideAreas;
@@ -355,11 +364,13 @@ var A11yAccordion = function () {
       var searchDivClass = classes.searchDivClass;
       var searchClass = classes.searchClass;
       var accordionHeaderClass = classes.accordionHeaderClass;
+      var headerClass = classes.headerClass;
       var searchPlaceholder = labels.searchPlaceholder;
       var noResultsText = labels.noResultsText;
       var titleText = labels.titleText;
       var resultsMessage = labels.resultsMessage;
       var leaveBlankMessage = labels.leaveBlankMessage;
+      var markedTextSelector = selectors.markedTextSelector;
       var headerSelector = selectors.headerSelector;
 
 
@@ -382,7 +393,7 @@ var A11yAccordion = function () {
       }).appendTo(el);
 
       $('<div>', {
-        'class': headerSelector.substring(1) + ' ' + accordionHeaderClass,
+        'class': headerClass + ' ' + accordionHeaderClass,
         text: noResultsText
       }).appendTo(wrapperLi);
 
@@ -395,7 +406,6 @@ var A11yAccordion = function () {
 
       // Bind search function to input field
       searchInput.keyup(function (event) {
-        debugger;
         var value = event.target.value;
         // lowercase search string
 
@@ -410,7 +420,7 @@ var A11yAccordion = function () {
           var headerTextNode = headers[i].children[0];
 
           // remove all markings from the DOM
-          $(headerTextNode).find('.' + markedTextClass).each(function (index, element) {
+          $(headerTextNode).find(markedTextSelector).each(function (index, element) {
             return $(element).contents().unwrap();
           });
           headerTextNode.normalize();
@@ -422,7 +432,7 @@ var A11yAccordion = function () {
             var bodyTextNode = accordionHideAreas[i];
 
             // remove all markings from the DOM
-            $(bodyTextNode).find('.' + markedTextClass).each(function (index, element) {
+            $(bodyTextNode).find(markedTextSelector).each(function (index, element) {
               return $(element).contents().unwrap();
             });
             bodyTextNode.normalize();
@@ -432,9 +442,9 @@ var A11yAccordion = function () {
           }
 
           // action on the item. Hide or Show
-          if (searchActionType === _constants.SEARCH_ACTION_TYPE_HIDE) {
+          if (searchActionType === constants.SEARCH_ACTION_TYPE_HIDE) {
             $(accordionItems[i])[action ? 'show' : 'hide']();
-          } else if (searchActionType === _constants.SEARCH_ACTION_TYPE_COLLAPSE) {
+          } else if (searchActionType === constants.SEARCH_ACTION_TYPE_COLLAPSE) {
             var hiddenArea = _getHiddenArea(i);
             if (!searchString.length && hiddenArea[0].style.display === 'block') {
               collapseRow(i);
@@ -483,11 +493,11 @@ var A11yAccordion = function () {
       var refs = this.refs;
       var props = this.props;
       var _collapse = this._collapse;
-      var visibleAreaClass = props.classes.visibleAreaClass;
+      var visibleAreaSelector = props.selectors.visibleAreaSelector;
       var accordionHideAreas = refs.accordionHideAreas;
 
 
-      var visibleAreas = accordionHideAreas.filter('.' + visibleAreaClass);
+      var visibleAreas = accordionHideAreas.filter(visibleAreaSelector);
 
       $.each(visibleAreas, function (index, element) {
         return _collapse(element);
@@ -502,18 +512,18 @@ var A11yAccordion = function () {
   }, {
     key: '_collapse',
     value: function _collapse(element) {
-      var _props = this.props;
-      var onAreaHide = _props.onAreaHide;
-      var speed = _props.speed;
-      var classes = _props.classes;
-      var selectors = _props.selectors;
-      var hideEffectStyle = _props.hideEffectStyle;
+      var props = this.props;
+      var onAreaHide = props.onAreaHide;
+      var speed = props.speed;
+      var classes = props.classes;
+      var selectors = props.selectors;
+      var hideEffectStyle = props.hideEffectStyle;
       var toggleClass = classes.toggleClass;
-      var triangleClass = classes.triangleClass;
       var visibleAreaClass = classes.visibleAreaClass;
       var headerSelector = selectors.headerSelector;
       var showHeaderLabelSelector = selectors.showHeaderLabelSelector;
       var hideHeaderLabelSelector = selectors.hideHeaderLabelSelector;
+      var triangleSelector = selectors.triangleSelector;
 
 
       element = $(element);
@@ -526,7 +536,7 @@ var A11yAccordion = function () {
 
       topRow.find(showHeaderLabelSelector).show();
       topRow.find(hideHeaderLabelSelector).hide();
-      topRow.find('.' + triangleClass).toggleClass(toggleClass);
+      topRow.find(triangleSelector).toggleClass(toggleClass);
 
       element.slideUp(speed, hideEffectStyle, function () {
         element.removeClass(visibleAreaClass);
@@ -544,19 +554,20 @@ var A11yAccordion = function () {
   }, {
     key: '_uncollapse',
     value: function _uncollapse(element) {
-      var _props2 = this.props;
-      var onAreaShow = _props2.onAreaShow;
-      var speed = _props2.speed;
-      var classes = _props2.classes;
-      var selectors = _props2.selectors;
-      var hideEffectStyle = _props2.hideEffectStyle;
-      var showOne = _props2.showOne;
+      var props = this.props;
+      var _collapseAll = this._collapseAll;
+      var onAreaShow = props.onAreaShow;
+      var speed = props.speed;
+      var classes = props.classes;
+      var selectors = props.selectors;
+      var hideEffectStyle = props.hideEffectStyle;
+      var showOne = props.showOne;
       var toggleClass = classes.toggleClass;
-      var triangleClass = classes.triangleClass;
       var visibleAreaClass = classes.visibleAreaClass;
       var headerSelector = selectors.headerSelector;
       var showHeaderLabelSelector = selectors.showHeaderLabelSelector;
       var hideHeaderLabelSelector = selectors.hideHeaderLabelSelector;
+      var triangleSelector = selectors.triangleSelector;
 
 
       element = $(element);
@@ -566,14 +577,14 @@ var A11yAccordion = function () {
       }
 
       if (showOne) {
-        this._collapseAll(element);
+        _collapseAll(element);
       }
 
       var topRow = element.siblings(headerSelector);
 
       topRow.find(showHeaderLabelSelector).hide();
       topRow.find(hideHeaderLabelSelector).show();
-      topRow.find('.' + triangleClass).toggleClass(toggleClass);
+      topRow.find(triangleSelector).toggleClass(toggleClass);
 
       element.addClass(visibleAreaClass);
       element.slideDown(speed, hideEffectStyle, function () {

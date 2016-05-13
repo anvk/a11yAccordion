@@ -149,17 +149,6 @@
           expect(headerLinkHiddenEl.text()).to.equal('Hidden Link Description');
         });
 
-        it('Custom theme', function() {
-          var customOptions = _.clone(testOptions, true);
-          customOptions.colorScheme = 'myColorScheme';
-
-          var a11yAccordion = new A11yAccordion(customOptions),
-              row = a11yAccordion.getRowEl(1);
-
-          expect(row.find('.a11yAccordionItemHeader').hasClass('myColorScheme-a11yAccordion-header')).to.be.true;
-          expect(row.find('.a11yAccordionHideArea').hasClass('myColorScheme-a11yAccordion-area')).to.be.true;
-        });
-
         it('Without search', function() {
           var customOptions = _.clone(testOptions, true);
           customOptions.showSearch = false;
@@ -184,7 +173,7 @@
           expect(el.find('.a11yAccordionItem').filter(':visible').length).to.equal(expectedNumberOfRows);
 
           if (!expectedNumberOfRows) {
-            expect(!!el.find('#accordion1-noResultsItem').length).to.be.true;
+            expect(!!el.find('#a11yAccordion-noResultsItem').length).to.be.true;
           }
         };
 
@@ -212,7 +201,7 @@
           expect(el.find('.a11yAccordionItem').filter(':visible').length).to.equal(expectedNumberOfRows);
 
           if (!expectedNumberOfRows) {
-            expect(!!el.find('#accordion1-noResultsItem').length).to.be.true;
+            expect(!!el.find('#a11yAccordion-noResultsItem').length).to.be.true;
           }
         };
 
@@ -343,7 +332,7 @@
       expect(row).to.be.undefined;
 
       row = a11yAccordion.getRowEl(2);
-      expect(row[0].id).to.equal('accordion1-row-2');
+      expect(row[0].id).to.equal('a11yAccordion-row-2');
     });
 
     // Private

@@ -18,7 +18,7 @@
 class A11yAccordion {
 
   constructor(options = {}) {
-    this._constants = {
+    const constants = {
       SEARCH_ACTION_TYPE_HIDE: 'hide',
       SEARCH_ACTION_TYPE_COLLAPSE: 'collapse',
     };
@@ -39,6 +39,7 @@ class A11yAccordion {
 
     // options which will be passed into the components with their default values
     const defaults = {
+      constants,
       parentSelector: undefined,
       colorScheme: 'light',
       hideEffectStyle: 'linear',
@@ -46,11 +47,16 @@ class A11yAccordion {
       hiddenLinkDescription: '',
       showSearch: true,
       showOne: true,
-      searchActionType: this._constants.SEARCH_ACTION_TYPE_HIDE,
+      searchActionType: constants.SEARCH_ACTION_TYPE_HIDE,
       overallSearch: false,
       onAreaShow: () => {},
       onAreaHide: () => {},
       classes: {
+        headerClass: 'a11yAccordionItemHeader',
+        accordionItemClass: 'a11yAccordionItem',
+        hiddenAreaClass: 'a11yAccordionHideArea',
+        showHeaderLabelClass: 'a11yAccordionItemHeaderLinkShowLabel',
+        hideHeaderLabelClass: 'a11yAccordionItemHeaderLinkHideLabel',
         markedTextClass: 'a11yAccordion-markedText',
         visibleAreaClass: 'visiblea11yAccordionItem',
         noResultsDivClass: 'a11yAccordionNoResultsItem',
@@ -60,7 +66,9 @@ class A11yAccordion {
         hiddenHeaderLabelDescriptionClass: 'a11yAccordionItemHeaderLinkHiddenLabel',
         toggleClass: 'toggle',
         triangleClass: 'a11yAccordion-triangle',
-        searchClass: 'a11yAccordionSearch'
+        searchClass: 'a11yAccordionSearch',
+        accordionHeaderClass: `a11yAccordion-header`,
+        accordionHideAreaClass: `a11yAccordion-area`
       },
       labels: {
         showHeaderLabelText: 'Show',
@@ -71,12 +79,10 @@ class A11yAccordion {
         resultsMessage: 'Number of results found: ',
         leaveBlankMessage: ' Please leave blank to see all the results.'
       },
-      selectors: {
-        headerSelector: '.a11yAccordionItemHeader',
-        accordionItemSelector: '.a11yAccordionItem',
-        hiddenAreaSelector: '.a11yAccordionHideArea',
-        showHeaderLabelSelector: '.a11yAccordionItemHeaderLinkShowLabel',
-        hideHeaderLabelSelector: '.a11yAccordionItemHeaderLinkHideLabel'
+      ids: {
+        noResultsDivID: `a11yAccordion-noResultsItem`,
+        searchDivID: `a11yAccordion-searchPanel`,
+        rowIdStringPrefix: `a11yAccordion-row-`
       }
     };
 
@@ -85,22 +91,20 @@ class A11yAccordion {
       ...options
     };
 
-    const { colorScheme, parentSelector } = options;
-    const parentPrefix = parentSelector
-      ? parentSelector.substring(1)
-      : undefined;
+    const { classes } = options;
 
     options = {
       ...options,
-      classes: {
-        ...options.classes,
-        accordionHeaderClass: `${colorScheme}-a11yAccordion-header`,
-        accordionHideAreaClass: `${colorScheme}-a11yAccordion-area`
-      },
-      ids: {
-        noResultsDivID: `${parentPrefix}-noResultsItem`,
-        searchDivID: `${parentPrefix}-searchPanel`,
-        rowIdStringPrefix: `${parentPrefix}-row-`
+      selectors: {
+        triangleSelector: `.${classes.triangleClass}`,
+        visibleAreaSelector: `.${classes.visibleAreaClass}`,
+        markedTextSelector: `.${classes.markedTextClass}`,
+        headerLinkSelector: `.${classes.headerLinkClass}`,
+        headerSelector: `.${classes.headerClass}`,
+        showHeaderLabelSelector: `.${classes.showHeaderLabelClass}`,
+        hideHeaderLabelSelector: `.${classes.hideHeaderLabelClass}`,
+        accordionItemSelector: `.${classes.accordionItemClass}`,
+        hiddenAreaSelector: `.${classes.hiddenAreaClass}`
       }
     };
 
@@ -179,8 +183,7 @@ class A11yAccordion {
   _render() {
     const {
       props,
-      _collapseWork,
-      _constants
+      _collapseWork
     } = this;
 
     const {
@@ -195,7 +198,8 @@ class A11yAccordion {
 
       classes,
       labels,
-      selectors
+      selectors,
+      constants
     } = props;
 
     const {
@@ -206,10 +210,16 @@ class A11yAccordion {
       toggleClass,
       triangleClass,
       accordionHeaderClass,
-      accordionHideAreaClass
+      accordionHideAreaClass,
+      showHeaderLabelClass,
+      hideHeaderLabelClass
     } = classes;
 
-    const { showHeaderLabelText, hideHeaderLabelText } = labels;
+    const {
+      showHeaderLabelText,
+      hideHeaderLabelText,
+      headerLinkSelector
+    } = labels;
 
     const {
       showHeaderLabelSelector,
@@ -241,11 +251,11 @@ class A11yAccordion {
       throw 'a11yAccordion - no element(s) with headerSelector was found';
     } else if (!accordionHideAreas.length) {
       throw 'a11yAccordion - no element(s) with hiddenAreaSelector was found';
-    } else if (searchActionType !== _constants.SEARCH_ACTION_TYPE_HIDE &&
-      searchActionType !== _constants.SEARCH_ACTION_TYPE_COLLAPSE) {
+    } else if (searchActionType !== constants.SEARCH_ACTION_TYPE_HIDE &&
+      searchActionType !== constants.SEARCH_ACTION_TYPE_COLLAPSE) {
       throw 'a11yAccordion - invalid searchActionType. It can only be: ' +
-        _constants.SEARCH_ACTION_TYPE_HIDE + ' or ' +
-        _constants.SEARCH_ACTION_TYPE_COLLAPSE;
+        constants.SEARCH_ACTION_TYPE_HIDE + ' or ' +
+        constants.SEARCH_ACTION_TYPE_COLLAPSE;
     }
 
     // hide all areas by default
@@ -261,7 +271,7 @@ class A11yAccordion {
       event.stopPropagation();
       const accordionItem = $(event.target).parents(accordionItemSelector);
       _collapseWork(accordionItem.find(hiddenAreaSelector));
-      accordionItem.find(`.${headerLinkClass}`).focus();
+      accordionItem.find(headerLinkSelector).focus();
     };
 
     // bind headers to a click event
@@ -281,13 +291,13 @@ class A11yAccordion {
 
       spans.push($('<span>', {
         text: showHeaderLabelText,
-        'class': showHeaderLabelSelector.substring(1)
+        'class': showHeaderLabelClass
       }));
 
       spans.push($('<span>', {
         text: hideHeaderLabelText,
         style: 'display: none;',
-        'class': hideHeaderLabelSelector.substring(1)
+        'class': hideHeaderLabelClass
       }));
 
       spans.push($('<span>', {
@@ -319,8 +329,7 @@ class A11yAccordion {
       collapseRow,
       uncollapseRow,
       _traverseChildNodes,
-      _getHiddenArea,
-      _constants
+      _getHiddenArea
     } = this;
 
     const {
@@ -329,7 +338,8 @@ class A11yAccordion {
       ids,
       labels,
       selectors,
-      searchActionType
+      searchActionType,
+      constants
     } = props;
 
     const {
@@ -350,7 +360,8 @@ class A11yAccordion {
       noResultsDivClass,
       searchDivClass,
       searchClass,
-      accordionHeaderClass
+      accordionHeaderClass,
+      headerClass
     } = classes;
 
     const {
@@ -361,7 +372,7 @@ class A11yAccordion {
       leaveBlankMessage
     } = labels;
 
-    const { headerSelector } = selectors;
+    const { markedTextSelector, headerSelector } = selectors;
 
     const wrapperDiv = $('<div>', {
       id: searchDivID,
@@ -382,7 +393,7 @@ class A11yAccordion {
     }).appendTo(el);
 
     $('<div>', {
-      'class': headerSelector.substring(1) + ' ' + accordionHeaderClass,
+      'class': `${headerClass} ${accordionHeaderClass}`,
       text: noResultsText
     }).appendTo(wrapperLi);
 
@@ -408,7 +419,7 @@ class A11yAccordion {
         const headerTextNode = headers[i].children[0];
 
         // remove all markings from the DOM
-        $(headerTextNode).find(`.${markedTextClass}`)
+        $(headerTextNode).find(markedTextSelector)
           .each((index, element) => $(element).contents().unwrap());
         headerTextNode.normalize();
 
@@ -421,7 +432,7 @@ class A11yAccordion {
           const bodyTextNode = accordionHideAreas[i];
 
           // remove all markings from the DOM
-          $(bodyTextNode).find(`.${markedTextClass}`)
+          $(bodyTextNode).find(markedTextSelector)
             .each((index, element) => $(element).contents().unwrap());
           bodyTextNode.normalize();
 
@@ -432,9 +443,9 @@ class A11yAccordion {
         }
 
         // action on the item. Hide or Show
-        if (searchActionType === _constants.SEARCH_ACTION_TYPE_HIDE) {
+        if (searchActionType === constants.SEARCH_ACTION_TYPE_HIDE) {
           $(accordionItems[i])[action ? 'show' : 'hide']();
-        } else if (searchActionType === _constants.SEARCH_ACTION_TYPE_COLLAPSE) {
+        } else if (searchActionType === constants.SEARCH_ACTION_TYPE_COLLAPSE) {
           const hiddenArea = _getHiddenArea(i);
           if (!searchString.length && hiddenArea[0].style.display === 'block') {
             collapseRow(i);
@@ -477,10 +488,10 @@ class A11yAccordion {
   //
   _collapseAll() {
     const { refs, props, _collapse } = this;
-    const { visibleAreaClass } = props.classes;
+    const { visibleAreaSelector } = props.selectors;
     const { accordionHideAreas } = refs;
 
-    const visibleAreas = accordionHideAreas.filter(`.${visibleAreaClass}`);
+    const visibleAreas = accordionHideAreas.filter(visibleAreaSelector);
 
     $.each(visibleAreas, (index, element) => _collapse(element));
   }
@@ -490,17 +501,18 @@ class A11yAccordion {
   //  element - accordion hidden area DOM element which will become hidden
   //
   _collapse(element) {
+    const { props } = this;
+
     const {
       onAreaHide,
       speed,
       classes,
       selectors,
       hideEffectStyle
-    } = this.props;
+    } = props;
 
     const {
       toggleClass,
-      triangleClass,
       visibleAreaClass
     } = classes;
 
@@ -508,6 +520,7 @@ class A11yAccordion {
       headerSelector,
       showHeaderLabelSelector,
       hideHeaderLabelSelector,
+      triangleSelector
     } = selectors;
 
     element = $(element);
@@ -520,7 +533,7 @@ class A11yAccordion {
 
     topRow.find(showHeaderLabelSelector).show();
     topRow.find(hideHeaderLabelSelector).hide();
-    topRow.find(`.${triangleClass}`).toggleClass(toggleClass);
+    topRow.find(triangleSelector).toggleClass(toggleClass);
 
     element.slideUp(speed, hideEffectStyle, () => {
       element.removeClass(visibleAreaClass);
@@ -535,6 +548,8 @@ class A11yAccordion {
   //  element - accordion hidden area DOM element which will become visible
   //
   _uncollapse(element) {
+    const { props, _collapseAll } = this;
+
     const {
       onAreaShow,
       speed,
@@ -542,11 +557,10 @@ class A11yAccordion {
       selectors,
       hideEffectStyle,
       showOne
-    } = this.props;
+    } = props;
 
     const {
       toggleClass,
-      triangleClass,
       visibleAreaClass
     } = classes;
 
@@ -554,6 +568,7 @@ class A11yAccordion {
       headerSelector,
       showHeaderLabelSelector,
       hideHeaderLabelSelector,
+      triangleSelector
     } = selectors;
 
     element = $(element);
@@ -563,14 +578,14 @@ class A11yAccordion {
     }
 
     if (showOne) {
-      this._collapseAll(element);
+      _collapseAll(element);
     }
 
     const topRow = element.siblings(headerSelector);
 
     topRow.find(showHeaderLabelSelector).hide();
     topRow.find(hideHeaderLabelSelector).show();
-    topRow.find(`.${triangleClass}`).toggleClass(toggleClass);
+    topRow.find(triangleSelector).toggleClass(toggleClass);
 
     element.addClass(visibleAreaClass);
     element.slideDown(speed, hideEffectStyle, () => {
