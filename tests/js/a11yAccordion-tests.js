@@ -5,15 +5,11 @@
 
     this.timeout(1500);
 
-    var testaccordionId = '#accordion1',
-        hiddenLinkDescription = 'Hidden Link Description';
+    var testaccordionId = '#accordion1';
+    var hiddenLinkDescription = 'Hidden Link Description';
 
     var testOptions = {
       parentSelector: testaccordionId,
-      accordionItemSelector: '.a11yAccordionItem',
-      headerSelector: '.a11yAccordionItemHeader',
-      hiddenAreaSelector: '.a11yAccordionHideArea',
-      visibleAreaClass: 'visiblea11yAccordionItem',
       hiddenLinkDescription: hiddenLinkDescription,
       speed: 1
     };
@@ -24,8 +20,8 @@
 
     var generateaccordionMarkup = function() {
       accordionCleanUp();
-      var markup = $(testaccordionId),
-          rows = [];
+      var markup = $(testaccordionId);
+      var rows = [];
 
       for (var i=0; i < 5; ++i) {
         var row = $('<li>', {
@@ -49,14 +45,22 @@
     };
 
     var checkVisibility = function(a11yAccordion, rowIndex, isVisible) {
-      var row = a11yAccordion.getRowEl(rowIndex),
-          hiddenArea = a11yAccordion._getHiddenArea(rowIndex),
-          hiddenAreaIsVisible = isVisible ? 'true' : 'false';
-      expect(row.find(a11yAccordion.props.selectors.showHeaderLabelSelector).is(':visible')).to.be[!isVisible ? 'true' : 'false'];
-      expect(row.find(a11yAccordion.props.selectors.hideHeaderLabelSelector).is(':visible')).to.be[isVisible ? 'true' : 'false'];
+      var row = a11yAccordion.getRowEl(rowIndex);
+      var hiddenArea = a11yAccordion._getHiddenArea(rowIndex);
+      var hiddenAreaIsVisible = isVisible ? 'true' : 'false';
+      expect(row.find(a11yAccordion.props.selectors.showHeaderLabelSelector)
+        .is(':visible')).to.be[!isVisible ? 'true' : 'false'];
+      expect(row.find(a11yAccordion.props.selectors.hideHeaderLabelSelector)
+        .is(':visible')).to.be[isVisible ? 'true' : 'false'];
       expect(hiddenArea.is(':visible')).to.be[hiddenAreaIsVisible];
-      expect(hiddenArea.hasClass(a11yAccordion.props.classes.visibleAreaClass)).to.be[hiddenAreaIsVisible];
+      expect(hiddenArea.hasClass(a11yAccordion.props.classes.visibleAreaClass))
+        .to.be[hiddenAreaIsVisible];
     };
+
+    var checkTriangle = function(a11yAccordion, rowIndex, toggled) {
+      expect($(a11yAccordion.refs.headers[rowIndex])
+        .find('.a11yAccordion-triangle').hasClass('toggle')).to.equal(toggled);
+    }
 
     beforeEach(generateaccordionMarkup);
     afterEach(accordionCleanUp);
@@ -69,43 +73,51 @@
           {
             throwMessage: 'a11yAccordion - no element(s) with parentSelector was found',
             options: {
-              parentSelector: undefined,
-              accordionItemSelector: '.a11yAccordionItem',
-              headerSelector: '.a11yAccordionItemHeader',
-              hiddenAreaSelector: '.a11yAccordionHideArea',
-              visibleAreaClass: 'visiblea11yAccordionItem'
+              parentSelector: undefined
             }
-          }//,
-          // {
-          //   throwMessage: 'a11yAccordion - no element(s) with accordionItemSelector was found',
-          //   options: {
-          //     parentSelector: '#accordion1',
-          //     accordionItemSelector: 'does not exist',
-          //     headerSelector: '.a11yAccordionItemHeader',
-          //     hiddenAreaSelector: '.a11yAccordionHideArea',
-          //     visibleAreaClass: 'visiblea11yAccordionItem'
-          //   }
-          // },
-          // {
-          //   throwMessage: 'a11yAccordion - no element(s) with headerSelector was found',
-          //   options: {
-          //     parentSelector: '#accordion1',
-          //     accordionItemSelector: '.a11yAccordionItem',
-          //     headerSelector: 'does not exist',
-          //     hiddenAreaSelector: '.a11yAccordionHideArea',
-          //     visibleAreaClass: 'visiblea11yAccordionItem'
-          //   }
-          // },
-          // {
-          //   throwMessage: 'a11yAccordion - no element(s) with hiddenAreaSelector was found',
-          //   options: {
-          //     parentSelector: '#accordion1',
-          //     accordionItemSelector: '.a11yAccordionItem',
-          //     headerSelector: '.a11yAccordionItemHeader',
-          //     hiddenAreaSelector: 'does not exist',
-          //     visibleAreaClass: 'visiblea11yAccordionItem'
-          //   }
-          // }
+          },
+          {
+            throwMessage: 'a11yAccordion - no element(s) with accordionItemSelector was found',
+            options: {
+              parentSelector: '#accordion1',
+              classes: {
+                accordionItemClass: 'does not exist'
+              }
+            }
+          },
+          {
+            throwMessage: 'a11yAccordion - no element(s) with headerSelector was found',
+            options: {
+              parentSelector: '#accordion1',
+              classes: {
+                accordionItemClass: 'a11yAccordionItem',
+                headerClass: 'does not exist'
+              }
+            }
+          },
+          {
+            throwMessage: 'a11yAccordion - no element(s) with hiddenAreaSelector was found',
+            options: {
+              parentSelector: '#accordion1',
+              classes: {
+                accordionItemClass: 'a11yAccordionItem',
+                headerClass: 'a11yAccordionItemHeader',
+                hiddenAreaClass: 'does not exist'
+              }
+            }
+          },
+          {
+            throwMessage: 'a11yAccordion - invalid searchActionType. It can only be: hide or collapse',
+            options: {
+              parentSelector: '#accordion1',
+              classes: {
+                accordionItemClass: 'a11yAccordionItem',
+                headerClass: 'a11yAccordionItemHeader',
+                hiddenAreaClass: 'a11yAccordionHideArea'
+              },
+              searchActionType: 'does not exist'
+            }
+          }
         ];
 
         _.each(testCases, function(testCase) {
@@ -126,16 +138,19 @@
         };
 
         it('Default creation', function() {
-          var a11yAccordion = new A11yAccordion(testOptions),
-              headerLinkHiddenEl, headerTextEl, row;
+          var a11yAccordion = new A11yAccordion(testOptions);
+          var headerLinkHiddenEl, headerTextEl, row;
 
           expect(a11yAccordion.refs.el.attr('id')).to.equal('accordion1');
           expect(a11yAccordion.refs.accordionHideAreas.length).to.equal(5);
           hasSearchDiv(a11yAccordion, true);
-          expect(a11yAccordion.refs.el.find(a11yAccordion.props.classes.visibleAreaClass).filter(':visible').length).to.equal(0);
+          expect(a11yAccordion.refs.el
+            .find(a11yAccordion.props.classes.visibleAreaClass)
+            .filter(':visible').length).to.equal(0);
 
           row = a11yAccordion.getRowEl(1);
-          expect(row.find(a11yAccordion.props.classes.visibleAreaClass).filter(':visible').length).to.equal(0);
+          expect(row.find(a11yAccordion.props.classes.visibleAreaClass)
+            .filter(':visible').length).to.equal(0);
 
           checkVisibility(a11yAccordion, 1, false);
 
@@ -162,15 +177,16 @@
 
     describe('Search functionality', function() {
       it('Regular search', function() {
-        var a11yAccordion = new A11yAccordion(testOptions),
-            el = a11yAccordion.refs.el,
-            searchInput = el.find('.a11yAccordionSearch');
+        var a11yAccordion = new A11yAccordion(testOptions);
+        var el = a11yAccordion.refs.el;
+        var searchInput = el.find('.a11yAccordionSearch');
 
         var triggerKeyUp = function(text, expectedNumberOfRows) {
           searchInput.val(text);
           searchInput.keyup();
 
-          expect(el.find('.a11yAccordionItem').filter(':visible').length).to.equal(expectedNumberOfRows);
+          expect(el.find('.a11yAccordionItem').filter(':visible').length)
+            .to.equal(expectedNumberOfRows);
 
           if (!expectedNumberOfRows) {
             expect(!!el.find('#a11yAccordion-noResultsItem').length).to.be.true;
@@ -190,15 +206,16 @@
         var customOptions = _.clone(testOptions, true);
         customOptions.overallSearch = true;
 
-        var a11yAccordion = new A11yAccordion(customOptions),
-            el = a11yAccordion.refs.el,
-            searchInput = el.find('.a11yAccordionSearch');
+        var a11yAccordion = new A11yAccordion(customOptions);
+        var el = a11yAccordion.refs.el;
+        var searchInput = el.find('.a11yAccordionSearch');
 
         var triggerKeyUp = function(text, expectedNumberOfRows) {
           searchInput.val(text);
           searchInput.keyup();
 
-          expect(el.find('.a11yAccordionItem').filter(':visible').length).to.equal(expectedNumberOfRows);
+          expect(el.find('.a11yAccordionItem').filter(':visible').length)
+            .to.equal(expectedNumberOfRows);
 
           if (!expectedNumberOfRows) {
             expect(!!el.find('#a11yAccordion-noResultsItem').length).to.be.true;
@@ -217,20 +234,39 @@
 
     // Public
 
-    describe('uncollapseRow() and _uncollapse()', function() {
-      it('regular functionality', function(done) {
+    describe('uncollapseRow and _uncollapse', function() {
+      it('onAreaShow', function(done) {
         var customOptions = _.clone(testOptions, true);
+        var index = 2;
+
         customOptions.onAreaShow = function(element) {
           expect(element.length).to.equal(1);
-          checkVisibility(a11yAccordion, 2, true);
+          expect($(element).hasClass('a11yAccordionHideArea')).to.equal(true);
+          expect($(element).hasClass('a11yAccordion-area')).to.equal(true);
+
           done();
         };
 
         var a11yAccordion = new A11yAccordion(customOptions);
 
-        checkVisibility(a11yAccordion, 2, false);
+        a11yAccordion.uncollapseRow(index);
+      });
 
-        a11yAccordion.uncollapseRow(2);
+      it('regular functionality', function(done) {
+        var customOptions = _.clone(testOptions, true);
+        var index = 2;
+
+        customOptions.onAreaShow = function(element) {
+          expect(element.length).to.equal(1);
+          checkVisibility(a11yAccordion, index, true);
+          done();
+        };
+
+        var a11yAccordion = new A11yAccordion(customOptions);
+
+        checkVisibility(a11yAccordion, index, false);
+
+        a11yAccordion.uncollapseRow(index);
       });
 
       it('showOne is set to true', function(done) {
@@ -288,43 +324,78 @@
       });
     });
 
-    it('collapseRow() and _collapse()', function(done) {
-      var customOptions = _.clone(testOptions, true);
-      customOptions.onAreaHide = function(element) {
-        expect(element.length).to.equal(1);
-        checkVisibility(a11yAccordion, 2, false);
-        done();
-      };
+    describe('collapseRow and _collapse', function() {
+      it('onAreaHide', function(done) {
+        var customOptions = _.clone(testOptions, true);
+        var index = 2;
 
-      var a11yAccordion = new A11yAccordion(customOptions);
+        customOptions.onAreaHide = function(element) {
+          expect(element.length).to.equal(1);
+          expect($(element).hasClass('a11yAccordionHideArea')).to.equal(true);
+          expect($(element).hasClass('a11yAccordion-area')).to.equal(true);
 
-      a11yAccordion.props.onAreaShow = function() {
-        checkVisibility(a11yAccordion, 2, true);
+          done();
+        };
 
-        a11yAccordion.collapseRow(2);
-      };
+        var a11yAccordion = new A11yAccordion(customOptions);
 
-      a11yAccordion.uncollapseRow(2);
+        a11yAccordion.props.onAreaShow = function() {
+          a11yAccordion.collapseRow(index);
+        };
+
+        a11yAccordion.uncollapseRow(index);
+      });
+
+      it('regular functionality', function(done) {
+        var customOptions = _.clone(testOptions, true);
+        var index = 2;
+
+        customOptions.onAreaHide = function(element) {
+          expect(element.length).to.equal(1);
+          checkVisibility(a11yAccordion, index, false);
+          checkTriangle(a11yAccordion, index, false);
+
+          done();
+        };
+
+        var a11yAccordion = new A11yAccordion(customOptions);
+
+        a11yAccordion.props.onAreaShow = function() {
+          checkVisibility(a11yAccordion, index, true);
+          checkTriangle(a11yAccordion, index, true);
+
+          a11yAccordion.collapseRow(index);
+        };
+
+        a11yAccordion.uncollapseRow(index);
+      });
     });
 
-    it('toggleRow()', function(done) {
+    it('toggleRow', function(done) {
       var customOptions = _.clone(testOptions, true);
+      var index = 2;
+
       customOptions.onAreaHide = function(element) {
-        checkVisibility(a11yAccordion, 2, false);
+        checkVisibility(a11yAccordion, index, false);
+        checkTriangle(a11yAccordion, index, false);
+
         done();
       };
       customOptions.onAreaShow = function(element) {
-        checkVisibility(a11yAccordion, 2, true);
-        a11yAccordion.toggleRow(2);
+        checkVisibility(a11yAccordion, index, true);
+        checkTriangle(a11yAccordion, index, true);
+
+        a11yAccordion.toggleRow(index);
       };
 
       var a11yAccordion = new A11yAccordion(customOptions);
-      checkVisibility(a11yAccordion, 2, false);
+      checkVisibility(a11yAccordion, index, false);
+      checkTriangle(a11yAccordion, index, false);
 
-      a11yAccordion.toggleRow(2);
+      a11yAccordion.toggleRow(index);
     });
 
-    it('getRowEl()', function() {
+    it('getRowEl', function() {
       var a11yAccordion = new A11yAccordion(testOptions),
           row;
 
@@ -337,9 +408,9 @@
 
     // Private
 
-    it('_collapseAll()', function(done) {
-      var customOptions = _.clone(testOptions, true),
-          index = 0;
+    it('_collapseAll', function(done) {
+      var customOptions = _.clone(testOptions, true);
+      var index = 0;
 
       customOptions.showOne = false;
       customOptions.onAreaHide = function(element) {
@@ -373,9 +444,9 @@
       a11yAccordion.uncollapseRow(3);
     });
 
-    it('_getHiddenArea()', function() {
-      var a11yAccordion = new A11yAccordion(testOptions),
-          hiddenArea;
+    it('_getHiddenArea', function() {
+      var a11yAccordion = new A11yAccordion(testOptions);
+      var hiddenArea;
 
       hiddenArea = a11yAccordion._getHiddenArea(-1);
 

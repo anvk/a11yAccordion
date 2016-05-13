@@ -12,9 +12,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 // params:
 //  options which consist of:
 //    parentSelector - selector for HTML element to which a11y accordion markup and functionality will be applied
-//    hiddenAreaSelector - HTML element which will be hidden/shown
-//    headerSelector - jQuery selector for the header of each a11yAccordionItem
-//    visibleAreaClass - Class which will be applied to every uncollapsed accordion element
 //    speed - speed of collapsing animation
 //    hiddenLinkDescription - some string which will be played by AT once user has a keyboard focus on Show/Hide link
 //    showSearch - boolean option which will tell accordion to render search options
@@ -22,6 +19,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 //    overallSearch - boolean option which will tell search to look not only in headers but within collapsed areas as well
 //    onAreaShow - custom callback which will be called after making visible an accordion's area. Argument is jQuery DOM element for an area to become hidden
 //    onAreaHide - user defined callback which will be called after hiding an accordion's area. Argument is jQuery DOM element for an area to become shown
+//    searchActionType - could be "hide" or "collapse". First option will hide/show accordion rows upon matches, while the second option will collapse/uncollapse them
 //
 
 var A11yAccordion = function () {
@@ -53,7 +51,6 @@ var A11yAccordion = function () {
     var defaults = {
       constants: constants,
       parentSelector: undefined,
-      colorScheme: 'light',
       hideEffectStyle: 'linear',
       speed: 300,
       hiddenLinkDescription: '',
@@ -215,7 +212,6 @@ var A11yAccordion = function () {
       var _collapseWork = this._collapseWork;
       var parentSelector = props.parentSelector;
       var hiddenLinkDescription = props.hiddenLinkDescription;
-      var colorScheme = props.colorScheme;
       var onAreaShow = props.onAreaShow;
       var onAreaHide = props.onAreaHide;
       var speed = props.speed;
