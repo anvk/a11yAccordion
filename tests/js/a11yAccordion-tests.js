@@ -162,6 +162,8 @@
 
           expect(headerLinkHiddenEl.length).to.equal(1);
           expect(headerLinkHiddenEl.text()).to.equal('Hidden Link Description');
+
+          expect(row.find('.a11yAccordion-triangle').length).to.equal(1);
         });
 
         it('Without search', function() {
@@ -187,6 +189,14 @@
 
           expect(el.find('.a11yAccordionItem').filter(':visible').length)
             .to.equal(expectedNumberOfRows);
+
+          if (text.length) {
+            expect(el.find('.a11yAccordion-markedText').length)
+              .to.equal(expectedNumberOfRows);
+          } else {
+            expect(el.find('.a11yAccordion-markedText').length)
+              .to.equal(0);
+          }
 
           if (!expectedNumberOfRows) {
             expect(!!el.find('#a11yAccordion-noResultsItem').length).to.be.true;
@@ -216,6 +226,57 @@
 
           expect(el.find('.a11yAccordionItem').filter(':visible').length)
             .to.equal(expectedNumberOfRows);
+
+          if (text.length) {
+            expect(el.find('.a11yAccordion-markedText').length)
+              .to.equal(expectedNumberOfRows);
+          } else {
+            expect(el.find('.a11yAccordion-markedText').length)
+              .to.equal(0);
+          }
+
+          if (!expectedNumberOfRows) {
+            expect(!!el.find('#a11yAccordion-noResultsItem').length).to.be.true;
+          }
+        };
+
+        expect(!!searchInput.length).to.be.true;
+
+        triggerKeyUp('Do not exist', 0);
+
+        triggerKeyUp('Item 3', 1);
+
+        triggerKeyUp('', 5);
+      });
+
+      it('Search with collapsable option', function() {
+        var totalNumberOfRows = 5;
+
+        var customOptions = _.clone(testOptions, true);
+        customOptions.overallSearch = true;
+        customOptions.searchActionType = 'collapse';
+
+        var a11yAccordion = new A11yAccordion(customOptions);
+        var el = a11yAccordion.refs.el;
+        var searchInput = el.find('.a11yAccordionSearch');
+
+        var triggerKeyUp = function(text, expectedNumberOfRows) {
+          searchInput.val(text);
+          searchInput.keyup();
+
+          expect(el.find('.a11yAccordionItem').filter(':visible').length)
+            .to.equal(totalNumberOfRows);
+          expect(el.find('.a11yAccordionItem')
+            .find('.a11yAccordionHideArea:visible').length
+          ).to.equal(expectedNumberOfRows);
+
+          if (text.length) {
+            expect(el.find('.a11yAccordion-markedText').length)
+              .to.equal(expectedNumberOfRows);
+          } else {
+            expect(el.find('.a11yAccordion-markedText').length)
+              .to.equal(0);
+          }
 
           if (!expectedNumberOfRows) {
             expect(!!el.find('#a11yAccordion-noResultsItem').length).to.be.true;

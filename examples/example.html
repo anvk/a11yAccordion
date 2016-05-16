@@ -17,20 +17,47 @@
 
   <script type="text/javascript">
     var load = function () {
-      var accordion = new A11yAccordion({
+      var accordion1 = new A11yAccordion({
         parentSelector: '#accordion1',
-        hiddenLinkDescription: 'this is some row with data in first accordion'
+        hiddenLinkDescription: 'row with data in the First Accordion'
       });
 
-      accordion.uncollapseRow(1);
+      accordion1.uncollapseRow(1);
 
-      var anotheraccordion = new A11yAccordion({
+      var accordion2 = new A11yAccordion({
         parentSelector: '#accordion2',
-        hiddenLinkDescription: 'this is some row with data in second accordion',
+        hiddenLinkDescription: 'row with data in the Second Accordion',
+        showOne: false
+      });
+
+      accordion2.uncollapseRow(0);
+      accordion2.uncollapseRow(1);
+
+      var accordion3 = new A11yAccordion({
+        parentSelector: '#accordion3',
+        hiddenLinkDescription: 'row with data in the Third Accordion',
+        showOne: false,
+        overallSearch: true
+      });
+
+      accordion3.uncollapseRow(1);
+
+      var accordion4 = new A11yAccordion({
+        parentSelector: '#accordion4',
+        hiddenLinkDescription: 'row with data in the Forth Accordion',
         showOne: false,
         overallSearch: true,
         searchActionType: 'collapse'
       });
+
+      accordion4.uncollapseRow(1);
+
+      var accordion5 = new A11yAccordion({
+        parentSelector: '#accordion5',
+        hiddenLinkDescription: 'row with data in the Fifth Accordion'
+      });
+
+      accordion5.uncollapseRow(1);
 
     };
   </script>
@@ -76,9 +103,120 @@
     </li>
   </ul>
 
-  <h3 align="center">Accordion which can display multiple items at a time. Search can lookup data within the accordion hide areas</h3>
+  <h3 align="center">Accordion which can have multiple options opened</h3>
 
-  <ul id="accordion2" class="a11yAccordion a11yAccordion-dark">
+  <ul id="accordion2" class="a11yAccordion a11yAccordion-light">
+    <li class="a11yAccordionItem">
+      <div class="a11yAccordionItemHeader">
+        <strong>Random Information</strong>
+      </div>
+      <div class="a11yAccordionHideArea">
+        <h2>My other content</h2>
+        <p>This content is accessible by Assistive Technology and Screen Readers only when the collapsible area is visible to the user.</p>
+        <a href="#">This link is also accessible only when the collapsible area is visible.</a>
+      </div>
+    </li>
+
+    <li class="a11yAccordionItem">
+      <div class="a11yAccordionItemHeader">
+        <strong>Dummy Text and Controls</strong>
+      </div>
+      <div class="a11yAccordionHideArea">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+        <p>These controls are accessible for interaction by Assistive Technology and Screen Readers only when the collapsible area is visible to the user.</p>
+        <input type='test' placeholder='Please enter some info here' style='width: 20%' /><br /><br />
+        <input type='test' placeholder='Another control' />
+      </div>
+    </li>
+
+    <li class="a11yAccordionItem">
+      <div class="a11yAccordionItemHeader">
+        <strong>Header with image</strong>
+      </div>
+      <div class="a11yAccordionHideArea">
+        <img src="imgs/image.jpg" alt="example image for the presentation purposes with a description Y U NO COLLAPSE">
+      </div>
+    </li>
+  </ul>
+
+  <h3 align="center">Accordion which can search in Accordion Headers and Body</h3>
+
+  <ul id="accordion3" class="a11yAccordion a11yAccordion-light">
+    <li class="a11yAccordionItem">
+      <div class="a11yAccordionItemHeader">
+        <strong>Random Information</strong>
+      </div>
+      <div class="a11yAccordionHideArea">
+        <h2>My other content</h2>
+        <p>This content is accessible by Assistive Technology and Screen Readers only when the collapsible area is visible to the user.</p>
+        <a href="#">This link is also accessible only when the collapsible area is visible.</a>
+      </div>
+    </li>
+
+    <li class="a11yAccordionItem">
+      <div class="a11yAccordionItemHeader">
+        <strong>Dummy Text and Controls</strong>
+      </div>
+      <div class="a11yAccordionHideArea">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+        <p>These controls are accessible for interaction by Assistive Technology and Screen Readers only when the collapsible area is visible to the user.</p>
+        <input type='test' placeholder='Please enter some info here' style='width: 20%' /><br /><br />
+        <input type='test' placeholder='Another control' />
+      </div>
+    </li>
+
+    <li class="a11yAccordionItem">
+      <div class="a11yAccordionItemHeader">
+        <strong>Header with image</strong>
+      </div>
+      <div class="a11yAccordionHideArea">
+        <img src="imgs/image.jpg" alt="example image for the presentation purposes with a description Y U NO COLLAPSE">
+      </div>
+    </li>
+  </ul>
+
+  <h3 align="center">Accordion which collapses/uncollapses rows based on search</h3>
+
+  <ul id="accordion4" class="a11yAccordion a11yAccordion-light">
+    <li class="a11yAccordionItem">
+      <div class="a11yAccordionItemHeader">
+        <strong>Random Information</strong>
+      </div>
+      <div class="a11yAccordionHideArea">
+        <h2>My other content</h2>
+        <p>This content is accessible by Assistive Technology and Screen Readers only when the collapsible area is visible to the user.</p>
+        <a href="#">This link is also accessible only when the collapsible area is visible.</a>
+      </div>
+    </li>
+
+    <li class="a11yAccordionItem">
+      <div class="a11yAccordionItemHeader">
+        <strong>Dummy Text and Controls</strong>
+      </div>
+      <div class="a11yAccordionHideArea">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+        <p>These controls are accessible for interaction by Assistive Technology and Screen Readers only when the collapsible area is visible to the user.</p>
+        <input type='test' placeholder='Please enter some info here' style='width: 20%' /><br /><br />
+        <input type='test' placeholder='Another control' />
+      </div>
+    </li>
+
+    <li class="a11yAccordionItem">
+      <div class="a11yAccordionItemHeader">
+        <strong>Header with image</strong>
+      </div>
+      <div class="a11yAccordionHideArea">
+        <img src="imgs/image.jpg" alt="example image for the presentation purposes with a description Y U NO COLLAPSE">
+      </div>
+    </li>
+  </ul>
+
+  <h3 align="center">Dark themed accordion</h3>
+
+  <ul id="accordion5" class="a11yAccordion a11yAccordion-dark">
     <li class="a11yAccordionItem">
       <div class="a11yAccordionItemHeader">
         <strong>a11yAccordion Quick Start</strong>
@@ -87,7 +225,7 @@
         <h3>HTML markup:</h3>
         <pre>
           <code>
-    &lt;ul id=&quot;accordion1&quot; class=&quot;a11yAccordion&quot;&gt;
+    &lt;ul id=&quot;accordion1&quot; class=&quot;a11yAccordion a11yAccordion-light&quot;&gt;
       &lt;li class=&quot;a11yAccordionItem&quot;&gt;
         &lt;div class=&quot;a11yAccordionItemHeader&quot;&gt;
           Header #1
@@ -135,16 +273,12 @@
       </div>
       <div class="a11yAccordionHideArea">
         <p><strong>parentSelector</strong> - selector for the parent container which has an accordion markup</p>
-        <p><strong>accordionItemSelector</strong> - selector for accordion row which contains header and hidden area</p>
-        <p><strong>headerSelector</strong> - selector for a header within the row</p>
-        <p><strong>hiddenAreaSelector</strong> - selector for hidden areas within the accordion row</p>
-        <p><strong>visibleAreaClass</strong> - class which would be added to every row which will be uncollapsed/visible to the user</p>
         <p><strong>speed</strong> - speed of animation</p>
         <p><strong>hiddenLinkDescription</strong> - description for every Show/Hide link for users who use Assistive technology (AT)</p>
         <p><strong>showSearch</strong> - boolean option which will tell accordion to render search options</p>
         <p><strong>showOne</strong> - boolean option which represents if accordion can uncollapse only 1 row to the user</p>
         <p><strong>overallSearch</strong> - boolean option which will tell search to look not only in headers but within collapsed areas as well
-          (WARNING! <strong>overallSearch</strong> option can slow down performance in cases when there is lots of data or HTML markup present in the hidden areas.)</p>
+        <p><strong>searchActionType</strong> - "hide" or "collapse". Hide option hides/shows rows based on the search results. Collapse option collapses/uncollapses rows
         <p><strong>onAreaShow</strong> - custom callback which will be called after making visible an accordion's area. Argument is jQuery DOM element for an area to become shown</p>
         <p><strong>onAreaHide</strong> - user defined callback which will be called after hiding an accordion's area. Argument is jQuery DOM element for an area to become hidden</p>
       </div>
