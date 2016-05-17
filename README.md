@@ -1,4 +1,4 @@
-﻿# a11yAccordion v0.3.1
+﻿# a11yAccordion
 
 > An accessible and easy to use Accordion widget.
 
