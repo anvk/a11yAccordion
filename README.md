@@ -4,7 +4,7 @@
 
 ## Prerequisites
 
-This widget was build with help of [jQuery v1.10.0](http://code.jquery.com/jquery-1.10.0.min.js)
+This widget requires jQuery v1.10.0+
 
 ## Live Demo
 
@@ -19,17 +19,12 @@ var myAccordion = new A11yAccordion(options);
 ### Options
 
 **parentSelector** - selector for the parent container which has an Accordion markup  
-**AccordionItemSelector** - selector for Accordion row which contains header and hidden area  
-**headerSelector** - selector for a header within the row  
-**hiddenAreaSelector** - selector for hidden areas within the Accordion row  
-**visibleAreaClass** - class which would be added to every row which will be uncollapsed/visible to the user  
-**colorScheme** - color scheme for the Accordion  
 **speed** - speed of animation  
 **hiddenLinkDescription** - description for every Show/Hide link for users who use Assistive technology (AT)  
 **showSearch** - boolean option which will tell Accordion to render search options  
 **showOne** - boolean option which represents if Accordion can uncollapse only 1 row to the user  
-**overallSearch** - boolean option which will tell search to look not only in headers but within collapsed areas as well
-(WARNING! **overallSearch** option can slow down performance in cases when there is lots of data or HTML markup present in the hidden areas.)  
+**overallSearch** - boolean option which will tell search to look not only in headers but within collapsed areas as well  
+**searchActionType** - "hide" or "collapse". Hide option hides/shows rows based on the search results. Collapse option collapses/uncollapses rows
 **onAreaShow** - custom callback which will be called after making visible an Accordion's area. Argument is jQuery DOM element for an area to become shown  
 **onAreaHide** - user defined callback which will be called after hiding an Accordion's area. Argument is jQuery DOM element for an area to become hidden  
 
@@ -37,19 +32,48 @@ var myAccordion = new A11yAccordion(options);
 
 ```javascript
 var defaults = {
-  parentSelector: undefined,
-  AccordionItemSelector: '.a11yAccordionItem',
-  headerSelector: '.a11yAccordionItemHeader',
-  hiddenAreaSelector: '.a11yAccordionHideArea',
-  visibleAreaClass: 'visibleA11yAccordionItem',
-  colorScheme: 'light',
+  hideEffectStyle: 'linear',
   speed: 300,
   hiddenLinkDescription: '',
   showSearch: true,
   showOne: true,
+  searchActionType: 'hide',
   overallSearch: false,
-  onAreaShow: undefined,
-  onAreaHide: undefined
+  onAreaShow: () => {},
+  onAreaHide: () => {},
+  classes: {
+    headerClass: 'a11yAccordionItemHeader',
+    accordionItemClass: 'a11yAccordionItem',
+    hiddenAreaClass: 'a11yAccordionHideArea',
+    showHeaderLabelClass: 'a11yAccordionItemHeaderLinkShowLabel',
+    hideHeaderLabelClass: 'a11yAccordionItemHeaderLinkHideLabel',
+    markedTextClass: 'a11yAccordion-markedText',
+    visibleAreaClass: 'visiblea11yAccordionItem',
+    noResultsDivClass: 'a11yAccordionNoResultsItem',
+    searchDivClass: 'a11yAccordionSearchDiv',
+    headerLinkClass: 'a11yAccordionItemHeaderLink',
+    headerTextClass: 'a11yAccordionItemHeaderText',
+    hiddenHeaderLabelDescriptionClass: 'a11yAccordionItemHeaderLinkHiddenLabel',
+    toggleClass: 'toggle',
+    triangleClass: 'a11yAccordion-triangle',
+    searchClass: 'a11yAccordionSearch',
+    accordionHeaderClass: `a11yAccordion-header`,
+    accordionHideAreaClass: `a11yAccordion-area`
+  },
+  labels: {
+    showHeaderLabelText: 'Show',
+    hideHeaderLabelText: 'Hide',
+    searchPlaceholder: 'Search',
+    noResultsText: 'No Results Found',
+    titleText: 'Type your query to search',
+    resultsMessage: 'Number of results found: ',
+    leaveBlankMessage: ' Please leave blank to see all the results.'
+  },
+  ids: {
+    noResultsDivID: `a11yAccordion-noResultsItem`,
+    searchDivID: `a11yAccordion-searchPanel`,
+    rowIdStringPrefix: `a11yAccordion-row-`
+  }
 };
 ```
 
@@ -84,7 +108,7 @@ var defaults = {
 Create the following HTML markup:
 
 ```html
-<ul id="accordion1" class="a11yAccordion">
+<ul id="accordion1" class="a11yAccordion a11yAccordion-light">
   <li class="a11yAccordionItem">
     <div class="a11yAccordionItemHeader">
       Header #1
@@ -132,10 +156,18 @@ To install all required dependencies run the followign command:
 npm install
 ```
 
-To rebuild a11yAccordion run Grunt command
+To rebuild a11yAccordion run the following NPM commands
+
+Production version
 
 ```
-grunt
+npm run build:prod
+```
+
+Development version
+
+```
+npm run build:dev
 ```
 
 Build result could be found in **dist** folder
@@ -175,13 +207,14 @@ An example on how to use it could be found for a default **light** color-scheme.
 ```
 
 ```
-grunt css
+npm run build:css
 ```
 
-css option for the grunt command will recreate CSS based on LESS file and place it into dist folder
+Command will recreate CSS based on LESS file and place it into dist folder
 
 ## Release History
 
+* 2016-05-03   v0.4.0   Using ES6 instead of ES5. Some code refactoring and cleanup. Adding marking for found text. Adding an option to collapse/uncollapse row based on the search results.  
 * 2014-06-10   v0.3.1   Moving away from the french word "accordeon" and using "accordion" instead.  
 * 2014-06-03   v0.3.0   Refactored the whole component using ideas from the existing Gaia and FireFox components. Created the full Mocha+Chai test suit. Added new Grunt task for recreating CSS file in dist folder. Refactored and fixed issues in style sheets. Significantly improved example.html page. Hosted an example of the widget on my personal github page. Fixed couple of major bugs.  
 * 2013-12-02   v0.2.2   Added few tests to the project. More tests coming. Changed markup for Search Div to be within the Accordion markup.  
@@ -191,23 +224,5 @@ css option for the grunt command will recreate CSS based on LESS file and place 
 * 2013-06-26   v0.0.1   First working version of a standalone a11yAccordion outside of AContent.  
 
 ## License
-The MIT License (MIT)
 
-Copyright (c) 2013 Alexey Novak
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+MIT license; see [LICENSE](./LICENSE).

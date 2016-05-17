@@ -1,0 +1,25 @@
+@dark-headerBackground: #2D292C;
+@dark-areaBackground: #383330;
+@dark-textColor: #F2F2EB;
+@dark-linkColor: #BFB7AE;
+@dark-triangleColor: #F2F2EB;
+
+.a11yAccordion-dark {
+  .a11yAccordionSearch {
+    background-image: url('../imgs/search-dark.png') !important;
+    color: @dark-textColor;
+    background-color: @dark-areaBackground;
+  }
+
+  .a11yAccordion-header {
+    .a11yAccordion-theme(@dark-headerBackground, @dark-textColor, @dark-linkColor);
+
+    .a11yAccordion-triangle {
+      border-top-color: @dark-triangleColor;
+    }
+  }
+
+  .a11yAccordion-area {
+    .a11yAccordion-theme(@dark-areaBackground, @dark-textColor, @dark-linkColor);
+  }
+}

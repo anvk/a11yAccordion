@@ -1,0 +1,19 @@
+@light-headerBackground: #F2F2EB;
+@light-areaBackground: #FFFEFD;
+@light-textColor: #261E14;
+@light-linkColor: #595048;
+@light-triangleColor: #261E14;
+
+.a11yAccordion-light {
+  .a11yAccordion-header {
+    .a11yAccordion-theme(@light-headerBackground, @light-textColor, @light-linkColor);
+
+    .a11yAccordion-triangle {
+      border-top-color: @light-triangleColor;
+    }
+  }
+
+  .a11yAccordion-area {
+    .a11yAccordion-theme(@light-areaBackground, @light-textColor, @light-linkColor);
+  }
+}
