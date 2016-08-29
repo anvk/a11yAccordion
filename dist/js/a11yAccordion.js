@@ -21,7 +21,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 //    onAreaHide - user defined callback which will be called after hiding an accordion's area. Argument is jQuery DOM element for an area to become shown
 //    searchActionType - could be "hide" or "collapse". First option will hide/show accordion rows upon matches, while the second option will collapse/uncollapse them
 //
-
 var A11yAccordion = function () {
   function A11yAccordion() {
     var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -122,6 +121,7 @@ var A11yAccordion = function () {
 
   /// Public functions and variables
 
+
   /// Function which will hide hidden area in the row with index = rowIndex
   // params:
   //  rowIndex - integer index of the row
@@ -200,7 +200,9 @@ var A11yAccordion = function () {
 
     // };
 
+
     /// Private functions and variables
+
 
     /// Rendering accordion control
     //
@@ -233,18 +235,18 @@ var A11yAccordion = function () {
       var hideHeaderLabelClass = classes.hideHeaderLabelClass;
       var showHeaderLabelText = labels.showHeaderLabelText;
       var hideHeaderLabelText = labels.hideHeaderLabelText;
-      var headerLinkSelector = labels.headerLinkSelector;
       var showHeaderLabelSelector = selectors.showHeaderLabelSelector;
       var hideHeaderLabelSelector = selectors.hideHeaderLabelSelector;
       var headerSelector = selectors.headerSelector;
+      var headerLinkSelector = selectors.headerLinkSelector;
       var accordionItemSelector = selectors.accordionItemSelector;
       var hiddenAreaSelector = selectors.hiddenAreaSelector;
 
 
       var parentDiv = $(parentSelector);
-      var accordionItems = parentDiv.find(accordionItemSelector);
-      var accordionHideAreas = accordionItems.find(hiddenAreaSelector);
-      var headers = accordionItems.find(headerSelector);
+      var accordionItems = parentDiv.find('> ' + accordionItemSelector);
+      var accordionHideAreas = accordionItems.find('> ' + hiddenAreaSelector);
+      var headers = accordionItems.find('> ' + headerSelector);
 
       // store component's DOM elements
       this.refs = {
@@ -278,9 +280,9 @@ var A11yAccordion = function () {
       var linkClick = function linkClick(event) {
         event.preventDefault();
         event.stopPropagation();
-        var accordionItem = $(event.target).parents(accordionItemSelector);
-        _collapseWork(accordionItem.find(hiddenAreaSelector));
-        accordionItem.find(headerLinkSelector).focus();
+        var accordionItem = $(event.target).parents(accordionItemSelector).eq(0); // to avoid execution on nested accordions
+        _collapseWork(accordionItem.find('> ' + hiddenAreaSelector).eq(0));
+        accordionItem.find(headerLinkSelector).eq(0).focus();
       };
 
       // bind headers to a click event
@@ -400,12 +402,21 @@ var A11yAccordion = function () {
 
       wrapperDiv.prependTo(el);
 
+      var searchValue = '';
+
       // Bind search function to input field
       searchInput.keyup(function (event) {
         var value = event.target.value;
         // lowercase search string
 
         var searchString = value.toLowerCase();
+
+        // if value did not change then nothing to do
+        if (searchValue === searchString) {
+          return;
+        }
+
+        searchValue = searchString;
 
         // hide no results found <li>
         wrapperLi.hide();
@@ -433,8 +444,10 @@ var A11yAccordion = function () {
             });
             bodyTextNode.normalize();
 
-            // only if there is something in the input only then perform search
-            action = searchString.length ? _traverseChildNodes(bodyTextNode, regex, markedTextClass) : true;
+            // only if there is something in the input
+            // and only if we could not find matching string in header
+            // only then perform search
+            action = searchString.length && !action ? _traverseChildNodes(bodyTextNode, regex, markedTextClass) : true;
           }
 
           // action on the item. Hide or Show
@@ -442,17 +455,18 @@ var A11yAccordion = function () {
             $(accordionItems[i])[action ? 'show' : 'hide']();
           } else if (searchActionType === constants.SEARCH_ACTION_TYPE_COLLAPSE) {
             var hiddenArea = _getHiddenArea(i);
-            if (!searchString.length && hiddenArea[0].style.display === 'block') {
+            var hiddenAreaDisplay = hiddenArea[0].style.display;
+            if (!searchString.length && hiddenAreaDisplay === 'block') {
               collapseRow(i);
-            } else if (hiddenArea[0].style.display === 'none' && action) {
+            } else if (hiddenAreaDisplay === 'none' && action) {
               uncollapseRow(i);
-            } else if (hiddenArea[0].style.display === 'block' && !action) {
+            } else if (hiddenAreaDisplay === 'block' && !action) {
               collapseRow(i);
             }
           }
         }
 
-        var results = el.find(headerSelector + ':visible').length;
+        var results = accordionHideAreas.filter(':visible').length;
         searchInput.attr('title', resultsMessage + results.toString() + leaveBlankMessage);
 
         if (!results) {

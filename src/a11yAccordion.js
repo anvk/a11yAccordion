@@ -178,10 +178,7 @@ class A11yAccordion {
   /// Rendering accordion control
   //
   _render() {
-    const {
-      props,
-      _collapseWork
-    } = this;
+    const { props, _collapseWork } = this;
 
     const {
       parentSelector,
@@ -211,24 +208,21 @@ class A11yAccordion {
       hideHeaderLabelClass
     } = classes;
 
-    const {
-      showHeaderLabelText,
-      hideHeaderLabelText,
-      headerLinkSelector
-    } = labels;
+    const { showHeaderLabelText, hideHeaderLabelText } = labels;
 
     const {
       showHeaderLabelSelector,
       hideHeaderLabelSelector,
       headerSelector,
+      headerLinkSelector,
       accordionItemSelector,
       hiddenAreaSelector
     } = selectors;
 
     const parentDiv = $(parentSelector);
-    const accordionItems = parentDiv.find(accordionItemSelector);
-    const accordionHideAreas = accordionItems.find(hiddenAreaSelector);
-    const headers = accordionItems.find(headerSelector);
+    const accordionItems = parentDiv.find(`> ${accordionItemSelector}`);
+    const accordionHideAreas = accordionItems.find(`> ${hiddenAreaSelector}`);
+    const headers = accordionItems.find(`> ${headerSelector}`);
 
     // store component's DOM elements
     this.refs = {
@@ -265,9 +259,11 @@ class A11yAccordion {
     const linkClick = (event) => {
       event.preventDefault();
       event.stopPropagation();
-      const accordionItem = $(event.target).parents(accordionItemSelector);
-      _collapseWork(accordionItem.find(hiddenAreaSelector));
-      accordionItem.find(headerLinkSelector).focus();
+      const accordionItem = $(event.target)
+        .parents(accordionItemSelector)
+        .eq(0); // to avoid execution on nested accordions
+      _collapseWork(accordionItem.find(`> ${hiddenAreaSelector}`).eq(0));
+      accordionItem.find(headerLinkSelector).eq(0).focus();
     };
 
     // bind headers to a click event
@@ -275,7 +271,7 @@ class A11yAccordion {
 
     // generate assistive links
     $.each(headers, function initHeadersEach(index, header) {
-      var spans = [];
+      let spans = [];
 
       var link = $('<a>', {
         href: '#',
@@ -400,11 +396,20 @@ class A11yAccordion {
 
     wrapperDiv.prependTo(el);
 
+    let searchValue = '';
+
     // Bind search function to input field
     searchInput.keyup(function(event) {
       const { value } = event.target;
       // lowercase search string
       const searchString = value.toLowerCase();
+
+      // if value did not change then nothing to do
+      if (searchValue === searchString) {
+        return;
+      }
+
+      searchValue = searchString;
 
       // hide no results found <li>
       wrapperLi.hide();
@@ -432,8 +437,10 @@ class A11yAccordion {
             .each((index, element) => $(element).contents().unwrap());
           bodyTextNode.normalize();
 
-          // only if there is something in the input only then perform search
-          action = searchString.length
+          // only if there is something in the input
+          // and only if we could not find matching string in header
+          // only then perform search
+          action = searchString.length && !action
             ? _traverseChildNodes(bodyTextNode, regex, markedTextClass)
             : true;
         }
@@ -443,17 +450,18 @@ class A11yAccordion {
           $(accordionItems[i])[action ? 'show' : 'hide']();
         } else if (searchActionType === constants.SEARCH_ACTION_TYPE_COLLAPSE) {
           const hiddenArea = _getHiddenArea(i);
-          if (!searchString.length && hiddenArea[0].style.display === 'block') {
+          const hiddenAreaDisplay = hiddenArea[0].style.display;
+          if (!searchString.length && hiddenAreaDisplay === 'block') {
             collapseRow(i);
-          } else if (hiddenArea[0].style.display === 'none' && action) {
+          } else if (hiddenAreaDisplay === 'none' && action) {
             uncollapseRow(i);
-          } else if (hiddenArea[0].style.display === 'block' && !action) {
+          } else if (hiddenAreaDisplay === 'block' && !action) {
             collapseRow(i);
           }
         }
       }
 
-      const results = el.find(`${headerSelector}:visible`).length;
+      const results = accordionHideAreas.filter(':visible').length;
       searchInput.attr('title', resultsMessage + results.toString() + leaveBlankMessage);
 
       if (!results) {

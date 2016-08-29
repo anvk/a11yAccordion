@@ -45,16 +45,17 @@
     };
 
     var checkVisibility = function(a11yAccordion, rowIndex, isVisible) {
-      var row = a11yAccordion.getRowEl(rowIndex);
+      var header = a11yAccordion.refs.headers.eq(rowIndex);
       var hiddenArea = a11yAccordion._getHiddenArea(rowIndex);
-      var hiddenAreaIsVisible = isVisible ? 'true' : 'false';
-      expect(row.find(a11yAccordion.props.selectors.showHeaderLabelSelector)
-        .is(':visible')).to.be[!isVisible ? 'true' : 'false'];
-      expect(row.find(a11yAccordion.props.selectors.hideHeaderLabelSelector)
-        .is(':visible')).to.be[isVisible ? 'true' : 'false'];
-      expect(hiddenArea.is(':visible')).to.be[hiddenAreaIsVisible];
+
+      expect(header.find(a11yAccordion.props.selectors.showHeaderLabelSelector)
+        .css('display') != 'none').to.equal(!isVisible);
+      expect(header.find(a11yAccordion.props.selectors.hideHeaderLabelSelector)
+        .css('display') != 'none').to.equal(isVisible);
+      expect(hiddenArea.css('display') != 'none').to.equal(isVisible);
+
       expect(hiddenArea.hasClass(a11yAccordion.props.classes.visibleAreaClass))
-        .to.be[hiddenAreaIsVisible];
+        .to.equal(isVisible);
     };
 
     var checkTriangle = function(a11yAccordion, rowIndex, toggled) {
@@ -178,75 +179,49 @@
     });
 
     describe('Search functionality', function() {
-      it('Regular search', function() {
-        var a11yAccordion = new A11yAccordion(testOptions);
+      var triggerKeyUp = function(a11yAccordion, text, expectedNumberOfRows) {
         var el = a11yAccordion.refs.el;
         var searchInput = el.find('.a11yAccordionSearch');
 
-        var triggerKeyUp = function(text, expectedNumberOfRows) {
-          searchInput.val(text);
-          searchInput.keyup();
-
-          expect(el.find('.a11yAccordionItem').filter(':visible').length)
-            .to.equal(expectedNumberOfRows);
-
-          if (text.length) {
-            expect(el.find('.a11yAccordion-markedText').length)
-              .to.equal(expectedNumberOfRows);
-          } else {
-            expect(el.find('.a11yAccordion-markedText').length)
-              .to.equal(0);
-          }
-
-          if (!expectedNumberOfRows) {
-            expect(!!el.find('#a11yAccordion-noResultsItem').length).to.be.true;
-          }
-        };
-
         expect(!!searchInput.length).to.be.true;
 
-        triggerKeyUp('Do not exist', 0);
+        searchInput.val(text);
+        searchInput.keyup();
 
-        triggerKeyUp('Header 3', 1);
+        expect(el.find('.a11yAccordionItem').filter(':visible').length)
+          .to.equal(expectedNumberOfRows);
 
-        triggerKeyUp('', 5);
+        if (text.length) {
+          expect(el.find('.a11yAccordion-markedText').length)
+            .to.equal(expectedNumberOfRows);
+        } else {
+          expect(el.find('.a11yAccordion-markedText').length)
+            .to.equal(0);
+        }
+
+        if (!expectedNumberOfRows) {
+          expect(!!el.find('#a11yAccordion-noResultsItem').length).to.be.true;
+        }
+      };
+
+      it('Regular search', function() {
+        var a11yAccordion = new A11yAccordion(testOptions);
+
+        triggerKeyUp(a11yAccordion, 'Do not exist', 0);
+        triggerKeyUp(a11yAccordion, 'Header 3', 1);
+        triggerKeyUp(a11yAccordion, 'Item 2', 0);
+        triggerKeyUp(a11yAccordion, '', 5);
       });
 
       it('Overall search', function() {
         var customOptions = _.clone(testOptions, true);
         customOptions.overallSearch = true;
-
         var a11yAccordion = new A11yAccordion(customOptions);
-        var el = a11yAccordion.refs.el;
-        var searchInput = el.find('.a11yAccordionSearch');
 
-        var triggerKeyUp = function(text, expectedNumberOfRows) {
-          searchInput.val(text);
-          searchInput.keyup();
-
-          expect(el.find('.a11yAccordionItem').filter(':visible').length)
-            .to.equal(expectedNumberOfRows);
-
-          if (text.length) {
-            expect(el.find('.a11yAccordion-markedText').length)
-              .to.equal(expectedNumberOfRows);
-          } else {
-            expect(el.find('.a11yAccordion-markedText').length)
-              .to.equal(0);
-          }
-
-          if (!expectedNumberOfRows) {
-            expect(!!el.find('#a11yAccordion-noResultsItem').length).to.be.true;
-          }
-        };
-
-        expect(!!searchInput.length).to.be.true;
-
-        triggerKeyUp('Do not exist', 0);
-
-        triggerKeyUp('Item 3', 1);
-
-        triggerKeyUp('', 5);
+        triggerKeyUp(a11yAccordion, 'Do not exist', 0);
+        triggerKeyUp(a11yAccordion, 'Header 3', 1);
+        triggerKeyUp(a11yAccordion, 'Item 3', 1);
+        triggerKeyUp(a11yAccordion, '', 5);
       });
 
       it('Search with collapsable option', function() {
@@ -255,17 +230,20 @@
         var customOptions = _.clone(testOptions, true);
         customOptions.overallSearch = true;
         customOptions.searchActionType = 'collapse';
-
         var a11yAccordion = new A11yAccordion(customOptions);
-        var el = a11yAccordion.refs.el;
-        var searchInput = el.find('.a11yAccordionSearch');
 
-        var triggerKeyUp = function(text, expectedNumberOfRows) {
+        var triggerKeyUp = function(a11yAccordion, text, expectedNumberOfRows) {
+          var el = a11yAccordion.refs.el;
+          var searchInput = el.find('.a11yAccordionSearch');
+
+          expect(!!searchInput.length).to.be.true;
+
           searchInput.val(text);
           searchInput.keyup();
 
           expect(el.find('.a11yAccordionItem').filter(':visible').length)
             .to.equal(totalNumberOfRows);
+
           expect(el.find('.a11yAccordionItem')
             .find('.a11yAccordionHideArea:visible').length
           ).to.equal(expectedNumberOfRows);
@@ -283,17 +261,44 @@
           }
         };
 
-        expect(!!searchInput.length).to.be.true;
-
-        triggerKeyUp('Do not exist', 0);
-
-        triggerKeyUp('Item 3', 1);
-
-        triggerKeyUp('', 5);
+        triggerKeyUp(a11yAccordion, 'Do not exist', 0);
+        triggerKeyUp(a11yAccordion, 'Item 3', 1);
+        triggerKeyUp(a11yAccordion, '', 5);
       });
     });
 
     // Public
+    describe('clicking on header', function() {
+      it('regular functionality', function(done) {
+        var customOptions = _.clone(testOptions, true);
+        var index = 2;
+
+        customOptions.onAreaShow = function(element) {
+          expect(element.length).to.equal(1);
+          checkVisibility(a11yAccordion, index, true);
+
+          // Check that proper link is in focus
+          var focusedEl = $(document.activeElement);
+
+          expect(focusedEl.hasClass('a11yAccordionItemHeaderLink')).to.be.true;
+
+          expect(
+            focusedEl
+              .parent()
+              .find('.a11yAccordionItemHeaderText')
+              .text()
+          ).to.equal('Header 2');
+          done();
+        };
+
+        var a11yAccordion = new A11yAccordion(customOptions);
+
+        checkVisibility(a11yAccordion, index, false);
+
+        // immitate click event
+        a11yAccordion.refs.el.find('.a11yAccordionItemHeader').eq(2).click();
+      });
+    });
 
     describe('uncollapseRow and _uncollapse', function() {
       it('onAreaShow', function(done) {
@@ -516,6 +521,154 @@
       hiddenArea = a11yAccordion._getHiddenArea(1);
       expect(hiddenArea).not.to.be.undefined;
       expect(hiddenArea.is(':visible')).to.be.false;
+    });
+
+    describe('Nested accordions', function() {
+      after(function() {
+        $('#accordion1A').empty();
+      });
+
+      it('regular functionality', function(done) {
+        // Init 2 accordions:
+
+        var onAreaShow = function(element) {
+          expect(element.length).to.equal(1);
+          checkVisibility(a11yAccordion, index, true);
+
+          // Check that proper link is in focus
+          var focusedEl = $(document.activeElement);
+
+          expect(focusedEl.hasClass('a11yAccordionItemHeaderLink')).to.be.true;
+
+          expect(
+            focusedEl
+              .parent()
+              .find('.a11yAccordionItemHeaderText')
+              .text()
+          ).to.equal('Header 2');
+          done();
+        };
+
+        var accordion1a = new A11yAccordion({
+          parentSelector: '#accordion1A',
+          hiddenLinkDescription: 'row with data in the First Accordion',
+          onAreaShow: function(element) {
+            expect(element.length).to.equal(1);
+            checkVisibility(accordion1a, 0, true);
+            checkVisibility(accordion1a, 1, false);
+            checkVisibility(accordion1a, 2, false);
+            checkVisibility(accordion2b, 0, false);
+            checkVisibility(accordion2b, 1, false);
+            checkVisibility(accordion2b, 2, false);
+
+            // Check that proper link is in focus
+            var focusedEl = $(document.activeElement);
+
+            expect(
+              focusedEl.hasClass('a11yAccordionItemHeaderLink')
+            ).to.be.true;
+
+            expect(
+              focusedEl
+                .parent()
+                .find('.a11yAccordionItemHeaderText')
+                .text()
+                .trim()
+            ).to.equal('Header A1');
+
+            // immitate click event in inner accordion
+            accordion2b.refs.el.find('.a11yAccordionItemHeader').eq(1).click();
+          },
+          onAreaHide: function(element) {
+            expect(element.length).to.equal(1);
+            checkVisibility(accordion1a, 0, false);
+            checkVisibility(accordion1a, 1, false);
+            checkVisibility(accordion1a, 2, false);
+            checkVisibility(accordion2b, 0, false);
+            checkVisibility(accordion2b, 1, false);
+            checkVisibility(accordion2b, 2, false);
+
+            // Check that proper link is in focus
+            var focusedEl = $(document.activeElement);
+
+            expect(
+              focusedEl.hasClass('a11yAccordionItemHeaderLink')
+            ).to.be.true;
+
+            expect(
+              focusedEl
+                .parent()
+                .find('.a11yAccordionItemHeaderText')
+                .text()
+                .trim()
+            ).to.equal('Header A1');
+
+            done(); // end of the execution
+          }
+        });
+
+        var accordion2b = new A11yAccordion({
+          parentSelector: '#accordion2B',
+          hiddenLinkDescription: 'row with data in the First Accordion',
+          onAreaShow: function(element) {
+            expect(element.length).to.equal(1);
+            checkVisibility(accordion1a, 0, true);
+            checkVisibility(accordion1a, 1, false);
+            checkVisibility(accordion1a, 2, false);
+            checkVisibility(accordion2b, 0, false);
+            checkVisibility(accordion2b, 1, true);
+            checkVisibility(accordion2b, 2, false);
+
+            // Check that proper link is in focus
+            var focusedEl = $(document.activeElement);
+
+            expect(
+              focusedEl.hasClass('a11yAccordionItemHeaderLink')
+            ).to.be.true;
+
+            expect(
+              focusedEl
+                .parent()
+                .find('.a11yAccordionItemHeaderText')
+                .text()
+                .trim()
+            ).to.equal('Header B2');
+
+            // immitate click event in inner accordion
+            accordion2b.refs.el.find('.a11yAccordionItemHeader').eq(1).click();
+          },
+          onAreaHide: function(element) {
+            expect(element.length).to.equal(1);
+            checkVisibility(accordion1a, 0, true);
+            checkVisibility(accordion1a, 1, false);
+            checkVisibility(accordion1a, 2, false);
+            checkVisibility(accordion2b, 0, false);
+            checkVisibility(accordion2b, 1, false);
+            checkVisibility(accordion2b, 2, false);
+
+            // Check that proper link is in focus
+            var focusedEl = $(document.activeElement);
+
+            expect(
+              focusedEl.hasClass('a11yAccordionItemHeaderLink')
+            ).to.be.true;
+
+            expect(
+              focusedEl
+                .parent()
+                .find('.a11yAccordionItemHeaderText')
+                .text()
+                .trim()
+            ).to.equal('Header B2');
+
+            // immitate click event in outter accordion
+            accordion1a.refs.el.find('.a11yAccordionItemHeader').eq(0).click();
+          }
+        });
+
+        // immitate click event in outter accordion
+        accordion1a.refs.el.find('.a11yAccordionItemHeader').eq(0).click();
+      });
     });
 
   });

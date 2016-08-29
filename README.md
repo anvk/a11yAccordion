@@ -22,7 +22,7 @@ var myAccordion = new A11yAccordion(options);
 **speed** - speed of animation  
 **hiddenLinkDescription** - description for every Show/Hide link for users who use Assistive technology (AT)  
 **showSearch** - boolean option which will tell Accordion to render search options  
-**showOne** - boolean option which represents if Accordion can uncollapse only 1 row to the user  
+**showOne** - boolean option which represents if Accordion can uncollapse only 1 row to the user **(this flag can lead to a confusing UX when search suppose to uncollapse all accordion items with a matching string)**  
 **overallSearch** - boolean option which will tell search to look not only in headers but within collapsed areas as well  
 **searchActionType** - "hide" or "collapse". Hide option hides/shows rows based on the search results. Collapse option collapses/uncollapses rows
 **onAreaShow** - custom callback which will be called after making visible an Accordion's area. Argument is jQuery DOM element for an area to become shown  
@@ -214,6 +214,7 @@ Command will recreate CSS based on LESS file and place it into dist folder
 
 ## Release History
 
+* 2016-08-30   v0.4.1   Fixing code for nested accordions. Fixing focus for links which were not focused before. Do not apply search if search string was not changed. Fixing search for the case when string would match in header but not in body of the accordion item. Fixed some of the tests.  
 * 2016-05-03   v0.4.0   Using ES6 instead of ES5. Some code refactoring and cleanup. Adding marking for found text. Adding an option to collapse/uncollapse row based on the search results.  
 * 2014-06-10   v0.3.1   Moving away from the french word "accordeon" and using "accordion" instead.  
 * 2014-06-03   v0.3.0   Refactored the whole component using ideas from the existing Gaia and FireFox components. Created the full Mocha+Chai test suit. Added new Grunt task for recreating CSS file in dist folder. Refactored and fixed issues in style sheets. Significantly improved example.html page. Hosted an example of the widget on my personal github page. Fixed couple of major bugs.  
