@@ -27,6 +27,61 @@ var myAccordion = new A11yAccordion(options);
 **searchActionType** - "hide" or "collapse". Hide option hides/shows rows based on the search results. Collapse option collapses/uncollapses rows
 **onAreaShow** - custom callback which will be called after making visible an Accordion's area. Argument is jQuery DOM element for an area to become shown  
 **onAreaHide** - user defined callback which will be called after hiding an Accordion's area. Argument is jQuery DOM element for an area to become hidden  
+**hideEffectStyle** - Easing of jQuery slideUp() function  
+**classes** - Classes for the accordion element (look into Default Options to learn more)  
+**labels** - Default labels for the accordion element (look into Default Options to learn more)  
+**ids** - Default ids for the accordion element (look into Default Options to learn more)  
+
+### Default Options
+
+```javascript
+const defaults = {
+  constants,
+  parentSelector: undefined,
+  hideEffectStyle: 'linear',
+  speed: 300,
+  hiddenLinkDescription: '',
+  showSearch: true,
+  showOne: true,
+  searchActionType: constants.SEARCH_ACTION_TYPE_HIDE,
+  overallSearch: false,
+  onAreaShow: () => {},
+  onAreaHide: () => {},
+  classes: {
+    headerClass: 'a11yAccordionItemHeader',
+    accordionItemClass: 'a11yAccordionItem',
+    hiddenAreaClass: 'a11yAccordionHideArea',
+    showHeaderLabelClass: 'a11yAccordionItemHeaderLinkShowLabel',
+    hideHeaderLabelClass: 'a11yAccordionItemHeaderLinkHideLabel',
+    markedTextClass: 'a11yAccordion-markedText',
+    visibleAreaClass: 'visiblea11yAccordionItem',
+    noResultsDivClass: 'a11yAccordionNoResultsItem',
+    searchDivClass: 'a11yAccordionSearchDiv',
+    headerLinkClass: 'a11yAccordionItemHeaderLink',
+    headerTextClass: 'a11yAccordionItemHeaderText',
+    hiddenHeaderLabelDescriptionClass: 'a11yAccordionItemHeaderLinkHiddenLabel',
+    toggleClass: 'toggle',
+    triangleClass: 'a11yAccordion-triangle',
+    searchClass: 'a11yAccordionSearch',
+    accordionHeaderClass: `a11yAccordion-header`,
+    accordionHideAreaClass: `a11yAccordion-area`
+  },
+  labels: {
+    showHeaderLabelText: 'Show',
+    hideHeaderLabelText: 'Hide',
+    searchPlaceholder: 'Search',
+    noResultsText: 'No Results Found',
+    titleText: 'Type your query to search',
+    resultsMessage: 'Number of results found: ',
+    leaveBlankMessage: ' Please leave blank to see all the results.'
+  },
+  ids: {
+    noResultsDivID: `a11yAccordion-noResultsItem`,
+    searchDivID: `a11yAccordion-searchPanel`,
+    rowIdStringPrefix: `a11yAccordion-row-`
+  }
+};
+```
 
 ### Widget default options
 
@@ -99,9 +154,9 @@ var defaults = {
 
 > Boolean value which will make Accordion to show only 1 uncollapsed row at a time to the user if true
 
-#### el
+#### refs
 
-> JQuery element which contains DOM markup of the A11yAccordion
+> An object which contains reference to JQuery elements: el - which contains DOM markup of the A11yAccordion, accordionItems, accordionHideAreas, headers.
 
 ## Quick Start
 
@@ -214,7 +269,7 @@ Command will recreate CSS based on LESS file and place it into dist folder
 
 ## Release History
 
-* 2016-08-30   v0.4.1   Fixing code for nested accordions. Fixing focus for links which were not focused before. Do not apply search if search string was not changed. Fixing search for the case when string would match in header but not in body of the accordion item. Fixed some of the tests.  
+* 2016-08-30   v0.4.2   Fixing Readme. Fixing code for nested accordions. Fixing focus for links which were not focused before. Do not apply search if search string was not changed. Fixing search for the case when string would match in header but not in body of the accordion item. Fixed some of the tests. Adding nested accordion example.  
 * 2016-05-03   v0.4.0   Using ES6 instead of ES5. Some code refactoring and cleanup. Adding marking for found text. Adding an option to collapse/uncollapse row based on the search results.  
 * 2014-06-10   v0.3.1   Moving away from the french word "accordeon" and using "accordion" instead.  
 * 2014-06-03   v0.3.0   Refactored the whole component using ideas from the existing Gaia and FireFox components. Created the full Mocha+Chai test suit. Added new Grunt task for recreating CSS file in dist folder. Refactored and fixed issues in style sheets. Significantly improved example.html page. Hosted an example of the widget on my personal github page. Fixed couple of major bugs.  

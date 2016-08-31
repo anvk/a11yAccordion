@@ -59,6 +59,28 @@
 
       accordion5.uncollapseRow(1);
 
+      // nested accordions
+      var accordion1a = new A11yAccordion({
+        parentSelector: '#accordion1a',
+        hiddenLinkDescription: 'row with data in the First Accordion',
+        showSearch: true,
+        searchActionType: 'collapse',
+        overallSearch: true,
+        showOne: false
+      });
+
+      var accordion2b = new A11yAccordion({
+        parentSelector: '#accordion2b',
+        hiddenLinkDescription: 'row with data in the First Accordion',
+        showSearch: true,
+        searchActionType: 'collapse',
+        overallSearch: true,
+        showOne: false
+      });
+
+      accordion1a.uncollapseRow(0);
+      accordion2b.uncollapseRow(0);
+
     };
   </script>
 
@@ -310,6 +332,80 @@
       </div>
     </li>
   </ul>
+
+  <h3 align="center">Nested accordions</h3>
+
+  <ul id="accordion1a" class="a11yAccordion a11yAccordion-light">
+    <li class="a11yAccordionItem">
+      <div class="a11yAccordionItemHeader">
+        <strong>Random Information</strong>
+      </div>
+      <div class="a11yAccordionHideArea">
+        <h2>My other content</h2>
+        <p>This content is accessible by Assistive Technology and Screen Readers only when the collapsible area is visible to the user.</p>
+        <a href="##">This link is also accessible only when the collapsible area is visible.</a>
+
+        <ul id="accordion2b" class="a11yAccordion a11yAccordion-light">
+          <li class="a11yAccordionItem">
+            <div class="a11yAccordionItemHeader">
+              <strong>Random Information</strong>
+            </div>
+            <div class="a11yAccordionHideArea">
+              <h2>My other content</h2>
+              <p>This content is accessible by Assistive Technology and Screen Readers only when the collapsible area is visible to the user.</p>
+              <a href="##">This link is also accessible only when the collapsible area is visible.</a>
+            </div>
+          </li>
+
+          <li class="a11yAccordionItem">
+            <div class="a11yAccordionItemHeader">
+              <strong>Dummy Text and Controls</strong>
+            </div>
+            <div class="a11yAccordionHideArea">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+              <p>These controls are accessible for interaction by Assistive Technology and Screen Readers only when the collapsible area is visible to the user.</p>
+              <input type='test' placeholder='Please enter some info here' style='width: 20%' /><br /><br />
+              <input type='test' placeholder='Another control' />
+            </div>
+          </li>
+
+          <li class="a11yAccordionItem">
+            <div class="a11yAccordionItemHeader">
+              <strong>Header with image</strong>
+            </div>
+            <div class="a11yAccordionHideArea">
+              <img src="imgs/image.jpg" alt="example image for the presentation purposes with a description Y U NO COLLAPSE">
+            </div>
+          </li>
+        </ul>
+
+      </div>
+    </li>
+
+    <li class="a11yAccordionItem">
+      <div class="a11yAccordionItemHeader">
+        <strong>Dummy Text and Controls</strong>
+      </div>
+      <div class="a11yAccordionHideArea">
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+        <p>These controls are accessible for interaction by Assistive Technology and Screen Readers only when the collapsible area is visible to the user.</p>
+        <input type='test' placeholder='Please enter some info here' style='width: 20%' /><br /><br />
+        <input type='test' placeholder='Another control' />
+      </div>
+    </li>
+
+    <li class="a11yAccordionItem">
+      <div class="a11yAccordionItemHeader">
+        <strong>Header with image</strong>
+      </div>
+      <div class="a11yAccordionHideArea">
+        <img src="imgs/image.jpg" alt="example image for the presentation purposes with a description Y U NO COLLAPSE">
+      </div>
+    </li>
+  </ul>
+
   <script type="text/javascript" src="../node_modules/jquery/dist/jquery.min.js"></script>
   <script type="text/javascript" src="../dist/js/a11yAccordion.js"></script>
 </body>
