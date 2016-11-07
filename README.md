@@ -1,4 +1,4 @@
-﻿# a11yAccordion
+# a11yAccordion
 
 > An accessible and easy to use Accordion widget.
 
@@ -32,56 +32,6 @@ var myAccordion = new A11yAccordion(options);
 **labels** - Default labels for the accordion element (look into Default Options to learn more)  
 **ids** - Default ids for the accordion element (look into Default Options to learn more)  
 
-### Default Options
-
-```javascript
-const defaults = {
-  constants,
-  parentSelector: undefined,
-  hideEffectStyle: 'linear',
-  speed: 300,
-  hiddenLinkDescription: '',
-  showSearch: true,
-  showOne: true,
-  searchActionType: constants.SEARCH_ACTION_TYPE_HIDE,
-  overallSearch: false,
-  onAreaShow: () => {},
-  onAreaHide: () => {},
-  classes: {
-    headerClass: 'a11yAccordionItemHeader',
-    accordionItemClass: 'a11yAccordionItem',
-    hiddenAreaClass: 'a11yAccordionHideArea',
-    showHeaderLabelClass: 'a11yAccordionItemHeaderLinkShowLabel',
-    hideHeaderLabelClass: 'a11yAccordionItemHeaderLinkHideLabel',
-    markedTextClass: 'a11yAccordion-markedText',
-    visibleAreaClass: 'visiblea11yAccordionItem',
-    noResultsDivClass: 'a11yAccordionNoResultsItem',
-    searchDivClass: 'a11yAccordionSearchDiv',
-    headerLinkClass: 'a11yAccordionItemHeaderLink',
-    headerTextClass: 'a11yAccordionItemHeaderText',
-    hiddenHeaderLabelDescriptionClass: 'a11yAccordionItemHeaderLinkHiddenLabel',
-    toggleClass: 'toggle',
-    triangleClass: 'a11yAccordion-triangle',
-    searchClass: 'a11yAccordionSearch',
-    accordionHeaderClass: `a11yAccordion-header`,
-    accordionHideAreaClass: `a11yAccordion-area`
-  },
-  labels: {
-    showHeaderLabelText: 'Show',
-    hideHeaderLabelText: 'Hide',
-    searchPlaceholder: 'Search',
-    noResultsText: 'No Results Found',
-    titleText: 'Type your query to search',
-    resultsMessage: 'Number of results found: ',
-    leaveBlankMessage: ' Please leave blank to see all the results.'
-  },
-  ids: {
-    noResultsDivID: `a11yAccordion-noResultsItem`,
-    searchDivID: `a11yAccordion-searchPanel`,
-    rowIdStringPrefix: `a11yAccordion-row-`
-  }
-};
-```
 
 ### Widget default options
 
