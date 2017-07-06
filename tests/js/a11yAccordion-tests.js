@@ -180,7 +180,7 @@
           // before creating accordion let's add an hiddenLinkDescription
           // override attribute to the first a11yAccordionItem
           var firstHeader = $(testaccordionId).find('.a11yAccordionItemHeader')[0];
-          firstHeader.setAttribute('a11yAccordion-hiddenLinkDescription', 'Override Hidden Text');
+          firstHeader.setAttribute('data-a11yAccordion-hiddenLinkDescription', 'Override Hidden Text');
 
           var a11yAccordion = new A11yAccordion(testOptions);
 

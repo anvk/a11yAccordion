@@ -80,7 +80,7 @@ var defaults = {
     rowIdStringPrefix: `a11yAccordion-row-`
   },
   attributes: {
-    hiddenLinkDescription: 'a11yAccordion-hiddenLinkDescription'
+    hiddenLinkDescription: 'data-a11yAccordion-hiddenLinkDescription'
   },
 };
 ```
@@ -159,7 +159,7 @@ var myAccordion = new A11yAccordion({
 It is easy achieved by setting `a11yAccordion-hiddenLinkDescription` attribute on the accordion item header. Example:
 
 ```html
-<div class="a11yAccordionItemHeader" a11yAccordion-hiddenLinkDescription="information section about russian sweets and baked goods">
+<div class="a11yAccordionItemHeader" data-a11yAccordion-hiddenLinkDescription="information section about russian sweets and baked goods">
   Russian Desserts
 </div>
 ```
