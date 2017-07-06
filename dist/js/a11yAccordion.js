@@ -21,6 +21,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 //    onAreaHide - user defined callback which will be called after hiding an accordion's area. Argument is jQuery DOM element for an area to become shown
 //    searchActionType - could be "hide" or "collapse". First option will hide/show accordion rows upon matches, while the second option will collapse/uncollapse them
 //
+
 var A11yAccordion = function () {
   function A11yAccordion() {
     var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -91,6 +92,9 @@ var A11yAccordion = function () {
         noResultsDivID: 'a11yAccordion-noResultsItem',
         searchDivID: 'a11yAccordion-searchPanel',
         rowIdStringPrefix: 'a11yAccordion-row-'
+      },
+      attributes: {
+        hiddenLinkDescription: 'a11yAccordion-hiddenLinkDescription'
       }
     };
 
@@ -120,7 +124,6 @@ var A11yAccordion = function () {
   }
 
   /// Public functions and variables
-
 
   /// Function which will hide hidden area in the row with index = rowIndex
   // params:
@@ -200,9 +203,7 @@ var A11yAccordion = function () {
 
     // };
 
-
     /// Private functions and variables
-
 
     /// Rendering accordion control
     //
@@ -222,6 +223,7 @@ var A11yAccordion = function () {
       var classes = props.classes;
       var labels = props.labels;
       var selectors = props.selectors;
+      var attributes = props.attributes;
       var constants = props.constants;
       var visibleAreaClass = classes.visibleAreaClass;
       var headerLinkClass = classes.headerLinkClass;
@@ -311,8 +313,10 @@ var A11yAccordion = function () {
           'class': hideHeaderLabelClass
         }));
 
+        var assistiveLinkDescription = header.getAttribute(attributes.hiddenLinkDescription) || hiddenLinkDescription;
+
         spans.push($('<span>', {
-          text: hiddenLinkDescription,
+          text: assistiveLinkDescription,
           'class': hiddenHeaderLabelDescriptionClass
         }));
 

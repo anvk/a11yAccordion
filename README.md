@@ -24,7 +24,7 @@ var myAccordion = new A11yAccordion(options);
 **showSearch** - boolean option which will tell Accordion to render search options  
 **showOne** - boolean option which represents if Accordion can uncollapse only 1 row to the user **(this flag can lead to a confusing UX when search suppose to uncollapse all accordion items with a matching string)**  
 **overallSearch** - boolean option which will tell search to look not only in headers but within collapsed areas as well  
-**searchActionType** - "hide" or "collapse". Hide option hides/shows rows based on the search results. Collapse option collapses/uncollapses rows
+**searchActionType** - "hide" or "collapse". Hide option hides/shows rows based on the search results. Collapse option collapses/uncollapses rows  
 **onAreaShow** - custom callback which will be called after making visible an Accordion's area. Argument is jQuery DOM element for an area to become shown  
 **onAreaHide** - user defined callback which will be called after hiding an Accordion's area. Argument is jQuery DOM element for an area to become hidden  
 **hideEffectStyle** - Easing of jQuery slideUp() function  
@@ -78,7 +78,10 @@ var defaults = {
     noResultsDivID: `a11yAccordion-noResultsItem`,
     searchDivID: `a11yAccordion-searchPanel`,
     rowIdStringPrefix: `a11yAccordion-row-`
-  }
+  },
+  attributes: {
+    hiddenLinkDescription: 'a11yAccordion-hiddenLinkDescription'
+  },
 };
 ```
 
@@ -151,6 +154,16 @@ var myAccordion = new A11yAccordion({
 });
 ```
 
+## How to set a custom hiddenLinkDescription on a specific row
+
+It is easy achieved by setting `a11yAccordion-hiddenLinkDescription` attribute on the accordion item header. Example:
+
+```html
+<div class="a11yAccordionItemHeader" a11yAccordion-hiddenLinkDescription="information section about russian sweets and baked goods">
+  Russian Desserts
+</div>
+```
+
 ## For Developers
 
 To build your own a11yAccordion you will require Node and NPM
@@ -219,15 +232,16 @@ Command will recreate CSS based on LESS file and place it into dist folder
 
 ## Release History
 
-* 2016-08-30   v0.4.2   Fixing Readme. Fixing code for nested accordions. Fixing focus for links which were not focused before. Do not apply search if search string was not changed. Fixing search for the case when string would match in header but not in body of the accordion item. Fixed some of the tests. Adding nested accordion example.  
-* 2016-05-03   v0.4.0   Using ES6 instead of ES5. Some code refactoring and cleanup. Adding marking for found text. Adding an option to collapse/uncollapse row based on the search results.  
-* 2014-06-10   v0.3.1   Moving away from the french word "accordeon" and using "accordion" instead.  
-* 2014-06-03   v0.3.0   Refactored the whole component using ideas from the existing Gaia and FireFox components. Created the full Mocha+Chai test suit. Added new Grunt task for recreating CSS file in dist folder. Refactored and fixed issues in style sheets. Significantly improved example.html page. Hosted an example of the widget on my personal github page. Fixed couple of major bugs.  
-* 2013-12-02   v0.2.2   Added few tests to the project. More tests coming. Changed markup for Search Div to be within the Accordion markup.  
-* 2013-11-28   v0.2.1   Added basic user click interactions and advanced Accordion to be more configurable.  
-* 2013-11-20   v0.2.0   Code completely refactored to be more performant and optimized. Proper web component structure.  
-* 2013-07-27   v0.1.0   Grunt added to the project. Proper project build scripts are created.  
-* 2013-06-26   v0.0.1   First working version of a standalone a11yAccordion outside of AContent.  
+* 2017-07-05   v0.4.3   Adding ability to overwrite hiddenLinkDescription by setting an attribute a11yAccordion-hiddenLinkDescription for the accordion item header.
+* 2016-08-30   v0.4.2   Fixing Readme. Fixing code for nested accordions. Fixing focus for links which were not focused before. Do not apply search if search string was not changed. Fixing search for the case when string would match in header but not in body of the accordion item. Fixed some of the tests. Adding nested accordion example.
+* 2016-05-03   v0.4.0   Using ES6 instead of ES5. Some code refactoring and cleanup. Adding marking for found text. Adding an option to collapse/uncollapse row based on the search results.
+* 2014-06-10   v0.3.1   Moving away from the french word "accordeon" and using "accordion" instead.
+* 2014-06-03   v0.3.0   Refactored the whole component using ideas from the existing Gaia and FireFox components. Created the full Mocha+Chai test suit. Added new Grunt task for recreating CSS file in dist folder. Refactored and fixed issues in style sheets. Significantly improved example.html page. Hosted an example of the widget on my personal github page. Fixed couple of major bugs.
+* 2013-12-02   v0.2.2   Added few tests to the project. More tests coming. Changed markup for Search Div to be within the Accordion markup.
+* 2013-11-28   v0.2.1   Added basic user click interactions and advanced Accordion to be more configurable.
+* 2013-11-20   v0.2.0   Code completely refactored to be more performant and optimized. Proper web component structure.
+* 2013-07-27   v0.1.0   Grunt added to the project. Proper project build scripts are created.
+* 2013-06-26   v0.0.1   First working version of a standalone a11yAccordion outside of AContent.
 
 ## License
 

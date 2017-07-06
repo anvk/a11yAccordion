@@ -80,7 +80,10 @@ class A11yAccordion {
         noResultsDivID: `a11yAccordion-noResultsItem`,
         searchDivID: `a11yAccordion-searchPanel`,
         rowIdStringPrefix: `a11yAccordion-row-`
-      }
+      },
+      attributes: {
+        hiddenLinkDescription: 'a11yAccordion-hiddenLinkDescription',
+      },
     };
 
     options = {
@@ -192,6 +195,7 @@ class A11yAccordion {
       classes,
       labels,
       selectors,
+      attributes,
       constants
     } = props;
 
@@ -292,8 +296,12 @@ class A11yAccordion {
         'class': hideHeaderLabelClass
       }));
 
+      const assistiveLinkDescription = header
+        .getAttribute(attributes.hiddenLinkDescription)
+      || hiddenLinkDescription;
+
       spans.push($('<span>', {
-        text: hiddenLinkDescription,
+        text: assistiveLinkDescription,
         'class': hiddenHeaderLabelDescriptionClass
       }));
 
