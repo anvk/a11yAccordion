@@ -82,7 +82,7 @@ class A11yAccordion {
         rowIdStringPrefix: `a11yAccordion-row-`
       },
       attributes: {
-        hiddenLinkDescription: 'a11yAccordion-hiddenLinkDescription',
+        hiddenLinkDescription: 'data-a11yAccordion-hiddenLinkDescription',
       },
     };
 
