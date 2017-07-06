@@ -175,6 +175,24 @@
 
           hasSearchDiv(a11yAccordion, false);
         });
+
+        it('With hiddenLinkDescription override', function() {
+          // before creating accordion let's add an hiddenLinkDescription
+          // override attribute to the first a11yAccordionItem
+          var firstHeader = $(testaccordionId).find('.a11yAccordionItemHeader')[0];
+          firstHeader.setAttribute('a11yAccordion-hiddenLinkDescription', 'Override Hidden Text');
+
+          var a11yAccordion = new A11yAccordion(testOptions);
+
+          var firstHiddenDescription = $(testaccordionId)
+            .find('.a11yAccordionItemHeaderLinkHiddenLabel')[0];
+
+          var secondHiddenDescription = $(testaccordionId)
+            .find('.a11yAccordionItemHeaderLinkHiddenLabel')[1];
+
+          expect(firstHiddenDescription.textContent).to.be.equal('Override Hidden Text');
+          expect(secondHiddenDescription.textContent).to.be.equal('Hidden Link Description');
+        });
       });
     });
 
